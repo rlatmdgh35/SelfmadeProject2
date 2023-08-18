@@ -13,8 +13,8 @@ AC_Player::AC_Player()
 	C_Helpers::CreateSceneComponent(this, &Camera, "Camera", GetMesh());
 
 
-	USkeletalMesh* meshAsset;
-	C_Helpers::GetAsset<USkeletalMesh>(&meshAsset, "SkeletalMesh'/Game/Character/Path/Mesh/Ch28_nonPBR.Ch28_nonPBR'");
+	// USkeletalMesh* meshAsset;
+	// C_Helpers::GetAsset<USkeletalMesh>(&meshAsset, "SkeletalMesh'/Game/Character/Path/Mesh/Ch28_nonPBR.Ch28_nonPBR'");
 
 	// TSubclassOf<UAnimInstance> animInstanceClass;
 	// C_Helpers::GetClass(&animInstanceClass, "/Game/Player/ABP_Player");
@@ -23,7 +23,7 @@ AC_Player::AC_Player()
 	// Mesh Setting
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -88));
 	GetMesh()->SetRelativeRotation(FRotator(0, 270, 0));
-	GetMesh()->SetSkeletalMesh(meshAsset);
+	// GetMesh()->SetSkeletalMesh(meshAsset);
 
 	// Camera Setting
 	Camera->SetRelativeLocation(FVector(0, 13, 165));
