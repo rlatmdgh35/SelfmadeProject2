@@ -4,7 +4,6 @@
 #include "GameFramework/Character.h"
 #include "C_Player.generated.h"
 
-class UInputComponent;
 
 UCLASS()
 class SELFMADEPROJECT2_API AC_Player : public ACharacter
@@ -41,5 +40,16 @@ private:
 private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCameraComponent* Camera;
+
+	// ActorComponent
+private:
+	UPROPERTY(VisibleDefaultsOnly)
+		class UC_PlayerComponent* PlayerComponent;
+
+private:
+	class UC_DataAsset* DataAsset;
+
+
+
 };
 

@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "SelfmadeProject2GameMode.h"
-#include "C_Player.h"
+#include "Player/C_Player.h"
 #include "UObject/ConstructorHelpers.h"
 
 ASelfmadeProject2GameMode::ASelfmadeProject2GameMode()

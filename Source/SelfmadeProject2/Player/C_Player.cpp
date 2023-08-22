@@ -1,6 +1,8 @@
 #include "C_Player.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Component/C_PlayerComponent.h"
+#include "DataAsset/C_DataAsset.h"
 #include "Global.h"
 
 
@@ -12,18 +14,28 @@ AC_Player::AC_Player()
 	// || CreateSceneComponent ||
 	C_Helpers::CreateSceneComponent(this, &Camera, "Camera", GetMesh());
 
+	// || CreateActorComponent ||
+	C_Helpers::CreateActorComponent(this, &PlayerComponent, "Component");
 
-	// USkeletalMesh* meshAsset;
-	// C_Helpers::GetAsset<USkeletalMesh>(&meshAsset, "SkeletalMesh'/Game/Character/Path/Mesh/Ch28_nonPBR.Ch28_nonPBR'");
+	// || Get Asset _ DataAsset ||
+	C_Helpers::GetAsset(&DataAsset, "/Game/Player/DA_Player");
 
-	// TSubclassOf<UAnimInstance> animInstanceClass;
-	// C_Helpers::GetClass(&animInstanceClass, "/Game/Player/ABP_Player");
-	// GetMesh()->SetAnimInstanceClass(animInstanceClass);
+	PlayerComponent->DataAsset = DataAsset;
+
+	USkeletalMesh* meshAsset;
+	C_Helpers::GetAsset(&meshAsset, "/Game/Character/Start/Mesh/Ch28_nonPBR");
+
+	TSubclassOf<UAnimInstance> animInstanceClass;
+	C_Helpers::GetClass(&animInstanceClass, "/Game/Player/ABP_Player");
+	GetMesh()->SetAnimInstanceClass(animInstanceClass);
+
+
+
 
 	// Mesh Setting
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -88));
 	GetMesh()->SetRelativeRotation(FRotator(0, 270, 0));
-	// GetMesh()->SetSkeletalMesh(meshAsset);
+	GetMesh()->SetSkeletalMesh(meshAsset);
 
 	// Camera Setting
 	Camera->SetRelativeLocation(FVector(0, 13, 165));
@@ -32,9 +44,6 @@ AC_Player::AC_Player()
 
 
 	// Movement
-	// bUseControllerRotationYaw = false;
-	// GetCharacterMovement()->bOrientRotationToMovement = true;
-	GetCharacterMovement()->RotationRate = FRotator(0, 720, 0);
 	GetCharacterMovement()->MaxWalkSpeed = 400.f;
 
 

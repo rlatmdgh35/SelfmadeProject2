@@ -4,6 +4,7 @@
 #include "GameFramework/Actor.h"
 #include "C_PastCollision.generated.h"
 
+
 UCLASS()
 class SELFMADEPROJECT2_API AC_PastCollision : public AActor
 {
@@ -12,7 +13,22 @@ class SELFMADEPROJECT2_API AC_PastCollision : public AActor
 public:	
 	AC_PastCollision();
 
+protected:
+	virtual void BeginPlay() override;
+
+
 private:
 	class UBoxComponent* Box;
+	FTimerHandle TimerHandle;
+
+private:
+	UFUNCTION()
+		void BeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
+
+private:
+	void TravelHotel();
+
+
+
 
 };
