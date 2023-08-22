@@ -36,6 +36,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		bool Ninth = false;
+
+	UPROPERTY(EditAnywhere)
+		bool Tenth = false;
 };
 
 USTRUCT(BlueprintType)
@@ -45,14 +48,13 @@ struct FOpenGuide
 
 public:
 	UPROPERTY(EditAnywhere)
-		bool IsOpenSeventh = false;
-
-	UPROPERTY(EditAnywhere)
 		bool IsOpenEighth = false;
 
 	UPROPERTY(EditAnywhere)
 		bool IsOpenNinth = false;
 
+	UPROPERTY(EditAnywhere)
+		bool IsOpenTenth = false;
 };
 
 
@@ -62,13 +64,27 @@ class SELFMADEPROJECT2_API UC_DataAsset : public UDataAsset
 	GENERATED_BODY()
 
 public:
+	UC_DataAsset();
+
+public:
+	void BeginPlay(ACharacter InOwnerCharacter);
+
+public:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Guide")
 		FGuide Guide;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "OpenGiude")
 		FOpenGuide OpenGuide;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "State")
+		TSubclassOf<class AC_PlayerComponent> PlayerStateClass;
+
+private:
+	class AC_Player* Player;
+
+public:
+	UPROPERTY(EditAnywhere)
+		class AC_PlayerComponent* PlayerState;
 
 
-	
 };

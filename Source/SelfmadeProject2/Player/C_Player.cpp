@@ -11,13 +11,13 @@ AC_Player::AC_Player()
 	PrimaryActorTick.bCanEverTick = true;
 
 
-	// || CreateSceneComponent ||
+	// || Create SceneComponent ||
 	C_Helpers::CreateSceneComponent(this, &Camera, "Camera", GetMesh());
 
-	// || CreateActorComponent ||
+	// || Create ActorComponent ||
 	C_Helpers::CreateActorComponent(this, &PlayerComponent, "Component");
 
-	// || Get Asset _ DataAsset ||
+	// || Get Asset_DataAsset ||
 	C_Helpers::GetAsset(&DataAsset, "/Game/Player/DA_Player");
 
 	PlayerComponent->DataAsset = DataAsset;
@@ -26,7 +26,7 @@ AC_Player::AC_Player()
 	C_Helpers::GetAsset(&meshAsset, "/Game/Character/Start/Mesh/Ch28_nonPBR");
 
 	TSubclassOf<UAnimInstance> animInstanceClass;
-	C_Helpers::GetClass(&animInstanceClass, "/Game/Player/ABP_Player");
+	C_Helpers::GetClass(&animInstanceClass, "/Game/Player/BluePrint/ABP_Player");
 	GetMesh()->SetAnimInstanceClass(animInstanceClass);
 
 
@@ -38,7 +38,7 @@ AC_Player::AC_Player()
 	GetMesh()->SetSkeletalMesh(meshAsset);
 
 	// Camera Setting
-	Camera->SetRelativeLocation(FVector(0, 13, 165));
+	Camera->SetRelativeLocation(FVector(0, 44.5, 157.5));
 	Camera->SetRelativeRotation(FRotator(0, 90, 0));
 	Camera->bUsePawnControlRotation = true;
 
