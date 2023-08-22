@@ -76,15 +76,8 @@ public:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "OpenGiude")
 		FOpenGuide OpenGuide;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "State")
-		TSubclassOf<class AC_PlayerComponent> PlayerStateClass;
-
 private:
 	class AC_Player* Player;
-
-public:
-	UPROPERTY(EditAnywhere)
-		class AC_PlayerComponent* PlayerState;
 
 
 };

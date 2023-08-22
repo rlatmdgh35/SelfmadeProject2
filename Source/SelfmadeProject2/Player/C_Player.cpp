@@ -8,9 +8,6 @@
 
 AC_Player::AC_Player()
 {
-	PrimaryActorTick.bCanEverTick = true;
-
-
 	// || Create SceneComponent ||
 	C_Helpers::CreateSceneComponent(this, &Camera, "Camera", GetMesh());
 

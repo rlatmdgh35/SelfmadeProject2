@@ -13,6 +13,10 @@ class SELFMADEPROJECT2_API UC_PlayerComponent : public UActorComponent
 public:	
 	UC_PlayerComponent();
 	
+public:
+	UPROPERTY(EditAnywhere)
+		class UC_DataAsset* DataAsset;
+
 private:
 	bool OpenEyes;
 	float Energy;
