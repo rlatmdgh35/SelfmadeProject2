@@ -25,6 +25,8 @@ public:
 private:
 	void OnRun();
 	void OffRun();
+	void CloseEyes();
+	void OpenEyes();
 
 
 	// Axis Event
@@ -48,6 +50,13 @@ private:
 
 private:
 	class UC_DataAsset* DataAsset;
+
+private:
+	bool IsRun;
+	bool CanChargeEnergy = false;
+	float Speed;
+	float MaxEnergy = 350.f;
+	float CurrentEnergy;
 
 
 

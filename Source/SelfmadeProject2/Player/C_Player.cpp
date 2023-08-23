@@ -58,6 +58,26 @@ void AC_Player::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	Speed = GetVelocity().Size2D();
+	if (IsRun)
+	{
+		CanChargeEnergy = false;
+		CurrentEnergy -= Speed / 300 * DeltaTime;
+	}
+	else
+	{
+		float ratio = CurrentEnergy / MaxEnergy;
+		float pow = FMath::Pow(ratio, 2);
+
+		if (CanChargeEnergy == false)
+		{
+			FLatentActionInfo latenAction;
+			UKismetSystemLibrary::Delay(this, (3.5 * pow), latenAction);
+			CanChargeEnergy = true;
+		}
+
+		CurrentEnergy += (20 / 7) * ((MaxEnergy - CurrentEnergy) / pow) * DeltaTime;
+	}
 }
 
 void AC_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -67,6 +87,8 @@ void AC_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	// Action Event
 	PlayerInputComponent->BindAction("Run", EInputEvent::IE_Pressed, this, &AC_Player::OnRun);
 	PlayerInputComponent->BindAction("Run", EInputEvent::IE_Released, this, &AC_Player::OffRun);
+	PlayerInputComponent->BindAction("CloseEyes", EInputEvent::IE_Pressed, this, &AC_Player::CloseEyes);
+	PlayerInputComponent->BindAction("CloseEyes", EInputEvent::IE_Released, this, &AC_Player::OpenEyes);
 
 	// Axis Event
 	PlayerInputComponent->BindAxis("MoveForward", this, &AC_Player::OnMoveForward);
@@ -78,12 +100,22 @@ void AC_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AC_Player::OnRun()
 {
-	GetCharacterMovement()->MaxWalkSpeed = 600.f;
+	IsRun = true;
 }
 
 void AC_Player::OffRun()
 {
-	GetCharacterMovement()->MaxWalkSpeed = 400.f;
+	IsRun = false;
+}
+
+void AC_Player::CloseEyes()
+{
+	DataAsset->IsOpenEyes = false;
+}
+
+void AC_Player::OpenEyes()
+{
+	DataAsset->IsOpenEyes = true;
 }
 
 void AC_Player::OnMoveForward(float InAxis)

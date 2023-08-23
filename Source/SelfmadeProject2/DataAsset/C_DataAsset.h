@@ -57,7 +57,6 @@ public:
 		bool IsOpenTenth = false;
 };
 
-
 UCLASS()
 class SELFMADEPROJECT2_API UC_DataAsset : public UDataAsset
 {
@@ -67,7 +66,10 @@ public:
 	UC_DataAsset();
 
 public:
-	void BeginPlay(ACharacter InOwnerCharacter);
+	void BeginPlay(ACharacter* InOwnerCharacter);
+
+
+
 
 public:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Guide")
@@ -76,8 +78,14 @@ public:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "OpenGiude")
 		FOpenGuide OpenGuide;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "PlayerState")
+		bool IsOpenEyes;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "PlayerState")
+		bool IsCanRun;
+
 private:
 	class AC_Player* Player;
-
+	class AC_PlayerComponent* PlayerComponent;
 
 };

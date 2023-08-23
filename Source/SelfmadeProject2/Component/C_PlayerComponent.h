@@ -13,16 +13,16 @@ class SELFMADEPROJECT2_API UC_PlayerComponent : public UActorComponent
 public:	
 	UC_PlayerComponent();
 	
+protected:
+	virtual void BeginPlay() override;
+
 public:
 	UPROPERTY(EditAnywhere)
 		class UC_DataAsset* DataAsset;
 
 private:
-	bool OpenEyes;
+	float Speed;
 	float Energy;
+	float MaxEnergy = 350.f;
 
-public:
-	FORCEINLINE bool IsOpenEyes() { return OpenEyes == true; }
-	FORCEINLINE bool IsCanRun() { return Energy >= 30.f; }
-	FORCEINLINE float GetEnergy() { return Energy; }
 };
