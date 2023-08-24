@@ -17,7 +17,7 @@ UC_DataAsset::UC_DataAsset()
 void UC_DataAsset::BeginPlay(ACharacter* InOwnerCharacter)
 {
 	Player = Cast<AC_Player>(InOwnerCharacter);
-	PlayerComponent = C_Helpers::GetComponent<AC_PlayerComponent>(Player);
+	PlayerComponent = C_Helpers::GetComponent<UC_PlayerComponent>(Player);
 
 
 

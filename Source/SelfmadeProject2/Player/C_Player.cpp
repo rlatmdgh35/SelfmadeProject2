@@ -51,7 +51,10 @@ void AC_Player::BeginPlay()
 {
 	Super::BeginPlay();
 
-
+	CurrentEnergy = MaxEnergy;
+	SaveEnergy = CurrentEnergy;
+	Ratio = CurrentEnergy / MaxEnergy;
+	Pow = FMath::Square(Ratio);
 }
 
 void AC_Player::Tick(float DeltaTime)
@@ -62,21 +65,24 @@ void AC_Player::Tick(float DeltaTime)
 	if (IsRun)
 	{
 		CanChargeEnergy = false;
-		CurrentEnergy -= Speed / 300 * DeltaTime;
+		CurrentEnergy -= Speed / 5 * DeltaTime;
+		FMath::Clamp(CurrentEnergy, 0.f, 350.f);
 	}
 	else
 	{
-		float ratio = CurrentEnergy / MaxEnergy;
-		float pow = FMath::Pow(ratio, 2);
-
 		if (CanChargeEnergy == false)
 		{
-			FLatentActionInfo latenAction;
-			UKismetSystemLibrary::Delay(this, (3.5 * pow), latenAction);
-			CanChargeEnergy = true;
+			FTimerHandle timerHandle;
+			GetWorldTimerManager().SetTimer(timerHandle, this, &AC_Player::NotBlockCharge, (3.5 * Pow));
+		}
+		else
+		{
+			SaveDeltaTime += DeltaTime;
+			CurrentEnergy = ((MaxEnergy - CurrentEnergy) / Pow) * SaveDeltaTime;
+			FMath::Clamp(CurrentEnergy, 0.f, 350.f);
 		}
 
-		CurrentEnergy += (20 / 7) * ((MaxEnergy - CurrentEnergy) / pow) * DeltaTime;
+		
 	}
 }
 
@@ -100,6 +106,8 @@ void AC_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AC_Player::OnRun()
 {
+	CheckTrue(CurrentEnergy < 30);
+
 	IsRun = true;
 }
 
@@ -149,4 +157,14 @@ void AC_Player::OnVerticalLook(float InAxis)
 {
 	float speed = 45.f;
 	AddControllerPitchInput(InAxis * speed * GetWorld()->GetDeltaSeconds());
+}
+
+void AC_Player::NotBlockCharge()
+{
+	SaveEnergy = CurrentEnergy;
+	Ratio = CurrentEnergy / MaxEnergy;
+	Pow = FMath::Pow(Ratio, 2);
+
+
+	CanChargeEnergy = true;
 }

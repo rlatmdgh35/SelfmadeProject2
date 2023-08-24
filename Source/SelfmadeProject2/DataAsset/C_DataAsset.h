@@ -86,6 +86,6 @@ public:
 
 private:
 	class AC_Player* Player;
-	class AC_PlayerComponent* PlayerComponent;
+	class UC_PlayerComponent* PlayerComponent;
 
 };

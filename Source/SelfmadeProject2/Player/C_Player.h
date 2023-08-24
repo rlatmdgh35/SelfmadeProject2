@@ -36,7 +36,8 @@ private:
 	void OnHorizontalLook(float InAxis);
 	void OnVerticalLook(float InAxis);
 
-
+private:
+	void NotBlockCharge();
 
 	// SceneComponent
 private:
@@ -48,15 +49,39 @@ private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UC_PlayerComponent* PlayerComponent;
 
+
 private:
 	class UC_DataAsset* DataAsset;
 
 private:
-	bool IsRun;
-	bool CanChargeEnergy = false;
-	float Speed;
-	float MaxEnergy = 350.f;
-	float CurrentEnergy;
+	float SaveDeltaTime;
+
+protected:
+	UPROPERTY(BlueprintReadOnly)
+		bool IsRun;
+	
+	UPROPERTY(BlueprintReadOnly)	
+		bool CanChargeEnergy = true;
+	
+	UPROPERTY(BlueprintReadOnly)
+		float Speed;
+	
+	UPROPERTY(BlueprintReadOnly)
+		float MaxEnergy = 350.f;
+
+	UPROPERTY(BlueprintReadOnly)
+		float SaveEnergy;
+
+	UPROPERTY(BlueprintReadOnly)
+		float Ratio;
+
+	UPROPERTY(BlueprintReadOnly)
+		float Pow;
+
+
+protected:
+	UPROPERTY(BlueprintReadOnly)
+		float CurrentEnergy;
 
 
 
