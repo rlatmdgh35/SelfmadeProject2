@@ -1,4 +1,5 @@
 #include "C_Player.h"
+#include "Meshes/C_Door.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Component/C_PlayerComponent.h"
@@ -50,6 +51,10 @@ AC_Player::AC_Player()
 void AC_Player::BeginPlay()
 {
 	Super::BeginPlay();
+
+	TArray<AActor*> doorActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Door::StaticClass(), doorActors);
+	Door = Cast<AC_Door>(doorActors[0]);
 
 	CurrentEnergy = MaxEnergy;
 }

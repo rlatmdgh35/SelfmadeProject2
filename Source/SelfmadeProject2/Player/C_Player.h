@@ -5,6 +5,12 @@
 #include "C_Player.generated.h"
 
 
+UENUM(BlueprintType)
+enum class EInteractionType : uint8
+{
+	Door, Max
+};
+
 UCLASS()
 class SELFMADEPROJECT2_API AC_Player : public ACharacter
 {
@@ -49,9 +55,13 @@ private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UC_PlayerComponent* PlayerComponent;
 
+public:
+	UPROPERTY(BlueprintReadOnly)
+		class AC_Door* Door;
 
 private:
 	class UC_DataAsset* DataAsset;
+	
 
 protected:
 	float Speed;
