@@ -52,9 +52,6 @@ void AC_Player::BeginPlay()
 	Super::BeginPlay();
 
 	CurrentEnergy = MaxEnergy;
-	SaveEnergy = CurrentEnergy;
-	Ratio = CurrentEnergy / MaxEnergy;
-	Pow = FMath::Square(Ratio);
 }
 
 void AC_Player::Tick(float DeltaTime)
@@ -64,26 +61,35 @@ void AC_Player::Tick(float DeltaTime)
 	Speed = GetVelocity().Size2D();
 	if (IsRun)
 	{
+		SaveDeltaTime = 0.f;
 		CanChargeEnergy = false;
-		CurrentEnergy -= Speed / 5 * DeltaTime;
-		FMath::Clamp(CurrentEnergy, 0.f, 350.f);
+		CurrentEnergy -= Speed / 10.f * DeltaTime;
+		FMath::Clamp(CurrentEnergy, 0.f, 1000.f);
+	}
+	else if (CanChargeEnergy == true)
+	{
+		C_Log::Print("else if");
+		
+		SaveDeltaTime += DeltaTime;
+		ChargeWaitTime = 3.5f * (1.f - CurrentEnergy / MaxEnergy);
+		FMath::Clamp(SaveDeltaTime, 0.f, ChargeWaitTime);
+		C_Log::Print(SaveDeltaTime);
+		C_Log::Print(ChargeWaitTime);
+		CurrentEnergy = (MaxEnergy - SaveEnergyValue) / ChargeWaitTime * SaveDeltaTime;
+		FMath::Clamp(CurrentEnergy, 0.f, 1000.f);
 	}
 	else
 	{
-		if (CanChargeEnergy == false)
+		SaveDeltaTime += DeltaTime;
+		ChargeWaitTime = 3.5f * (1.f - CurrentEnergy / MaxEnergy);
+		if (SaveDeltaTime >= ChargeWaitTime)
 		{
-			FTimerHandle timerHandle;
-			GetWorldTimerManager().SetTimer(timerHandle, this, &AC_Player::NotBlockCharge, (3.5 * Pow));
+			SaveEnergyValue = CurrentEnergy;
+			SaveDeltaTime = 0.f;
+			CanChargeEnergy = true;
 		}
-		else
-		{
-			SaveDeltaTime += DeltaTime;
-			CurrentEnergy = ((MaxEnergy - CurrentEnergy) / Pow) * SaveDeltaTime;
-			FMath::Clamp(CurrentEnergy, 0.f, 350.f);
-		}
-
-		
 	}
+		
 }
 
 void AC_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -106,13 +112,15 @@ void AC_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AC_Player::OnRun()
 {
-	CheckTrue(CurrentEnergy < 30);
+	CheckTrue(CurrentEnergy < 100);
 
+	GetCharacterMovement()->MaxWalkSpeed = 600.f;
 	IsRun = true;
 }
 
 void AC_Player::OffRun()
 {
+	GetCharacterMovement()->MaxWalkSpeed = 400.f;
 	IsRun = false;
 }
 
@@ -157,14 +165,4 @@ void AC_Player::OnVerticalLook(float InAxis)
 {
 	float speed = 45.f;
 	AddControllerPitchInput(InAxis * speed * GetWorld()->GetDeltaSeconds());
-}
-
-void AC_Player::NotBlockCharge()
-{
-	SaveEnergy = CurrentEnergy;
-	Ratio = CurrentEnergy / MaxEnergy;
-	Pow = FMath::Pow(Ratio, 2);
-
-
-	CanChargeEnergy = true;
 }

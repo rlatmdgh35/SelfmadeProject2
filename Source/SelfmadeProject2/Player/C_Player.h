@@ -29,22 +29,20 @@ private:
 	void OpenEyes();
 
 
-	// Axis Event
+// Axis Event
 private:
 	void OnMoveForward(float InAxis);
 	void OnMoveRight(float InAxis);
 	void OnHorizontalLook(float InAxis);
 	void OnVerticalLook(float InAxis);
 
-private:
-	void NotBlockCharge();
 
-	// SceneComponent
+// SceneComponent
 private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCameraComponent* Camera;
 
-	// ActorComponent
+// ActorComponent
 private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UC_PlayerComponent* PlayerComponent;
@@ -54,34 +52,23 @@ private:
 	class UC_DataAsset* DataAsset;
 
 private:
+	float Speed;
+	float MaxEnergy = 1000.f;
+	float ChargeWaitTime;
 	float SaveDeltaTime;
+	float SaveEnergyValue;
+
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
 		bool IsRun;
 	
 	UPROPERTY(BlueprintReadOnly)	
-		bool CanChargeEnergy = true;
-	
-	UPROPERTY(BlueprintReadOnly)
-		float Speed;
-	
-	UPROPERTY(BlueprintReadOnly)
-		float MaxEnergy = 350.f;
+		bool CanChargeEnergy = false;
 
-	UPROPERTY(BlueprintReadOnly)
-		float SaveEnergy;
-
-	UPROPERTY(BlueprintReadOnly)
-		float Ratio;
-
-	UPROPERTY(BlueprintReadOnly)
-		float Pow;
-
-
-protected:
 	UPROPERTY(BlueprintReadOnly)
 		float CurrentEnergy;
+	
 
 
 
