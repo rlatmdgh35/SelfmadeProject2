@@ -21,12 +21,14 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	// Action Event
+
+// Action Event
 private:
 	void OnRun();
 	void OffRun();
 	void CloseEyes();
 	void OpenEyes();
+	void Interaction();
 
 
 // Axis Event
@@ -51,13 +53,12 @@ private:
 private:
 	class UC_DataAsset* DataAsset;
 
-private:
+protected:
 	float Speed;
-	float MaxEnergy = 1000.f;
+	float MaxEnergy = 350.f;
 	float ChargeWaitTime;
 	float SaveDeltaTime;
 	float SaveEnergyValue;
-
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
@@ -68,8 +69,6 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly)
 		float CurrentEnergy;
-	
-
 
 
 };

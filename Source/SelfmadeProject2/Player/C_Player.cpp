@@ -61,35 +61,45 @@ void AC_Player::Tick(float DeltaTime)
 	Speed = GetVelocity().Size2D();
 	if (IsRun)
 	{
-		SaveDeltaTime = 0.f;
-		CanChargeEnergy = false;
-		CurrentEnergy -= Speed / 10.f * DeltaTime;
-		FMath::Clamp(CurrentEnergy, 0.f, 1000.f);
+		if (CurrentEnergy != 0)
+		{
+			SaveDeltaTime = 0.f;
+			CanChargeEnergy = false;
+			CurrentEnergy -= Speed / 10.f * DeltaTime;
+			CurrentEnergy = FMath::Clamp(CurrentEnergy, 0.f, 1000.f);
+		}
+		else
+			OffRun();
 	}
 	else if (CanChargeEnergy == true)
 	{
-		C_Log::Print("else if");
-		
 		SaveDeltaTime += DeltaTime;
-		ChargeWaitTime = 3.5f * (1.f - CurrentEnergy / MaxEnergy);
-		FMath::Clamp(SaveDeltaTime, 0.f, ChargeWaitTime);
-		C_Log::Print(SaveDeltaTime);
-		C_Log::Print(ChargeWaitTime);
-		CurrentEnergy = (MaxEnergy - SaveEnergyValue) / ChargeWaitTime * SaveDeltaTime;
-		FMath::Clamp(CurrentEnergy, 0.f, 1000.f);
+		if (ChargeWaitTime != 0)
+		{
+			SaveDeltaTime = FMath::Clamp(SaveDeltaTime, 0.f, ChargeWaitTime);
+			C_Log::Print(SaveDeltaTime, 1);
+			C_Log::Print(ChargeWaitTime, 2);
+			CurrentEnergy = SaveEnergyValue + ((MaxEnergy - SaveEnergyValue) / ChargeWaitTime * SaveDeltaTime);
+			CurrentEnergy = FMath::Clamp(CurrentEnergy, 0.f, 1000.f);
+		}
 	}
 	else
 	{
 		SaveDeltaTime += DeltaTime;
 		ChargeWaitTime = 3.5f * (1.f - CurrentEnergy / MaxEnergy);
-		if (SaveDeltaTime >= ChargeWaitTime)
+		if (SaveDeltaTime >= ChargeWaitTime && ChargeWaitTime != 0)
 		{
 			SaveEnergyValue = CurrentEnergy;
 			SaveDeltaTime = 0.f;
 			CanChargeEnergy = true;
 		}
 	}
-		
+
+	if (CurrentEnergy <= 50)
+		DataAsset->IsCanRun = false;
+	else
+		DataAsset->IsCanRun = true;
+
 }
 
 void AC_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -101,6 +111,8 @@ void AC_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("Run", EInputEvent::IE_Released, this, &AC_Player::OffRun);
 	PlayerInputComponent->BindAction("CloseEyes", EInputEvent::IE_Pressed, this, &AC_Player::CloseEyes);
 	PlayerInputComponent->BindAction("CloseEyes", EInputEvent::IE_Released, this, &AC_Player::OpenEyes);
+	PlayerInputComponent->BindAction("Interaction", EInputEvent::IE_Pressed, this, &AC_Player::Interaction);
+
 
 	// Axis Event
 	PlayerInputComponent->BindAxis("MoveForward", this, &AC_Player::OnMoveForward);
@@ -112,7 +124,7 @@ void AC_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AC_Player::OnRun()
 {
-	CheckTrue(CurrentEnergy < 100);
+	CheckTrue(CurrentEnergy <= 50);
 
 	GetCharacterMovement()->MaxWalkSpeed = 600.f;
 	IsRun = true;
@@ -132,6 +144,11 @@ void AC_Player::CloseEyes()
 void AC_Player::OpenEyes()
 {
 	DataAsset->IsOpenEyes = true;
+}
+
+void AC_Player::Interaction()
+{
+
 }
 
 void AC_Player::OnMoveForward(float InAxis)

@@ -5,7 +5,7 @@
 #include "C_DataAsset.generated.h"
 
 USTRUCT(BlueprintType)
-struct FGuide
+struct FKeepGuide
 {
 	GENERATED_BODY()
 
@@ -72,8 +72,8 @@ public:
 
 
 public:
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Guide")
-		FGuide Guide;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "KeepGuide")
+		FKeepGuide KeepGuide;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "OpenGiude")
 		FOpenGuide OpenGuide;
