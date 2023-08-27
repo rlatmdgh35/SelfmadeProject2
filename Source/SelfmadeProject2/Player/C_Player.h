@@ -45,6 +45,7 @@ private:
 	void OnVerticalLook(float InAxis);
 
 
+
 // SceneComponent
 private:
 	UPROPERTY(VisibleDefaultsOnly)
@@ -57,7 +58,7 @@ private:
 
 public:
 	UPROPERTY(BlueprintReadOnly)
-		class AC_Door* Door;
+		TArray<class AC_Door*> Doors;
 
 private:
 	class UC_DataAsset* DataAsset;

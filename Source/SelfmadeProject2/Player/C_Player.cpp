@@ -24,7 +24,7 @@ AC_Player::AC_Player()
 	C_Helpers::GetAsset(&meshAsset, "/Game/Character/Start/Mesh/Ch28_nonPBR");
 
 	TSubclassOf<UAnimInstance> animInstanceClass;
-	C_Helpers::GetClass(&animInstanceClass, "/Game/Player/BluePrint/ABP_Player");
+	C_Helpers::GetClass(&animInstanceClass, "/Game/Player/BluePrint/ABP_Player_Start");
 	GetMesh()->SetAnimInstanceClass(animInstanceClass);
 
 
@@ -54,7 +54,13 @@ void AC_Player::BeginPlay()
 
 	TArray<AActor*> doorActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Door::StaticClass(), doorActors);
-	Door = Cast<AC_Door>(doorActors[0]);
+	if (doorActors.Num() > 0)
+	{
+		for (int32 i = 0; i > doorActors.Num() ;i++)
+		{
+			Doors[i] = Cast<AC_Door>(doorActors[i]);
+		}
+	}
 
 	CurrentEnergy = MaxEnergy;
 }
@@ -82,8 +88,8 @@ void AC_Player::Tick(float DeltaTime)
 		if (ChargeWaitTime != 0)
 		{
 			SaveDeltaTime = FMath::Clamp(SaveDeltaTime, 0.f, ChargeWaitTime);
-			C_Log::Print(SaveDeltaTime, 1);
-			C_Log::Print(ChargeWaitTime, 2);
+			C_Log::Print("FlowTime Value : " + FString::SanitizeFloat(SaveDeltaTime), 1);
+			C_Log::Print("WaitTime Value : " + FString::SanitizeFloat(ChargeWaitTime), 2);
 			CurrentEnergy = SaveEnergyValue + ((MaxEnergy - SaveEnergyValue) / ChargeWaitTime * SaveDeltaTime);
 			CurrentEnergy = FMath::Clamp(CurrentEnergy, 0.f, 1000.f);
 		}
@@ -153,7 +159,17 @@ void AC_Player::OpenEyes()
 
 void AC_Player::Interaction()
 {
-
+	if (Doors.Num() > 0)
+	{
+		for (int32 i = 0; i > Doors.Num(); i++)
+		{
+			if (Doors[i]->IsOverrlaped())
+			{
+				Doors[i]->Interaction();
+				break;
+			}
+		}
+	}
 }
 
 void AC_Player::OnMoveForward(float InAxis)

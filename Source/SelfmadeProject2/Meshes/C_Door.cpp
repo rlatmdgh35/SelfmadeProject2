@@ -38,29 +38,57 @@ void AC_Door::BeginPlay()
 {
 	Super::BeginPlay();
 
+	TArray<AActor*> playerActor;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Player::StaticClass(), playerActor);
+	Player = Cast<AC_Player>(playerActor[0]);
+
+
 	OnActorBeginOverlap.AddDynamic(this, &AC_Door::ActorBeginOverlap);
+	OnActorEndOverlap.AddDynamic(this, &AC_Door::ActorEndOverlap);
+
 }
 
 void AC_Door::ActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
-	C_Log::Print("Overlap");
+	bOverlapped = true;
+}
 
-	Player = Cast<AC_Player>(OtherActor);
+void AC_Door::ActorEndOverlap(AActor* OverlappedActor, AActor* OtherActor)
+{
+	bOverlapped = false;
+}
 
+void AC_Door::Interaction()
+{
+	// 
 	FQuat quat;
-	FVector rightVector = DefaultSceneComponent->GetRelativeRotationFromWorld(quat).GetRightVector();
+	FVector rightVector = DefaultSceneComponent->GetRelativeRotationFromWorld(quat).GetForwardVector();
 	FVector directionalVector = Player->GetActorLocation() - GetActorLocation();
 	directionalVector.Z = 0;
-	FVector crossResult = FVector::CrossProduct(rightVector, directionalVector);
+	float dotResult = UKismetMathLibrary::Dot_VectorVector(rightVector, directionalVector);
+
+	// 
+	FVector doorForward = -1 * GetActorRightVector();
+	FVector playerForward = Player->GetActorForwardVector();
+	float dotResult2 = UKismetMathLibrary::Dot_VectorVector(doorForward, playerForward);
+	float cos45 = FMath::Sqrt(2) / 2;
+
 	
-	if (crossResult.Z > 0)
-		Rotation = -1.f;
-	else
+
+	if (dotResult <= 0)
+	{
 		Rotation = 1.f;
+		CheckFalse(dotResult2 >= cos45);
+	}
+	else
+	{
+		Rotation = -1.f;
+		CheckFalse(dotResult2 <= -1 * cos45);
+	}
+
 
 	if ((bClosing || bOpen) == true)
 		Rotation = SaveRotation;
 
 	StartTimeline();
 }
-

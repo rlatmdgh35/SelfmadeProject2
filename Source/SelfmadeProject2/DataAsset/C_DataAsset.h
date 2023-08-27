@@ -11,7 +11,7 @@ struct FKeepGuide
 
 public:
 	UPROPERTY(EditAnywhere)
-		bool First = false;
+		bool First = true;
 
 	UPROPERTY(EditAnywhere)
 		bool Second = false;

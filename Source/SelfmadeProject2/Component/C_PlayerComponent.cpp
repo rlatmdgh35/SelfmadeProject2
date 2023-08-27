@@ -16,7 +16,5 @@ void UC_PlayerComponent::BeginPlay()
 
 	ACharacter* ownerCharacter = Cast<ACharacter>(GetOwner());
 	DataAsset->BeginPlay(ownerCharacter);
-
-
 }
 

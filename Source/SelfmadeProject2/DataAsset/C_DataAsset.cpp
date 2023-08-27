@@ -20,5 +20,12 @@ void UC_DataAsset::BeginPlay(ACharacter* InOwnerCharacter)
 	PlayerComponent = C_Helpers::GetComponent<UC_PlayerComponent>(Player);
 
 
+	FTransform transform;
+	FActorSpawnParameters actorSpawnParameter;
+	// GetWorld()->SpawnActor( ,transform, actorSpawnParameter);
+
+
+
+
 
 }
