@@ -29,7 +29,6 @@ protected:
 
 public:
 	virtual void Tick(float DeltaTime) override;
-
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 
@@ -40,6 +39,7 @@ private:
 	void CloseEyes();
 	void OpenEyes();
 	void Interaction();
+	void CheckGuide();
 
 
 // Axis Event
@@ -87,6 +87,7 @@ protected:
 	float ChargeWaitTime;
 	float SaveDeltaTime;
 	float SaveEnergyValue;
+	bool bTurn = true;
 
 public:
 	bool bTravelMap;

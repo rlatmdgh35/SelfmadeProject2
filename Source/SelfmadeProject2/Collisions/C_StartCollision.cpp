@@ -1,17 +1,17 @@
-#include "C_PastCollision.h"
+#include "C_StartCollision.h"
 #include "Components/BoxComponent.h"
 #include "Player/C_Player.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Global.h"
 
 
-AC_PastCollision::AC_PastCollision()
+AC_StartCollision::AC_StartCollision()
 {
 	C_Helpers::CreateSceneComponent(this, &Box, "Box");
-	Box->SetRelativeScale3D(FVector(15, 3, 5));
+	// Box->SetRelativeScale3D(FVector(15, 3, 5));
 }
 
-void AC_PastCollision::BeginPlay()
+void AC_StartCollision::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -21,25 +21,25 @@ void AC_PastCollision::BeginPlay()
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Player::StaticClass(), playerActor);
 	Player = Cast<AC_Player>(playerActor[0]);
 
-	OnActorBeginOverlap.AddDynamic(this, &AC_PastCollision::BeginOverlap);
+	OnActorBeginOverlap.AddDynamic(this, &AC_StartCollision::BeginOverlap);
 }
 
-void AC_PastCollision::BeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
+void AC_StartCollision::BeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
 	Player->bTravelMap = true;
 	Player->GetCharacterMovement()->MaxWalkSpeed = 0;
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &AC_PastCollision::TravelHotel, 3);
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &AC_StartCollision::TravelPast, 3);
 }
 
-void AC_PastCollision::TravelHotel()
+void AC_StartCollision::TravelPast()
 {
 	UWorld* world = GetWorld();
 	CheckNull(world);
+	world->ServerTravel("/Game/Maps/PastMap");
 
-	world->ServerTravel("/Game/Maps/HotelMap");
-	
-	
 	Player->bTravelMap = false;
+	Player->GetCharacterMovement()->MaxWalkSpeed = 600;
+
 
 
 }

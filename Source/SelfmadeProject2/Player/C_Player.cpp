@@ -42,7 +42,7 @@ AC_Player::AC_Player()
 
 
 	// Movement
-	GetCharacterMovement()->MaxWalkSpeed = 650.f;
+	GetCharacterMovement()->MaxWalkSpeed = 400.f;
 
 
 
@@ -124,6 +124,7 @@ void AC_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("CloseEyes", EInputEvent::IE_Pressed, this, &AC_Player::CloseEyes);
 	PlayerInputComponent->BindAction("CloseEyes", EInputEvent::IE_Released, this, &AC_Player::OpenEyes);
 	PlayerInputComponent->BindAction("Interaction", EInputEvent::IE_Pressed, this, &AC_Player::Interaction);
+	PlayerInputComponent->BindAction("CheckGuide", EInputEvent::IE_Pressed, this, &AC_Player::CheckGuide);
 
 
 	// Axis Event
@@ -139,7 +140,7 @@ void AC_Player::OnRun()
 	CheckTrue(CurrentMap == ECurrentMap::Past);
 	CheckTrue(CurrentEnergy <= 50);
 
-	GetCharacterMovement()->MaxWalkSpeed = 1000.f;
+	GetCharacterMovement()->MaxWalkSpeed = 600.f;
 	IsRun = true;
 }
 
@@ -147,7 +148,7 @@ void AC_Player::OffRun()
 {
 	CheckTrue(CurrentMap == ECurrentMap::Past);
 
-	GetCharacterMovement()->MaxWalkSpeed = 650.f;
+	GetCharacterMovement()->MaxWalkSpeed = 400.f;
 	IsRun = false;
 }
 
@@ -159,6 +160,24 @@ void AC_Player::CloseEyes()
 void AC_Player::OpenEyes()
 {
 	DataAsset->IsOpenEyes = true;
+}
+
+void AC_Player::CheckGuide()
+{
+	if (bTurn)
+	{
+		// Check Guide Code
+
+
+		bTurn = false;
+	}
+	else
+	{
+		// Quit Guide Code
+
+
+		bTurn = true;
+	}
 }
 
 void AC_Player::Interaction()
