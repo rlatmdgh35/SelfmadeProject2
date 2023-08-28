@@ -42,7 +42,7 @@ AC_Player::AC_Player()
 
 
 	// Movement
-	GetCharacterMovement()->MaxWalkSpeed = 400.f;
+	GetCharacterMovement()->MaxWalkSpeed = 650.f;
 
 
 
@@ -59,11 +59,9 @@ void AC_Player::BeginPlay()
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Door::StaticClass(), doorActors);
 	if (doorActors.Num() > 0)
 	{
-		C_Log::Print("doorActors Num : " + FString::FromInt(doorActors.Num()));
 		for (int32 i = 0; i < doorActors.Num(); i++)
 		{
-			C_Log::Print(i);
-			// Doors[i] = Cast<AC_Door>(doorActors[i]);
+			Doors.Add(Cast<AC_Door>(doorActors[i]));
 		}
 	}
 }
@@ -138,15 +136,18 @@ void AC_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AC_Player::OnRun()
 {
+	CheckTrue(CurrentMap == ECurrentMap::Past);
 	CheckTrue(CurrentEnergy <= 50);
 
-	GetCharacterMovement()->MaxWalkSpeed = 600.f;
+	GetCharacterMovement()->MaxWalkSpeed = 1000.f;
 	IsRun = true;
 }
 
 void AC_Player::OffRun()
 {
-	GetCharacterMovement()->MaxWalkSpeed = 400.f;
+	CheckTrue(CurrentMap == ECurrentMap::Past);
+
+	GetCharacterMovement()->MaxWalkSpeed = 650.f;
 	IsRun = false;
 }
 
@@ -162,16 +163,12 @@ void AC_Player::OpenEyes()
 
 void AC_Player::Interaction()
 {
-	C_Log::Print("1");
-
 	if (Doors.Num() > 0)
 	{
-		C_Log::Print("2");
-		for (int32 i = 0; i > Doors.Num(); i++)
+		for (int32 i = 0; i < Doors.Num(); i++)
 		{
 			if (Doors[i]->IsOverrlaped())
 			{
-				C_Log::Print("3");
 				Doors[i]->Interaction();
 				break;
 			}
@@ -202,12 +199,16 @@ void AC_Player::OnMoveRight(float InAxis)
 
 void AC_Player::OnHorizontalLook(float InAxis)
 {
+	CheckTrue(bTravelMap);
+
 	float speed = 45.f;
 	AddControllerYawInput(InAxis * speed * GetWorld()->GetDeltaSeconds());
 }
 
 void AC_Player::OnVerticalLook(float InAxis)
 {
+	CheckTrue(bTravelMap);
+
 	float speed = 45.f;
 	AddControllerPitchInput(InAxis * speed * GetWorld()->GetDeltaSeconds());
 }

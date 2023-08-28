@@ -4,6 +4,11 @@
 #include "GameFramework/Character.h"
 #include "C_Player.generated.h"
 
+UENUM(BlueprintType)
+enum class ECurrentMap : uint8
+{
+	Start, Past, Hotel, End
+};
 
 UENUM(BlueprintType)
 enum class EInteractionType : uint8
@@ -62,14 +67,6 @@ public:
 
 private:
 	class UC_DataAsset* DataAsset;
-	
-
-protected:
-	float Speed;
-	float MaxEnergy = 350.f;
-	float ChargeWaitTime;
-	float SaveDeltaTime;
-	float SaveEnergyValue;
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
@@ -80,6 +77,20 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly)
 		float CurrentEnergy;
+
+protected:
+	UPROPERTY(BlueprintReadWrite)
+		ECurrentMap CurrentMap;
+
+	float Speed;
+	float MaxEnergy = 350.f;
+	float ChargeWaitTime;
+	float SaveDeltaTime;
+	float SaveEnergyValue;
+
+public:
+	bool bTravelMap;
+
 
 
 };

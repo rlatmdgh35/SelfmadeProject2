@@ -52,6 +52,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, VisibleDefaultsOnly)
 		class UStaticMeshComponent* Door;
 
+	UPROPERTY(BlueprintReadWrite, VisibleDefaultsOnly)
+		class USceneComponent* DoorRoot;
+
 	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly)
 		class USceneComponent* Corner_R;
 
@@ -65,7 +68,7 @@ public:
 
 public:
 	UPROPERTY(BlueprintReadWrite)
-		bool bClosing;
+		bool bMoving;
 
 	UPROPERTY(BlueprintReadWrite)
 		bool bOpen;

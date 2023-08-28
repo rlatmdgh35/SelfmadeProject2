@@ -1,6 +1,7 @@
 #include "C_PastCollision.h"
 #include "Components/BoxComponent.h"
 #include "Player/C_Player.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Global.h"
 
 
@@ -14,13 +15,20 @@ void AC_PastCollision::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// PastMap Start Location (X=4775.000000,Y=3150.000000,Z=120.000000)
+
+	TArray<AActor*> playerActor;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Player::StaticClass(), playerActor);
+	Player = Cast<AC_Player>(playerActor[0]);
+
 	OnActorBeginOverlap.AddDynamic(this, &AC_PastCollision::BeginOverlap);
 }
 
 void AC_PastCollision::BeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &AC_PastCollision::TravelHotel, 5);
-
+	Player->bTravelMap = true;
+	Player->GetCharacterMovement()->MaxWalkSpeed = 0;
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &AC_PastCollision::TravelHotel, 3);
 }
 
 void AC_PastCollision::TravelHotel()
@@ -29,15 +37,17 @@ void AC_PastCollision::TravelHotel()
 	CheckNull(world);
 
 	world->ServerTravel("/Game/Maps/HotelMap");
+	
+	
+	Player->bTravelMap = false;
 
-	// USkeletalMesh* skeletalMesh;
-	// C_Helpers::GetAsset(&skeletalMesh, "/Game/Character/Past/Mesh/Ch18_nonPBR");
-	// 
-	// 
-	// TSubclassOf<AC_Player> playerClass;
-	// C_Helpers::GetClass(&playerClass, "/Game/Player/BP_Player");
-	// AC_Player* player = Cast<AC_Player>(playerClass);
-	// player->GetMesh()->SetSkeletalMesh(skeletalMesh);
+	USkeletalMesh* skeletalMesh;
+	C_Helpers::GetAsset(&skeletalMesh, "/Game/Character/Past/Mesh/Ch18_nonPBR");
+	Player->GetMesh()->SetSkeletalMesh(skeletalMesh);
+
+	TSubclassOf<UAnimInstance> animInstanceClass;
+	C_Helpers::GetClass(&animInstanceClass, "/Game/Player/BluePrint/ABP_Player_Past");
+	Player->GetMesh()->SetAnimInstanceClass(animInstanceClass);
 
 
 }

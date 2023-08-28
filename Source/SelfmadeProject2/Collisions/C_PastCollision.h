@@ -19,6 +19,7 @@ protected:
 
 private:
 	class UBoxComponent* Box;
+	class AC_Player* Player;
 	FTimerHandle TimerHandle;
 
 private:
