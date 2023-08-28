@@ -14,7 +14,11 @@ AC_Door::AC_Door()
 	C_Helpers::CreateSceneComponent<UStaticMeshComponent>(this, &Door, "Door", DefaultSceneComponent);
 	C_Helpers::CreateSceneComponent<UStaticMeshComponent>(this, &DoorHandle_F, "DoorHandle_F", Door);
 	C_Helpers::CreateSceneComponent<UStaticMeshComponent>(this, &DoorHandle_B, "DoorHandle_B", Door);
+	C_Helpers::CreateSceneComponent<USceneComponent>(this, &Corner_R, "Corner_R", Door);
+	C_Helpers::CreateSceneComponent<USceneComponent>(this, &Corner_L, "Corner_L", Door);
 	C_Helpers::CreateSceneComponent<UBoxComponent>(this, &Box, "BoxCollision", DefaultSceneComponent);
+
+	Door->SetRelativeRotation(FRotator(0.f, 90.f, 0.f));
 
 	UStaticMesh* doorHandle_F;
 	C_Helpers::GetAsset(&doorHandle_F, "/Game/StaticMeshes/SM_DoorHandle");
@@ -28,7 +32,10 @@ AC_Door::AC_Door()
 	DoorHandle_B->SetRelativeLocation(FVector(-55.f, 5.75f, 100.f));
 	DoorHandle_B->SetRelativeRotation(FRotator(0.f, 180.f, 270.f));
 
-	Box->SetRelativeLocation(FVector(0, 0, 100));
+	Corner_R->SetRelativeLocation(FVector(60.f, 3.5f, 100.f));
+	Corner_L->SetRelativeLocation(FVector(-60.f, 3.5f, 100.f));
+
+	Box->SetRelativeLocationAndRotation(FVector(0.f, 0.f, 100.f), FRotator(0.f, 90.f, 0.f));
 	Box->SetRelativeScale3D(FVector(1.75f, 3.f, 3.f));
 
 
@@ -65,25 +72,37 @@ void AC_Door::Interaction()
 	FVector rightVector = DefaultSceneComponent->GetRelativeRotationFromWorld(quat).GetForwardVector();
 	FVector directionalVector = Player->GetActorLocation() - GetActorLocation();
 	directionalVector.Z = 0;
-	float dotResult = UKismetMathLibrary::Dot_VectorVector(rightVector, directionalVector);
 
 	// 
 	FVector doorForward = -1 * GetActorRightVector();
 	FVector playerForward = Player->GetActorForwardVector();
-	float dotResult2 = UKismetMathLibrary::Dot_VectorVector(doorForward, playerForward);
-	float cos45 = FMath::Sqrt(2) / 2;
 
+	//
+	FVector playerLocation = Player->GetActorLocation();
+	FVector corner_R = Corner_R->GetComponentLocation();
+	FVector normal_R = playerLocation - corner_R;
+	FVector corner_L = Corner_L->GetComponentLocation();
+	FVector normal_L = playerLocation - corner_L;
+
+	float dotResult = UKismetMathLibrary::Dot_VectorVector(rightVector, directionalVector);
+	float dotResult2 = UKismetMathLibrary::Dot_VectorVector(doorForward, playerForward);
+	float cross_R = FVector::CrossProduct(normal_R, playerForward).Z;
+	float cross_L = FVector::CrossProduct(normal_L, playerForward).Z * -1;
 	
+	C_Log::Print("Interaction_Door");
+
+
+
 
 	if (dotResult <= 0)
 	{
 		Rotation = 1.f;
-		CheckFalse(dotResult2 >= cos45);
+		CheckFalse(cross_R >= 0 && cross_L >= 0);
 	}
 	else
 	{
 		Rotation = -1.f;
-		CheckFalse(dotResult2 <= -1 * cos45);
+		CheckFalse(cross_R <= 0 && cross_L <= 0);
 	}
 
 

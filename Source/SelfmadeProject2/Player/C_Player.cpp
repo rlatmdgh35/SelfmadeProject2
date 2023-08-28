@@ -1,9 +1,9 @@
 #include "C_Player.h"
-#include "Meshes/C_Door.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Component/C_PlayerComponent.h"
 #include "DataAsset/C_DataAsset.h"
+#include "Meshes/C_Door.h"
 #include "Global.h"
 
 
@@ -52,17 +52,20 @@ void AC_Player::BeginPlay()
 {
 	Super::BeginPlay();
 
+	CurrentEnergy = MaxEnergy;
+
+
 	TArray<AActor*> doorActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Door::StaticClass(), doorActors);
 	if (doorActors.Num() > 0)
 	{
-		for (int32 i = 0; i > doorActors.Num() ;i++)
+		C_Log::Print("doorActors Num : " + FString::FromInt(doorActors.Num()));
+		for (int32 i = 0; i < doorActors.Num(); i++)
 		{
-			Doors[i] = Cast<AC_Door>(doorActors[i]);
+			C_Log::Print(i);
+			// Doors[i] = Cast<AC_Door>(doorActors[i]);
 		}
 	}
-
-	CurrentEnergy = MaxEnergy;
 }
 
 void AC_Player::Tick(float DeltaTime)
@@ -159,12 +162,16 @@ void AC_Player::OpenEyes()
 
 void AC_Player::Interaction()
 {
+	C_Log::Print("1");
+
 	if (Doors.Num() > 0)
 	{
+		C_Log::Print("2");
 		for (int32 i = 0; i > Doors.Num(); i++)
 		{
 			if (Doors[i]->IsOverrlaped())
 			{
+				C_Log::Print("3");
 				Doors[i]->Interaction();
 				break;
 			}
