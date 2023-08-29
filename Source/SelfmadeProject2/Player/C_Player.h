@@ -72,7 +72,9 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 		TArray<class AC_Door*> Doors;
 
-	class UC_DataAsset* DataAsset;
+	UPROPERTY(BlueprintReadOnly)
+		class UC_DataAsset* DataAsset;
+	
 	class AC_Office* Office;
 
 

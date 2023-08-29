@@ -66,7 +66,8 @@ void AC_Player::BeginPlay()
 
 	TArray<AActor*> officeActor;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Office::StaticClass(), officeActor);
-	Office = Cast<AC_Office>(officeActor[0]);
+	if (officeActor.Num() > 0)
+		Office = Cast<AC_Office>(officeActor[0]);
 
 
 	APlayerController* controller = Cast<APlayerController>(GetController());
@@ -213,10 +214,8 @@ void AC_Player::Interaction()
 		}
 	}
 
-	if (Office->IsOverlapped())
+	if ((Office != nullptr) && (Office->IsOverlapped()))
 		Office->Interaction();
-
-	
 }
 
 void AC_Player::OnMoveForward(float InAxis)

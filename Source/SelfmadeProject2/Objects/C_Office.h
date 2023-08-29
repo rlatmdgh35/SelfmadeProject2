@@ -41,7 +41,7 @@ private:
 	class AC_Player* Player;
 
 private:
-	bool bOverlapping;
+	bool bOverlapping = false;
 
 
 };
