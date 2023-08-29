@@ -4,6 +4,7 @@
 #include "GameFramework/Character.h"
 #include "C_Player.generated.h"
 
+
 UENUM(BlueprintType)
 enum class ECurrentMap : uint8
 {
@@ -14,6 +15,12 @@ UENUM(BlueprintType)
 enum class EInteractionType : uint8
 {
 	Door, Max
+};
+
+UENUM(BlueprintType)
+enum class EEndingType : uint8
+{
+	Happy, Sad, Normal, Hidden
 };
 
 UCLASS()
@@ -57,7 +64,7 @@ private:
 		class UCameraComponent* Camera;
 
 // ActorComponent
-private:
+public:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UC_PlayerComponent* PlayerComponent;
 
@@ -65,8 +72,13 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 		TArray<class AC_Door*> Doors;
 
-private:
 	class UC_DataAsset* DataAsset;
+	class AC_Office* Office;
+
+
+private:
+	TSubclassOf<class UC_Guide> Guide;
+	class UC_Guide* GuideWidget;
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
@@ -81,17 +93,19 @@ protected:
 protected:
 	UPROPERTY(BlueprintReadWrite)
 		ECurrentMap CurrentMap;
+	
+	UPROPERTY(BlueprintReadWrite)
+		bool bTurn = true;
 
 	float Speed;
 	float MaxEnergy = 350.f;
 	float ChargeWaitTime;
 	float SaveDeltaTime;
 	float SaveEnergyValue;
-	bool bTurn = true;
 
 public:
 	bool bTravelMap;
-
+	bool bHaveOfficeKey = true;
 
 
 };

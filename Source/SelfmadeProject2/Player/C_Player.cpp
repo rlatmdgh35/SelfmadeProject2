@@ -1,9 +1,12 @@
 #include "C_Player.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Widgets/C_Guide.h"
 #include "Component/C_PlayerComponent.h"
 #include "DataAsset/C_DataAsset.h"
 #include "Meshes/C_Door.h"
+#include "Objects/C_Office.h"
+#include "Blueprint/UserWidget.h"
 #include "Global.h"
 
 
@@ -17,7 +20,6 @@ AC_Player::AC_Player()
 
 	// || Get Asset_DataAsset ||
 	C_Helpers::GetAsset(&DataAsset, "/Game/Player/DA_Player");
-
 	PlayerComponent->DataAsset = DataAsset;
 
 	USkeletalMesh* meshAsset;
@@ -26,8 +28,6 @@ AC_Player::AC_Player()
 	TSubclassOf<UAnimInstance> animInstanceClass;
 	C_Helpers::GetClass(&animInstanceClass, "/Game/Player/BluePrint/ABP_Player_Start");
 	GetMesh()->SetAnimInstanceClass(animInstanceClass);
-
-
 
 
 	// Mesh Setting
@@ -44,7 +44,7 @@ AC_Player::AC_Player()
 	// Movement
 	GetCharacterMovement()->MaxWalkSpeed = 400.f;
 
-
+	C_Helpers::GetClass(&Guide, "/Game/Blueprints/WBP_Guide");
 
 }
 
@@ -53,7 +53,6 @@ void AC_Player::BeginPlay()
 	Super::BeginPlay();
 
 	CurrentEnergy = MaxEnergy;
-
 
 	TArray<AActor*> doorActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Door::StaticClass(), doorActors);
@@ -64,6 +63,17 @@ void AC_Player::BeginPlay()
 			Doors.Add(Cast<AC_Door>(doorActors[i]));
 		}
 	}
+
+	TArray<AActor*> officeActor;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Office::StaticClass(), officeActor);
+	Office = Cast<AC_Office>(officeActor[0]);
+
+
+	APlayerController* controller = Cast<APlayerController>(GetController());
+	GuideWidget = CreateWidget<UC_Guide>(controller, Guide);
+	GuideWidget->AddToViewport();
+
+
 }
 
 void AC_Player::Tick(float DeltaTime)
@@ -71,6 +81,7 @@ void AC_Player::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	Speed = GetVelocity().Size2D();
+
 	if (IsRun)
 	{
 		if (CurrentEnergy != 0)
@@ -112,6 +123,14 @@ void AC_Player::Tick(float DeltaTime)
 	else
 		DataAsset->IsCanRun = true;
 
+	// On/Off Widget
+	// --------------------------------------------------------
+	if (bTurn)
+		GuideWidget->SetVisibility(ESlateVisibility::Hidden);
+	else
+		GuideWidget->SetVisibility(ESlateVisibility::Visible);
+	// --------------------------------------------------------
+
 }
 
 void AC_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -132,7 +151,6 @@ void AC_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("MoveRight", this, &AC_Player::OnMoveRight);
 	PlayerInputComponent->BindAxis("HorizontalLook", this, &AC_Player::OnHorizontalLook);
 	PlayerInputComponent->BindAxis("VerticalLook", this, &AC_Player::OnVerticalLook);
-
 }
 
 void AC_Player::OnRun()
@@ -166,15 +184,16 @@ void AC_Player::CheckGuide()
 {
 	if (bTurn)
 	{
-		// Check Guide Code
-
+		GuideWidget->ShowFirstPage();
+		APlayerController* controller = Cast<APlayerController>(GetController());
+		controller->bShowMouseCursor = true;
 
 		bTurn = false;
 	}
 	else
 	{
-		// Quit Guide Code
-
+		APlayerController* controller = Cast<APlayerController>(GetController());
+		controller->bShowMouseCursor = false;
 
 		bTurn = true;
 	}
@@ -193,6 +212,11 @@ void AC_Player::Interaction()
 			}
 		}
 	}
+
+	if (Office->IsOverlapped())
+		Office->Interaction();
+
+	
 }
 
 void AC_Player::OnMoveForward(float InAxis)

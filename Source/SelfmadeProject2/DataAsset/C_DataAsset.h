@@ -84,6 +84,9 @@ public:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "PlayerState")
 		bool IsCanRun;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Objects")
+		bool IsOpenOffice;
+
 private:
 	class AC_Player* Player;
 	class UC_PlayerComponent* PlayerComponent;

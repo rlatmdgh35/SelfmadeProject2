@@ -13,7 +13,7 @@ class SELFMADEPROJECT2_API UC_Guide : public UUserWidget
 protected:
 	virtual bool Initialize() override;
 
-private:
+public:
 	UFUNCTION()
 		void ShowFirstPage();
 

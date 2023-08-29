@@ -24,10 +24,6 @@ bool UC_Guide::Initialize()
 
 
 
-
-
-
-
 	return true;
 }
 
