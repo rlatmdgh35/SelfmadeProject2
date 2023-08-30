@@ -10,6 +10,7 @@ class SELFMADEPROJECT2_API UC_Guide : public UUserWidget
 {
 	GENERATED_BODY()
 	
+
 protected:
 	virtual bool Initialize() override;
 
@@ -23,7 +24,12 @@ public:
 	UFUNCTION()
 		void ShowThirdPage();
 
+private:
+	UFUNCTION()
+		void OpenEighthGuide();
 
+	UFUNCTION()
+		void OpenNinthGuide();
 
 
 private:
@@ -51,6 +57,11 @@ private:
 	UPROPERTY(meta = (BindWidget))
 		class UButton* BackButton_3;
 
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* Mosaic;
 
+private:
+	class AC_RoomNum307* RoomNum307;
+	class AC_RoomNum508* RoomNum508;
 
 };

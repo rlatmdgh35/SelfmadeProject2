@@ -107,7 +107,9 @@ protected:
 
 public:
 	bool bTravelMap;
-	bool bHaveOfficeKey = true;
+
+	UPROPERTY(BlueprintReadWrite)
+		bool bHaveOfficeKey = true;
 
 
 };

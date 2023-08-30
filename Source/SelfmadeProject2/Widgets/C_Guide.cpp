@@ -1,7 +1,12 @@
 #include "C_Guide.h"
 #include "Components/Button.h"
 #include "Components/WidgetSwitcher.h"
+#include "Components/TextBlock.h"
+#include "Collisions/C_RoomNum307.h"
+#include "Collisions/C_RoomNum508.h"
 #include "Global.h"
+
+
 
 
 
@@ -22,7 +27,10 @@ bool UC_Guide::Initialize()
 	CheckNullResult(BackButton_3, false);
 	BackButton_3->OnClicked.AddDynamic(this, &UC_Guide::ShowSecondPage);
 
-
+	/*
+	RoomNum307->OpenEighthGuide.AddDynamic(this, &UC_Guide::OpenEighthGuide);
+	RoomNum508->OpenNinthGuide.AddDynamic(this, &UC_Guide::OpenNinthGuide);
+	*/
 
 	return true;
 }
@@ -48,3 +56,13 @@ void UC_Guide::ShowThirdPage()
 	GuidePageSwitcher->SetActiveWidget(ThirdPage);
 }
 
+void UC_Guide::OpenEighthGuide()
+{
+
+}
+
+void UC_Guide::OpenNinthGuide()
+{
+
+
+}

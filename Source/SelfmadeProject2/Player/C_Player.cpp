@@ -6,7 +6,6 @@
 #include "DataAsset/C_DataAsset.h"
 #include "Meshes/C_Door.h"
 #include "Objects/C_Office.h"
-#include "Blueprint/UserWidget.h"
 #include "Global.h"
 
 
@@ -195,6 +194,7 @@ void AC_Player::CheckGuide()
 	{
 		APlayerController* controller = Cast<APlayerController>(GetController());
 		controller->bShowMouseCursor = false;
+
 
 		bTurn = true;
 	}

@@ -44,11 +44,10 @@ void AC_Office::EndOverlap(AActor* OverlappedActor, AActor* OtherActor)
 void AC_Office::Interaction() // If Player Has OfficeKey -> Open Door, Another Functions
 {
 	CheckFalse(Player->bHaveOfficeKey);
-
-
-
+	C_Log::Print("OfficeOpen");
 
 	Player->DataAsset->IsOpenOffice = true;
+	Player->bHaveOfficeKey = false;
 }
 
 
