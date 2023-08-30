@@ -27,6 +27,8 @@ bool UC_Guide::Initialize()
 	CheckNullResult(BackButton_3, false);
 	BackButton_3->OnClicked.AddDynamic(this, &UC_Guide::ShowSecondPage);
 
+
+
 	/*
 	RoomNum307->OpenEighthGuide.AddDynamic(this, &UC_Guide::OpenEighthGuide);
 	RoomNum508->OpenNinthGuide.AddDynamic(this, &UC_Guide::OpenNinthGuide);
@@ -58,7 +60,7 @@ void UC_Guide::ShowThirdPage()
 
 void UC_Guide::OpenEighthGuide()
 {
-
+	
 }
 
 void UC_Guide::OpenNinthGuide()

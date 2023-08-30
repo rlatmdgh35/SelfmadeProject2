@@ -14,7 +14,7 @@ enum class ECurrentMap : uint8
 UENUM(BlueprintType)
 enum class EInteractionType : uint8
 {
-	Door, Max
+	Door, Lock, Max
 };
 
 UENUM(BlueprintType)
@@ -48,6 +48,18 @@ private:
 	void Interaction();
 	void CheckGuide();
 
+	void OnZero();
+	void OnOne();
+	void OnTwo();
+	void OnThree();
+	void OnFour();
+	void OnFive();
+	void OnSix();
+	void OnSeven();
+	void OnEight();
+	void OnNine();
+
+
 
 // Axis Event
 private:
@@ -76,11 +88,15 @@ public:
 		class UC_DataAsset* DataAsset;
 	
 	class AC_Office* Office;
-
+	class AC_LockActor* LockActor;
 
 private:
 	TSubclassOf<class UC_Guide> Guide;
 	class UC_Guide* GuideWidget;
+
+	TSubclassOf<class UC_Lock> Lock;
+	class UC_Lock* LockWidget;
+
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
@@ -92,13 +108,17 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 		float CurrentEnergy;
 
-protected:
+public:
 	UPROPERTY(BlueprintReadWrite)
 		ECurrentMap CurrentMap;
+
+	UPROPERTY(BlueprintReadWrite)
+		EInteractionType InteractionType;
 	
 	UPROPERTY(BlueprintReadWrite)
 		bool bTurn = true;
 
+protected:
 	float Speed;
 	float MaxEnergy = 350.f;
 	float ChargeWaitTime;

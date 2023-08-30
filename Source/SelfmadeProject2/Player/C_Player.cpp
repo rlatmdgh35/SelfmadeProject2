@@ -2,10 +2,12 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Widgets/C_Guide.h"
+#include "Widgets/C_Lock.h"
 #include "Component/C_PlayerComponent.h"
 #include "DataAsset/C_DataAsset.h"
 #include "Meshes/C_Door.h"
 #include "Objects/C_Office.h"
+#include "Objects/C_LockActor.h"
 #include "Global.h"
 
 
@@ -44,6 +46,7 @@ AC_Player::AC_Player()
 	GetCharacterMovement()->MaxWalkSpeed = 400.f;
 
 	C_Helpers::GetClass(&Guide, "/Game/Blueprints/WBP_Guide");
+	C_Helpers::GetClass(&Lock, "/Game/Blueprints/WBP_Lock");
 
 }
 
@@ -68,10 +71,20 @@ void AC_Player::BeginPlay()
 	if (officeActor.Num() > 0)
 		Office = Cast<AC_Office>(officeActor[0]);
 
+	TArray<AActor*> lockActor;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_LockActor::StaticClass(), lockActor);
+	if (lockActor.Num() > 0)
+		LockActor = Cast<AC_LockActor>(lockActor[0]);
+
+
+
 
 	APlayerController* controller = Cast<APlayerController>(GetController());
 	GuideWidget = CreateWidget<UC_Guide>(controller, Guide);
 	GuideWidget->AddToViewport();
+
+	LockWidget = CreateWidget<UC_Lock>(controller, Lock);
+	LockWidget->AddToViewport();
 
 
 }
@@ -144,6 +157,16 @@ void AC_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("CloseEyes", EInputEvent::IE_Released, this, &AC_Player::OpenEyes);
 	PlayerInputComponent->BindAction("Interaction", EInputEvent::IE_Pressed, this, &AC_Player::Interaction);
 	PlayerInputComponent->BindAction("CheckGuide", EInputEvent::IE_Pressed, this, &AC_Player::CheckGuide);
+	PlayerInputComponent->BindAction("Zero", EInputEvent::IE_Pressed, this, &AC_Player::OnZero);
+	PlayerInputComponent->BindAction("One", EInputEvent::IE_Pressed, this, &AC_Player::OnOne);
+	PlayerInputComponent->BindAction("Two", EInputEvent::IE_Pressed, this, &AC_Player::OnTwo);
+	PlayerInputComponent->BindAction("Three", EInputEvent::IE_Pressed, this, &AC_Player::OnThree);
+	PlayerInputComponent->BindAction("Four", EInputEvent::IE_Pressed, this, &AC_Player::OnFour);
+	PlayerInputComponent->BindAction("Five", EInputEvent::IE_Pressed, this, &AC_Player::OnFive);
+	PlayerInputComponent->BindAction("Six", EInputEvent::IE_Pressed, this, &AC_Player::OnSix);
+	PlayerInputComponent->BindAction("Seven", EInputEvent::IE_Pressed, this, &AC_Player::OnSeven);
+	PlayerInputComponent->BindAction("Eight", EInputEvent::IE_Pressed, this, &AC_Player::OnEight);
+	PlayerInputComponent->BindAction("Nine", EInputEvent::IE_Pressed, this, &AC_Player::OnNine);
 
 
 	// Axis Event
@@ -180,6 +203,29 @@ void AC_Player::OpenEyes()
 	DataAsset->IsOpenEyes = true;
 }
 
+void AC_Player::Interaction()
+{
+	if (Doors.Num() > 0)
+	{
+		for (int32 i = 0; i < Doors.Num(); i++)
+		{
+			if (Doors[i]->IsOverrlaped())
+			{
+				Doors[i]->Interaction();
+				break;
+			}
+		}
+	}
+
+	if ((Office != nullptr) && (Office->IsOverlapped()))
+		Office->Interaction();
+
+	if ((LockActor != nullptr) && (LockActor->IsOverlapped()))
+		LockActor->Interaction();
+
+
+}
+
 void AC_Player::CheckGuide()
 {
 	if (bTurn)
@@ -200,22 +246,72 @@ void AC_Player::CheckGuide()
 	}
 }
 
-void AC_Player::Interaction()
+void AC_Player::OnZero()
 {
-	if (Doors.Num() > 0)
-	{
-		for (int32 i = 0; i < Doors.Num(); i++)
-		{
-			if (Doors[i]->IsOverrlaped())
-			{
-				Doors[i]->Interaction();
-				break;
-			}
-		}
-	}
+	CheckFalse(InteractionType == EInteractionType::Lock);
+}
 
-	if ((Office != nullptr) && (Office->IsOverlapped()))
-		Office->Interaction();
+void AC_Player::OnOne()
+{
+	CheckFalse(InteractionType == EInteractionType::Lock);
+
+
+}
+
+void AC_Player::OnTwo()
+{
+	CheckFalse(InteractionType == EInteractionType::Lock);
+
+
+}
+
+void AC_Player::OnThree()
+{
+	CheckFalse(InteractionType == EInteractionType::Lock);
+
+
+}
+
+void AC_Player::OnFour()
+{
+	CheckFalse(InteractionType == EInteractionType::Lock);
+
+
+}
+
+void AC_Player::OnFive()
+{
+	CheckFalse(InteractionType == EInteractionType::Lock);
+
+
+}
+
+void AC_Player::OnSix()
+{
+	CheckFalse(InteractionType == EInteractionType::Lock);
+
+
+}
+
+void AC_Player::OnSeven()
+{
+	CheckFalse(InteractionType == EInteractionType::Lock);
+
+
+}
+
+void AC_Player::OnEight()
+{
+	CheckFalse(InteractionType == EInteractionType::Lock);
+
+
+}
+
+void AC_Player::OnNine()
+{
+	CheckFalse(InteractionType == EInteractionType::Lock);
+
+
 }
 
 void AC_Player::OnMoveForward(float InAxis)
