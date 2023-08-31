@@ -3,15 +3,21 @@
 #include "Components/Button.h"
 #include "GameFramework/Character.h"
 #include "Player/C_Player.h"
-#include "DataAsset/C_DataAsset.h"
 #include "Global.h"
 
+
+bool UC_Lock::Initialize()
+{
+	Super::Initialize();
+
+	QuitButton->OnClicked.AddDynamic(this, &UC_Lock::Quit);
+
+	return true;
+}
 
 void UC_Lock::BeginPlay(ACharacter* InCharacter)
 {
 	Player = Cast<AC_Player>(InCharacter);
-
-	QuitButton->OnClicked.AddDynamic(this, &UC_Lock::Quit);
 }
 
 void UC_Lock::SetTextNum(FText InText)
@@ -37,8 +43,10 @@ void UC_Lock::SetTextNum(FText InText)
 
 		if (CheckLockNum())
 		{
-			Player->DataAsset->OpenGuide.IsOpenTenth = true;
 			Quit();
+
+			if (OpenTenthGuide.IsBound())
+				OpenTenthGuide.Broadcast();
 			// Index = 1;
 		}
 

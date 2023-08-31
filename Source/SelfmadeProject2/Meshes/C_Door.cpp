@@ -9,15 +9,13 @@
 
 AC_Door::AC_Door()
 {
-	C_Helpers::CreateSceneComponent<USceneComponent>(this, &DefaultSceneComponent, "DafaultSceneComponent");
-
-	C_Helpers::CreateSceneComponent<USceneComponent>(this, &DoorRoot, "DoorRoot", DefaultSceneComponent);
+	C_Helpers::CreateSceneComponent<USceneComponent>(this, &DoorRoot, "DoorRoot", RootComponent);
 	C_Helpers::CreateSceneComponent<UStaticMeshComponent>(this, &Door, "Door", DoorRoot);
 	C_Helpers::CreateSceneComponent<UStaticMeshComponent>(this, &DoorHandle_F, "DoorHandle_F", Door);
 	C_Helpers::CreateSceneComponent<UStaticMeshComponent>(this, &DoorHandle_B, "DoorHandle_B", Door);
-	C_Helpers::CreateSceneComponent<USceneComponent>(this, &Corner_R, "Corner_R", DefaultSceneComponent);
-	C_Helpers::CreateSceneComponent<USceneComponent>(this, &Corner_L, "Corner_L", DefaultSceneComponent);
-	C_Helpers::CreateSceneComponent<UBoxComponent>(this, &Box, "BoxCollision", DefaultSceneComponent);
+	C_Helpers::CreateSceneComponent<USceneComponent>(this, &Corner_R, "Corner_R", RootComponent);
+	C_Helpers::CreateSceneComponent<USceneComponent>(this, &Corner_L, "Corner_L", RootComponent);
+	C_Helpers::CreateSceneComponent<UBoxComponent>(this, &Box, "BoxCollision", RootComponent);
 
 	DoorRoot->SetRelativeLocation(FVector(0, 62, 0));
 
@@ -74,7 +72,7 @@ void AC_Door::Interaction()
 {
 	// 
 	FQuat quat;
-	FVector rightVector = DefaultSceneComponent->GetRelativeRotationFromWorld(quat).GetForwardVector();
+	FVector rightVector = RootComponent->GetRelativeRotationFromWorld(quat).GetForwardVector();
 	FVector directionalVector = (Player->GetActorLocation() - GetActorLocation());
 	directionalVector.Z = 0;
 

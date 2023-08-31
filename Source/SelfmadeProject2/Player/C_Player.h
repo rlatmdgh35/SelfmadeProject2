@@ -14,7 +14,7 @@ enum class ECurrentMap : uint8
 UENUM(BlueprintType)
 enum class EInteractionType : uint8
 {
-	Door, Lock, Max
+	None, Door, Lock, Max
 };
 
 UENUM(BlueprintType)
@@ -101,7 +101,7 @@ public:
 		ECurrentMap CurrentMap = ECurrentMap::Start;
 
 	UPROPERTY(BlueprintReadWrite)
-		EInteractionType InteractionType;
+		EInteractionType InteractionType = EInteractionType::None;
 
 	UPROPERTY(BlueprintReadOnly)
 		bool IsRun;

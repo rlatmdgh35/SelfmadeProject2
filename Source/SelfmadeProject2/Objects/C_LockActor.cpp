@@ -2,7 +2,6 @@
 #include "Components/StaticMeshComponent.h"
 #include "Player/C_Player.h"
 #include "Widgets/C_Lock.h"
-#include "DataAsset/C_DataAsset.h"
 #include "Global.h"
 
 

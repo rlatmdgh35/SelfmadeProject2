@@ -21,12 +21,6 @@ void AC_RoomNum508::BeginPlay()
 
 void AC_RoomNum508::OnBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
-	Player = Cast<AC_Player>(OtherActor);
-	CheckNull(Player);
-
-	C_Log::Print("Overlapped");
-	Player->DataAsset->OpenGuide.IsOpenEighth = true;
-
 	Box->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	if (OpenNinthGuide.IsBound())

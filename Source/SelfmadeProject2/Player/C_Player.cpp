@@ -79,17 +79,17 @@ void AC_Player::BeginPlay()
 
 
 
-
 	APlayerController* controller = Cast<APlayerController>(GetController());
-	GuideWidget = CreateWidget<UC_Guide>(controller, Guide);
-	GuideWidget->AddToViewport();
-	GuideWidget->SetVisibility(ESlateVisibility::Hidden);
 
-	
 	LockWidget = CreateWidget<UC_Lock>(controller, Lock);
 	LockWidget->AddToViewport();
 	LockWidget->BeginPlay(this);
 	LockWidget->SetVisibility(ESlateVisibility::Hidden);
+
+	GuideWidget = CreateWidget<UC_Guide>(controller, Guide);
+	GuideWidget->AddToViewport();
+	GuideWidget->BeginPlay(this, LockWidget);
+	GuideWidget->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void AC_Player::Tick(float DeltaTime)
@@ -219,7 +219,7 @@ void AC_Player::Interaction()
 		Office->Interaction();
 	}
 
-	if ((LockActor != nullptr) && (LockActor->bLookAtMe == true))
+	if ((LockActor != nullptr) && (LockActor->bLookAtMe == true) && (DataAsset->OpenGuide.IsOpenTenth == false))
 	{
 		InteractionType = EInteractionType::Lock;
 

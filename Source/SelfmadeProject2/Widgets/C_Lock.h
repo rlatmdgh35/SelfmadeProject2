@@ -5,10 +5,15 @@
 #include "C_Lock.generated.h"
 
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOpenTenthGuide);
+
 UCLASS()
 class SELFMADEPROJECT2_API UC_Lock : public UUserWidget
 {
 	GENERATED_BODY()
+
+protected:
+	virtual bool Initialize() override;
 
 public:
 	void BeginPlay(ACharacter* InCharacter);
@@ -26,7 +31,8 @@ private:
 public:
 	void SetTextNum(FText InText);
 
-
+public:
+	FOpenTenthGuide OpenTenthGuide;
 
 private:
 	UPROPERTY(meta = (BindWidget))

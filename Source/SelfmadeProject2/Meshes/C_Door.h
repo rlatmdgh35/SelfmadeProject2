@@ -37,9 +37,6 @@ public:
 
 private:
 	UPROPERTY(VisibleDefaultsOnly)
-		class USceneComponent* DefaultSceneComponent;
-
-	UPROPERTY(VisibleDefaultsOnly)
 		class UStaticMeshComponent* DoorHandle_F;
 	
 	UPROPERTY(VisibleDefaultsOnly)
