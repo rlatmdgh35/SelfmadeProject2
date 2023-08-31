@@ -58,6 +58,7 @@ private:
 	void OnSeven();
 	void OnEight();
 	void OnNine();
+	void OnBackSpace();
 
 
 

@@ -1,5 +1,6 @@
 #include "C_Player.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/Character.h"
 #include "Camera/CameraComponent.h"
 #include "Widgets/C_Guide.h"
 #include "Widgets/C_Lock.h"
@@ -54,6 +55,9 @@ void AC_Player::BeginPlay()
 {
 	Super::BeginPlay();
 
+	InteractionType = EInteractionType::Lock;
+	LockWidget->BeginPlay(this);
+
 	CurrentEnergy = MaxEnergy;
 
 	TArray<AActor*> doorActors;
@@ -83,9 +87,10 @@ void AC_Player::BeginPlay()
 	GuideWidget = CreateWidget<UC_Guide>(controller, Guide);
 	GuideWidget->AddToViewport();
 
+	
 	LockWidget = CreateWidget<UC_Lock>(controller, Lock);
 	LockWidget->AddToViewport();
-
+	
 
 }
 
@@ -167,6 +172,7 @@ void AC_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("Seven", EInputEvent::IE_Pressed, this, &AC_Player::OnSeven);
 	PlayerInputComponent->BindAction("Eight", EInputEvent::IE_Pressed, this, &AC_Player::OnEight);
 	PlayerInputComponent->BindAction("Nine", EInputEvent::IE_Pressed, this, &AC_Player::OnNine);
+	PlayerInputComponent->BindAction("BackSpace", EInputEvent::IE_Pressed, this, &AC_Player::OnBackSpace);
 
 
 	// Axis Event
@@ -249,69 +255,78 @@ void AC_Player::CheckGuide()
 void AC_Player::OnZero()
 {
 	CheckFalse(InteractionType == EInteractionType::Lock);
+
+	LockWidget->SetTextNum(FText::FromString("0"));
 }
 
 void AC_Player::OnOne()
 {
 	CheckFalse(InteractionType == EInteractionType::Lock);
 
-
+	LockWidget->SetTextNum(FText::FromString("1"));
 }
 
 void AC_Player::OnTwo()
 {
 	CheckFalse(InteractionType == EInteractionType::Lock);
 
-
+	LockWidget->SetTextNum(FText::FromString("2"));
 }
 
 void AC_Player::OnThree()
 {
 	CheckFalse(InteractionType == EInteractionType::Lock);
 
-
+	LockWidget->SetTextNum(FText::FromString("3"));
 }
 
 void AC_Player::OnFour()
 {
 	CheckFalse(InteractionType == EInteractionType::Lock);
 
-
+	LockWidget->SetTextNum(FText::FromString("4"));
 }
 
 void AC_Player::OnFive()
 {
 	CheckFalse(InteractionType == EInteractionType::Lock);
 
-
+	LockWidget->SetTextNum(FText::FromString("5"));
 }
 
 void AC_Player::OnSix()
 {
 	CheckFalse(InteractionType == EInteractionType::Lock);
 
-
+	LockWidget->SetTextNum(FText::FromString("6"));
 }
 
 void AC_Player::OnSeven()
 {
 	CheckFalse(InteractionType == EInteractionType::Lock);
 
-
+	LockWidget->SetTextNum(FText::FromString("7"));
 }
 
 void AC_Player::OnEight()
 {
 	CheckFalse(InteractionType == EInteractionType::Lock);
 
-
+	LockWidget->SetTextNum(FText::FromString("8"));
 }
 
 void AC_Player::OnNine()
 {
 	CheckFalse(InteractionType == EInteractionType::Lock);
 
+	LockWidget->SetTextNum(FText::FromString("9"));
+}
 
+void AC_Player::OnBackSpace()
+{
+	CheckFalse(InteractionType == EInteractionType::Lock);
+
+	LockWidget->PressBackSpace();
 }
 
 void AC_Player::OnMoveForward(float InAxis)
