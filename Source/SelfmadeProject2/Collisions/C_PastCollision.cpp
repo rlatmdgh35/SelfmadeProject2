@@ -26,8 +26,8 @@ void AC_PastCollision::BeginPlay()
 
 void AC_PastCollision::BeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
-	Player->bTravelMap = true;
-	Player->GetCharacterMovement()->MaxWalkSpeed = 0;
+	Player->bStopLocation = true;
+	Player->bStopRotation = true;
 	GetWorldTimerManager().SetTimer(TimerHandle, this, &AC_PastCollision::TravelHotel, 3);
 }
 
@@ -38,8 +38,8 @@ void AC_PastCollision::TravelHotel()
 
 	world->ServerTravel("/Game/Maps/HotelMap");
 	
-	
-	Player->bTravelMap = false;
+	Player->bStopLocation = false;
+	Player->bStopRotation = false;
 
 
 }

@@ -1,5 +1,6 @@
 #include "C_Lock.h"
 #include "Components/TextBlock.h"
+#include "Components/Button.h"
 #include "GameFramework/Character.h"
 #include "Player/C_Player.h"
 #include "DataAsset/C_DataAsset.h"
@@ -8,8 +9,9 @@
 
 void UC_Lock::BeginPlay(ACharacter* InCharacter)
 {
-	C_Log::Print(InCharacter->GetName());
-	// Player = Cast<AC_Player>(InCharacter);
+	Player = Cast<AC_Player>(InCharacter);
+
+	QuitButton->OnClicked.AddDynamic(this, &UC_Lock::Quit);
 }
 
 void UC_Lock::SetTextNum(FText InText)
@@ -36,15 +38,14 @@ void UC_Lock::SetTextNum(FText InText)
 		if (CheckLockNum())
 		{
 			Player->DataAsset->OpenGuide.IsOpenTenth = true;
-			Index = 1;
-			C_Log::Print("True");
+			Quit();
+			// Index = 1;
 		}
 
 		else
 		{
 			ClearNum();
 			Index = 1;
-			C_Log::Print("False");
 		}
 	}
 }
@@ -69,7 +70,12 @@ void UC_Lock::PressBackSpace()
 
 bool UC_Lock::CheckLockNum()
 {
-	if ((FirstNum->GetText().ToString() == "7") && (SecondNum->GetText().ToString() == "3") && (ThirdNum->GetText().ToString() == "0") && (ForthNum->GetText().ToString() == "9"))
+	if (
+		(FirstNum->GetText().ToString()		== "7") && 
+		(SecondNum->GetText().ToString()	== "3") && 
+		(ThirdNum->GetText().ToString()		== "0") && 
+		(ForthNum->GetText().ToString()		== "9")
+		)
 		return true;
 
 	return false;
@@ -83,3 +89,12 @@ void UC_Lock::ClearNum()
 	ForthNum->SetText(FText::FromString("-"));
 }
 
+void UC_Lock::Quit()
+{
+	APlayerController* controller = Cast<APlayerController>(Player->GetController());
+	controller->bShowMouseCursor = false;
+
+	Player->bStopLocation = false;
+	Player->bStopRotation = false;
+	Player->LockWidget->SetVisibility(ESlateVisibility::Hidden);
+}

@@ -26,8 +26,7 @@ void AC_StartCollision::BeginPlay()
 
 void AC_StartCollision::BeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
-	Player->bTravelMap = true;
-	Player->GetCharacterMovement()->MaxWalkSpeed = 0;
+	Player->bStopLocation = true;
 	GetWorldTimerManager().SetTimer(TimerHandle, this, &AC_StartCollision::TravelPast, 3);
 }
 
@@ -37,8 +36,8 @@ void AC_StartCollision::TravelPast()
 	CheckNull(world);
 	world->ServerTravel("/Game/Maps/PastMap");
 
-	Player->bTravelMap = false;
-	Player->GetCharacterMovement()->MaxWalkSpeed = 600;
+	Player->CurrentMap = ECurrentMap::Past;
+	Player->bStopLocation = false;
 
 
 

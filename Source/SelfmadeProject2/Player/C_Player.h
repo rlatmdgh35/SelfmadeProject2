@@ -69,11 +69,9 @@ private:
 	void OnHorizontalLook(float InAxis);
 	void OnVerticalLook(float InAxis);
 
-
-
 // SceneComponent
-private:
-	UPROPERTY(VisibleDefaultsOnly)
+public:
+	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly)
 		class UCameraComponent* Camera;
 
 // ActorComponent
@@ -91,33 +89,41 @@ public:
 	class AC_Office* Office;
 	class AC_LockActor* LockActor;
 
-private:
+public:
 	TSubclassOf<class UC_Guide> Guide;
 	class UC_Guide* GuideWidget;
 
 	TSubclassOf<class UC_Lock> Lock;
 	class UC_Lock* LockWidget;
 
+public:
+	UPROPERTY(BlueprintReadWrite)
+		ECurrentMap CurrentMap = ECurrentMap::Start;
 
-protected:
+	UPROPERTY(BlueprintReadWrite)
+		EInteractionType InteractionType;
+
 	UPROPERTY(BlueprintReadOnly)
 		bool IsRun;
-	
-	UPROPERTY(BlueprintReadOnly)	
+
+	UPROPERTY(BlueprintReadOnly)
 		bool CanChargeEnergy = false;
 
 	UPROPERTY(BlueprintReadOnly)
 		float CurrentEnergy;
 
-public:
 	UPROPERTY(BlueprintReadWrite)
-		ECurrentMap CurrentMap;
+		bool bHaveOfficeKey = true;
 
 	UPROPERTY(BlueprintReadWrite)
-		EInteractionType InteractionType;
-	
-	UPROPERTY(BlueprintReadWrite)
 		bool bTurn = true;
+
+	UPROPERTY(BlueprintReadWrite)
+		bool bStopLocation;
+
+	UPROPERTY(BlueprintReadWrite)
+		bool bStopRotation;
+
 
 protected:
 	float Speed;
@@ -125,12 +131,6 @@ protected:
 	float ChargeWaitTime;
 	float SaveDeltaTime;
 	float SaveEnergyValue;
-
-public:
-	bool bTravelMap;
-
-	UPROPERTY(BlueprintReadWrite)
-		bool bHaveOfficeKey = true;
 
 
 };

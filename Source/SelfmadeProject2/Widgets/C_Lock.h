@@ -20,6 +20,9 @@ private:
 	bool CheckLockNum();
 	void ClearNum();
 
+	UFUNCTION()
+		void Quit();
+
 public:
 	void SetTextNum(FText InText);
 
@@ -37,6 +40,9 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 		class UTextBlock* ForthNum;
+
+	UPROPERTY(meta = (BindWidget))
+		class UButton* QuitButton;
 
 private:
 	class AC_Player* Player;

@@ -55,9 +55,6 @@ void AC_Player::BeginPlay()
 {
 	Super::BeginPlay();
 
-	InteractionType = EInteractionType::Lock;
-	LockWidget->BeginPlay(this);
-
 	CurrentEnergy = MaxEnergy;
 
 	TArray<AActor*> doorActors;
@@ -86,12 +83,13 @@ void AC_Player::BeginPlay()
 	APlayerController* controller = Cast<APlayerController>(GetController());
 	GuideWidget = CreateWidget<UC_Guide>(controller, Guide);
 	GuideWidget->AddToViewport();
+	GuideWidget->SetVisibility(ESlateVisibility::Hidden);
 
 	
 	LockWidget = CreateWidget<UC_Lock>(controller, Lock);
 	LockWidget->AddToViewport();
-	
-
+	LockWidget->BeginPlay(this);
+	LockWidget->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void AC_Player::Tick(float DeltaTime)
@@ -140,15 +138,6 @@ void AC_Player::Tick(float DeltaTime)
 		DataAsset->IsCanRun = false;
 	else
 		DataAsset->IsCanRun = true;
-
-	// On/Off Widget
-	// --------------------------------------------------------
-	if (bTurn)
-		GuideWidget->SetVisibility(ESlateVisibility::Hidden);
-	else
-		GuideWidget->SetVisibility(ESlateVisibility::Visible);
-	// --------------------------------------------------------
-
 }
 
 void AC_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -213,6 +202,8 @@ void AC_Player::Interaction()
 {
 	if (Doors.Num() > 0)
 	{
+		InteractionType = EInteractionType::Door;
+
 		for (int32 i = 0; i < Doors.Num(); i++)
 		{
 			if (Doors[i]->IsOverrlaped())
@@ -224,29 +215,35 @@ void AC_Player::Interaction()
 	}
 
 	if ((Office != nullptr) && (Office->IsOverlapped()))
+	{
 		Office->Interaction();
+	}
 
-	if ((LockActor != nullptr) && (LockActor->IsOverlapped()))
+	if ((LockActor != nullptr) && (LockActor->bLookAtMe == true))
+	{
+		InteractionType = EInteractionType::Lock;
+
 		LockActor->Interaction();
+	}
 
 
 }
 
 void AC_Player::CheckGuide()
 {
+	APlayerController* controller = Cast<APlayerController>(GetController());
 	if (bTurn)
 	{
 		GuideWidget->ShowFirstPage();
-		APlayerController* controller = Cast<APlayerController>(GetController());
 		controller->bShowMouseCursor = true;
+		GuideWidget->SetVisibility(ESlateVisibility::Visible);
 
 		bTurn = false;
 	}
 	else
 	{
-		APlayerController* controller = Cast<APlayerController>(GetController());
 		controller->bShowMouseCursor = false;
-
+		GuideWidget->SetVisibility(ESlateVisibility::Hidden);
 
 		bTurn = true;
 	}
@@ -332,7 +329,7 @@ void AC_Player::OnBackSpace()
 void AC_Player::OnMoveForward(float InAxis)
 {
 	CheckTrue(FMath::IsNearlyZero(InAxis));
-
+	CheckTrue(bStopLocation);
 
 	FRotator rotator = FRotator(0.f, GetControlRotation().Yaw, 0.f);
 	FVector direction = FQuat(rotator).GetForwardVector();
@@ -343,6 +340,7 @@ void AC_Player::OnMoveForward(float InAxis)
 void AC_Player::OnMoveRight(float InAxis)
 {
 	CheckTrue(FMath::IsNearlyZero(InAxis));
+	CheckTrue(bStopLocation);
 
 	FRotator rotator = FRotator(0.f, GetControlRotation().Yaw, 0.f);
 	FVector direction = FQuat(rotator).GetRightVector();
@@ -352,7 +350,7 @@ void AC_Player::OnMoveRight(float InAxis)
 
 void AC_Player::OnHorizontalLook(float InAxis)
 {
-	CheckTrue(bTravelMap);
+	CheckTrue(bStopRotation);
 
 	float speed = 45.f;
 	AddControllerYawInput(InAxis * speed * GetWorld()->GetDeltaSeconds());
@@ -360,7 +358,7 @@ void AC_Player::OnHorizontalLook(float InAxis)
 
 void AC_Player::OnVerticalLook(float InAxis)
 {
-	CheckTrue(bTravelMap);
+	CheckTrue(bStopRotation);
 
 	float speed = 45.f;
 	AddControllerPitchInput(InAxis * speed * GetWorld()->GetDeltaSeconds());

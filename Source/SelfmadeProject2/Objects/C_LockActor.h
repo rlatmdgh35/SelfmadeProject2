@@ -16,16 +16,6 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	FORCEINLINE bool IsOverlapped() { return bOverlapping; }
-
-private:
-	UFUNCTION()
-		void BeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
-
-	UFUNCTION()
-		void EndOverlap(AActor* OverlappedActor, AActor* OtherActor);
-
-public:
 	void Interaction();
 
 private:
@@ -34,8 +24,9 @@ private:
 
 	class AC_Player* Player;
 
-private:
-	bool bOverlapping = false;
+public:
+	UPROPERTY(BlueprintReadWrite)
+		bool bLookAtMe = false;
 
 
 
