@@ -50,6 +50,9 @@ public:
 		class UStaticMeshComponent* Door;
 
 	UPROPERTY(BlueprintReadWrite, VisibleDefaultsOnly)
+		class USceneComponent* DefaultSceneComponent;
+
+	UPROPERTY(BlueprintReadWrite, VisibleDefaultsOnly)
 		class USceneComponent* DoorRoot;
 
 	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly)

@@ -21,7 +21,7 @@ enum class ECharacterLineType : uint8
 UENUM(BlueprintType)
 enum class EInteractionType : uint8
 {
-	None, Door, Lock, Max
+	None, CheckGuide, Door, Lock, Elevator, Max
 };
 
 UENUM(BlueprintType)
@@ -84,6 +84,11 @@ private:
 public:
 	void CallLineOfCharacter(ECharacterLineType InType);
 
+// This Function Can Read In Blueprint
+public:
+	UFUNCTION(BlueprintCallable)
+		void LineTraceInteraction(AActor* InActor);
+
 // Delegate -> LineOfCharacter
 public:
 	FCharacterLineTypeSignature CharacterLineType;
@@ -104,9 +109,11 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 		class UC_DataAsset* DataAsset;
-	
+
+private:
 	class AC_Office* Office;
 	class AC_LockActor* LockActor;
+	class AC_Elevator_Button* Elevator_Button;
 
 public:
 	TSubclassOf<class UC_Guide> Guide;
@@ -117,6 +124,8 @@ public:
 
 	TSubclassOf<class UC_LineOfCharacter> LineOfCharacter;
 	class UC_LineOfCharacter* LineOfCharacterWidget;
+
+
 
 
 public:

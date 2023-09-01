@@ -8,6 +8,6 @@ ASelfmadeProject2GameMode::ASelfmadeProject2GameMode()
 	: Super()
 {
 	// set default pawn class to our Blueprinted character
-	ConstructorHelpers::FClassFinder<APawn> PlayerPawnClassFinder(TEXT("/Game/Player/BluePrint/BP_Player"));
+	ConstructorHelpers::FClassFinder<APawn> PlayerPawnClassFinder(TEXT("/Game/Player/Blueprint/BP_Player"));
 	DefaultPawnClass = PlayerPawnClassFinder.Class;
 }

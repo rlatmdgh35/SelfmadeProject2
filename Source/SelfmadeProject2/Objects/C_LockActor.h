@@ -25,9 +25,6 @@ private:
 	class AC_Player* Player;
 
 public:
-	UPROPERTY(BlueprintReadWrite)
-		bool bLookAtMe = false;
-
-
+	bool bCanCall = false;
 
 };

@@ -60,18 +60,19 @@ void UC_Lock::SetTextNum(FText InText)
 
 void UC_Lock::PressBackSpace()
 {
-	if (Index == 1)
+	if (Index == 2)
 	{
-		FirstNum->SetText(FText::FromString(""));
-	}
-	else if (Index == 2)
-	{
-		SecondNum->SetText(FText::FromString(""));
+		FirstNum->SetText(FText::FromString("-"));
 		Index--;
 	}
 	else if (Index == 3)
 	{
-		ThirdNum->SetText(FText::FromString(""));
+		SecondNum->SetText(FText::FromString("-"));
+		Index--;
+	}
+	else if (Index == 4)
+	{
+		ThirdNum->SetText(FText::FromString("-"));
 		Index--;
 	}
 }
@@ -102,6 +103,7 @@ void UC_Lock::Quit()
 	APlayerController* controller = Cast<APlayerController>(Player->GetController());
 	controller->bShowMouseCursor = false;
 
+	Player->InteractionType = EInteractionType::None;
 	Player->bStopLocation = false;
 	Player->bStopRotation = false;
 	Player->LockWidget->SetVisibility(ESlateVisibility::Hidden);

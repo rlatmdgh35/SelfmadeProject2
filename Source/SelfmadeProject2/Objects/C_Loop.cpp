@@ -33,15 +33,21 @@ void AC_Loop::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	CheckFalse(bLoop);
-	CheckFalse(Player->GetActorLocation().X <= 2500.f);
-	CheckFalse(Player->GetActorLocation().Y <= -11420.f);
+	if (Player->GetActorLocation().Y <= -11420.f)
+	{
+		FVector location;
+		location.X = Player->GetActorLocation().X;
+		location.Y = 1100.f;
+		location.Z = Player->GetActorLocation().Z;
 
-	FVector location;
-	location.X = Player->GetActorLocation().X;
-	location.Y = 1100.f;
-	location.Z = Player->GetActorLocation().Z;
+		Player->SetActorLocation(location);
+	}
 
-	Player->SetActorLocation(location);
+	if ((bStart) && (Player->GetActorLocation().X <= 2500.f))
+	{
+		Player->CallLineOfCharacter(ECharacterLineType::PastMap_Start);
+		bStart = false;
+	}
 }
 
 void AC_Loop::SetOffLoop()

@@ -7,7 +7,7 @@
 AC_PastMapGameMode::AC_PastMapGameMode()
 {
 	TSubclassOf<AC_Player> player;
-	C_Helpers::GetClass(&player, "/Game/Player/BluePrint/BP_Player");
+	C_Helpers::GetClass(&player, "/Game/Player/Blueprint/BP_Player");
 
 	DefaultPawnClass = player;
 }

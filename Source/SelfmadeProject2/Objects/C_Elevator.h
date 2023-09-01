@@ -16,24 +16,19 @@ class SELFMADEPROJECT2_API AC_Elevator : public AActor
 {
 	GENERATED_BODY()
 
+protected:
+	virtual void BeginPlay() override;
+
 public:
 	UFUNCTION(BlueprintImplementableEvent)
-		void FirstFloor_Event();
+		void OpenElevatorDoor();
 
-	UFUNCTION(BlueprintImplementableEvent)
-		void SecondFloor_Event();
+public:
+	void SetFloor(EMoveToFloor InFloor);
 
-	UFUNCTION(BlueprintImplementableEvent)
-		void ThirdFloor_Event();
+private:
+	class AC_Elevator_Button* Button;
 
-	UFUNCTION(BlueprintImplementableEvent)
-		void ForthFloor_Event();
-
-	UFUNCTION(BlueprintImplementableEvent)
-		void FifthFloor_Event();
-
-	UFUNCTION(BlueprintCallable)
-		void SetFloor(EMoveToFloor InFloor);
 
 public:
 	UPROPERTY(BlueprintReadWrite)
@@ -44,5 +39,11 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 		bool bMoving;
+
+	UPROPERTY(BlueprintReadWrite)
+		bool bCloseDoor;
+
+
+
 
 };

@@ -9,16 +9,18 @@
 
 AC_Door::AC_Door()
 {
-	C_Helpers::CreateSceneComponent<USceneComponent>(this, &DoorRoot, "DoorRoot", RootComponent);
+	C_Helpers::CreateSceneComponent<USceneComponent>(this, &DefaultSceneComponent, "DefaultSceneComoponent");
+
+	C_Helpers::CreateSceneComponent<USceneComponent>(this, &DoorRoot, "DoorRoot", DefaultSceneComponent);
 	C_Helpers::CreateSceneComponent<UStaticMeshComponent>(this, &Door, "Door", DoorRoot);
 	C_Helpers::CreateSceneComponent<UStaticMeshComponent>(this, &DoorHandle_F, "DoorHandle_F", Door);
 	C_Helpers::CreateSceneComponent<UStaticMeshComponent>(this, &DoorHandle_B, "DoorHandle_B", Door);
-	C_Helpers::CreateSceneComponent<USceneComponent>(this, &Corner_R, "Corner_R", RootComponent);
-	C_Helpers::CreateSceneComponent<USceneComponent>(this, &Corner_L, "Corner_L", RootComponent);
-	C_Helpers::CreateSceneComponent<UBoxComponent>(this, &Box, "BoxCollision", RootComponent);
+	C_Helpers::CreateSceneComponent<USceneComponent>(this, &Corner_R, "Corner_R", DefaultSceneComponent);
+	C_Helpers::CreateSceneComponent<USceneComponent>(this, &Corner_L, "Corner_L", DefaultSceneComponent);
+	C_Helpers::CreateSceneComponent<UBoxComponent>(this, &Box, "BoxCollision", DefaultSceneComponent);
 
 	DoorRoot->SetRelativeLocation(FVector(0, 62, 0));
-
+	
 	Door->SetRelativeLocationAndRotation(FVector(0, -62, 0), FRotator(0, 90, 0));
 
 	UStaticMesh* doorHandle_F;

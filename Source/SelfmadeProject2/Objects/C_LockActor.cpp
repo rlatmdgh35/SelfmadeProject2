@@ -19,7 +19,7 @@ void AC_LockActor::BeginPlay()
 	Player = Cast<AC_Player>(playerActor[0]);
 }
 
-void AC_LockActor::Interaction() // If Player Has OfficeKey -> Open Door, Another Functions
+void AC_LockActor::Interaction()
 {
 	Player->InteractionType = EInteractionType::Lock;
 

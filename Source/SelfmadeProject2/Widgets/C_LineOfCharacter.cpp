@@ -16,27 +16,7 @@ void UC_LineOfCharacter::BeginPlay(ACharacter* InCharacter)
 
 void UC_LineOfCharacter::SetCharacterLine(ECharacterLineType InType)
 {
-	switch (InType)
-	{
-	case ECharacterLineType::StartMap_Start:
-		PrintStartMap_1();
-		break;
-	case ECharacterLineType::PastMap_Start:
-		PrintPastMap_1();
-		break;
-	case ECharacterLineType::HotelMap_Start:
-		PrintHotelMap_1();
-		break;
-	case ECharacterLineType::OpenEighthGuide:
-		PrintEighthGuide();
-		break;
-	case ECharacterLineType::OpenNinthGuide:
-		break;
-	case ECharacterLineType::OpenTenthGuide:
-		break;
-	default:
-		break;
-	}
+
 }
 
 void UC_LineOfCharacter::ClearTextBlock()
@@ -55,8 +35,6 @@ void UC_LineOfCharacter::PrintStartMap_2()
 void UC_LineOfCharacter::PrintPastMap_1()
 {
 	CharacterLineText->SetText(PastMap_1);
-	C_Log::Print("Past_1");
-	C_Log::Print(PastMap_1.ToString());
 
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UC_LineOfCharacter::PrintPastMap_2, 3);
 }
@@ -70,9 +48,9 @@ void UC_LineOfCharacter::PrintPastMap_2()
 
 void UC_LineOfCharacter::PrintPastMap_3()
 {
-	CharacterLineText->SetText(PastMap_1);
+	CharacterLineText->SetText(PastMap_3);
 
-	ClearTextBlock();
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UC_LineOfCharacter::ClearTextBlock, 3);
 }
 
 void UC_LineOfCharacter::PrintPastMap_4()

@@ -10,6 +10,7 @@
 #include "Meshes/C_Door.h"
 #include "Objects/C_Office.h"
 #include "Objects/C_LockActor.h"
+#include "Objects/C_Elevator_Button.h"
 #include "Global.h"
 
 
@@ -29,7 +30,7 @@ AC_Player::AC_Player()
 	C_Helpers::GetAsset(&meshAsset, "/Game/Character/Start/Mesh/Ch28_nonPBR");
 
 	TSubclassOf<UAnimInstance> animInstanceClass;
-	C_Helpers::GetClass(&animInstanceClass, "/Game/Player/BluePrint/ABP_Player_Start");
+	C_Helpers::GetClass(&animInstanceClass, "/Game/Player/Blueprint/ABP_Player_Start");
 	GetMesh()->SetAnimInstanceClass(animInstanceClass);
 
 
@@ -74,11 +75,6 @@ void AC_Player::BeginPlay()
 	if (officeActor.Num() > 0)
 		Office = Cast<AC_Office>(officeActor[0]);
 
-	TArray<AActor*> lockActor;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_LockActor::StaticClass(), lockActor);
-	if (lockActor.Num() > 0)
-		LockActor = Cast<AC_LockActor>(lockActor[0]);
-
 
 
 	APlayerController* controller = Cast<APlayerController>(GetController());
@@ -122,8 +118,8 @@ void AC_Player::Tick(float DeltaTime)
 		if (ChargeWaitTime != 0)
 		{
 			SaveDeltaTime = FMath::Clamp(SaveDeltaTime, 0.f, ChargeWaitTime);
-			C_Log::Print("FlowTime Value : " + FString::SanitizeFloat(SaveDeltaTime), 1);
-			C_Log::Print("WaitTime Value : " + FString::SanitizeFloat(ChargeWaitTime), 2);
+			C_Log::Print("FlowTime Value : " + FString::SanitizeFloat(SaveDeltaTime), 1); 	 // For Test
+			C_Log::Print("WaitTime Value : " + FString::SanitizeFloat(ChargeWaitTime), 2);	 // For Test
 			CurrentEnergy = SaveEnergyValue + ((MaxEnergy - SaveEnergyValue) / ChargeWaitTime * SaveDeltaTime);
 			CurrentEnergy = FMath::Clamp(CurrentEnergy, 0.f, 1000.f);
 		}
@@ -150,6 +146,26 @@ void AC_Player::CallLineOfCharacter(ECharacterLineType InType)
 {
 	if (CharacterLineType.IsBound())
 		CharacterLineType.Broadcast(InType);
+}
+
+void AC_Player::LineTraceInteraction(AActor* Actor)
+{
+	Elevator_Button = Cast<AC_Elevator_Button>(Actor);
+	if (Elevator_Button != nullptr)
+	{
+		Elevator_Button->bCanCall = true;
+		if (Elevator_Button != Actor)
+			Elevator_Button->bCanCall = false;
+	}
+
+	LockActor = Cast<AC_LockActor>(Actor);
+	if (LockActor != nullptr)
+	{
+		LockActor->bCanCall = true;
+		if (LockActor != Actor)
+			LockActor->bCanCall = false;
+	}
+
 }
 
 void AC_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -220,6 +236,8 @@ void AC_Player::Interaction()
 		{
 			if (Doors[i]->IsOverrlaped())
 			{
+				CheckTrue(InteractionType == EInteractionType::CheckGuide);
+
 				Doors[i]->Interaction();
 				break;
 			}
@@ -231,14 +249,17 @@ void AC_Player::Interaction()
 		Office->Interaction();
 	}
 
-	if ((LockActor != nullptr) && (LockActor->bLookAtMe == true) && (DataAsset->OpenGuide.IsOpenTenth == false))
+	if ((LockActor != nullptr) && (LockActor->bCanCall == true) && (DataAsset->OpenGuide.IsOpenTenth == false))
 	{
-		InteractionType = EInteractionType::Lock;
-
+		CheckTrue(InteractionType == EInteractionType::CheckGuide);
 		LockActor->Interaction();
 	}
 
-
+	if ((Elevator_Button != nullptr) && (Elevator_Button->bCanCall == true))
+	{
+		InteractionType = EInteractionType::Elevator;
+		Elevator_Button->Interaction();
+	}
 }
 
 void AC_Player::CheckGuide()
@@ -246,9 +267,12 @@ void AC_Player::CheckGuide()
 	APlayerController* controller = Cast<APlayerController>(GetController());
 	if (bTurn)
 	{
+		CheckTrue(InteractionType == EInteractionType::Lock);
+
 		GuideWidget->ShowFirstPage();
 		controller->bShowMouseCursor = true;
 		GuideWidget->SetVisibility(ESlateVisibility::Visible);
+		InteractionType = EInteractionType::CheckGuide;
 
 		bTurn = false;
 	}
@@ -256,6 +280,7 @@ void AC_Player::CheckGuide()
 	{
 		controller->bShowMouseCursor = false;
 		GuideWidget->SetVisibility(ESlateVisibility::Hidden);
+		InteractionType = EInteractionType::None;
 
 		bTurn = true;
 	}

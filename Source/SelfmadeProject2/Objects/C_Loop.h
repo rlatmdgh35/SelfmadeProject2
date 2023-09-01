@@ -35,4 +35,5 @@ private:
 
 private:
 	bool bLoop = true;
+	bool bStart = true;
 };
