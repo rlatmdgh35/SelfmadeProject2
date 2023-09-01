@@ -5,10 +5,17 @@
 #include "C_Player.generated.h"
 
 
+
 UENUM(BlueprintType)
 enum class ECurrentMap : uint8
 {
 	Start, Past, Hotel, End
+};
+
+UENUM(BlueprintType)
+enum class ECharacterLineType : uint8
+{
+	StartMap_Start, PastMap_Start, HotelMap_Start, OpenEighthGuide, OpenNinthGuide, OpenTenthGuide
 };
 
 UENUM(BlueprintType)
@@ -22,6 +29,10 @@ enum class EEndingType : uint8
 {
 	Happy, Sad, Normal, Hidden
 };
+
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCharacterLineTypeSignature, ECharacterLineType, InType);
+
 
 UCLASS()
 class SELFMADEPROJECT2_API AC_Player : public ACharacter
@@ -69,6 +80,14 @@ private:
 	void OnHorizontalLook(float InAxis);
 	void OnVerticalLook(float InAxis);
 
+// Call Broadcast Function
+public:
+	void CallLineOfCharacter(ECharacterLineType InType);
+
+// Delegate -> LineOfCharacter
+public:
+	FCharacterLineTypeSignature CharacterLineType;
+
 // SceneComponent
 public:
 	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly)
@@ -95,6 +114,10 @@ public:
 
 	TSubclassOf<class UC_Lock> Lock;
 	class UC_Lock* LockWidget;
+
+	TSubclassOf<class UC_LineOfCharacter> LineOfCharacter;
+	class UC_LineOfCharacter* LineOfCharacterWidget;
+
 
 public:
 	UPROPERTY(BlueprintReadWrite)

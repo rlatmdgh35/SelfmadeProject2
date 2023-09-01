@@ -1,7 +1,8 @@
 #include "C_Player.h"
-#include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Widgets/C_LineOfCharacter.h"
 #include "Widgets/C_Guide.h"
 #include "Widgets/C_Lock.h"
 #include "Component/C_PlayerComponent.h"
@@ -46,6 +47,7 @@ AC_Player::AC_Player()
 	// Movement
 	GetCharacterMovement()->MaxWalkSpeed = 400.f;
 
+	C_Helpers::GetClass(&LineOfCharacter, "/Game/Blueprints/WBP_LineOfCharacter");
 	C_Helpers::GetClass(&Guide, "/Game/Blueprints/WBP_Guide");
 	C_Helpers::GetClass(&Lock, "/Game/Blueprints/WBP_Lock");
 
@@ -88,8 +90,12 @@ void AC_Player::BeginPlay()
 
 	GuideWidget = CreateWidget<UC_Guide>(controller, Guide);
 	GuideWidget->AddToViewport();
-	GuideWidget->BeginPlay(this, LockWidget);
+	GuideWidget->BeginPlay(this);
 	GuideWidget->SetVisibility(ESlateVisibility::Hidden);
+
+	LineOfCharacterWidget = CreateWidget<UC_LineOfCharacter>(controller, LineOfCharacter);
+	LineOfCharacterWidget->AddToViewport();
+	LineOfCharacterWidget->BeginPlay(this);
 }
 
 void AC_Player::Tick(float DeltaTime)
@@ -138,6 +144,12 @@ void AC_Player::Tick(float DeltaTime)
 		DataAsset->IsCanRun = false;
 	else
 		DataAsset->IsCanRun = true;
+}
+
+void AC_Player::CallLineOfCharacter(ECharacterLineType InType)
+{
+	if (CharacterLineType.IsBound())
+		CharacterLineType.Broadcast(InType);
 }
 
 void AC_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

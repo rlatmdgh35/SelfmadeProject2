@@ -2,18 +2,18 @@
 #include "Components/Button.h"
 #include "Components/WidgetSwitcher.h"
 #include "Components/TextBlock.h"
-#include "Components/Widget.h"
 #include "GameFramework/Character.h"
 #include "Player/C_Player.h"
 #include "DataAsset/C_DataAsset.h"
 #include "Collisions/C_RoomNum307.h"
 #include "Collisions/C_RoomNum508.h"
 #include "Widgets/C_Lock.h"
+#include "Widgets/C_LineOfCharacter.h"
 #include "Global.h"
 
 
 
-void UC_Guide::BeginPlay(ACharacter* InCharacter, UWidget* InWidget)
+void UC_Guide::BeginPlay(ACharacter* InCharacter)
 {
 	Player = Cast<AC_Player>(InCharacter);
 
@@ -22,7 +22,7 @@ void UC_Guide::BeginPlay(ACharacter* InCharacter, UWidget* InWidget)
 	if (roomNum307Actor.Num() > 0)
 	{
 		RoomNum307 = Cast<AC_RoomNum307>(roomNum307Actor[0]);
-		// RoomNum307->OpenEighthGuide.AddDynamic(this, &UC_Guide::OpenEighthGuide);
+		RoomNum307->OpenEighthGuide.AddDynamic(this, &UC_Guide::OpenEighthGuide);
 	}
 
 	TArray<AActor*> roomNum508Actor;
@@ -30,11 +30,11 @@ void UC_Guide::BeginPlay(ACharacter* InCharacter, UWidget* InWidget)
 	if (roomNum508Actor.Num() > 0)
 	{
 		RoomNum508 = Cast<AC_RoomNum508>(roomNum508Actor[0]);
-		// RoomNum508->OpenNinthGuide.AddDynamic(this, &UC_Guide::OpenNinthGuide);
+		RoomNum508->OpenNinthGuide.AddDynamic(this, &UC_Guide::OpenNinthGuide);
 	}
 
-	LockWidget = Cast<UC_Lock>(InWidget);
-	// LockWidget->OpenTenthGuide.AddDynamic(this, &UC_Guide::OpenTenthGuide);
+	LockWidget = Cast<UC_Lock>(Player->LockWidget);
+	LockWidget->OpenTenthGuide.AddDynamic(this, &UC_Guide::OpenTenthGuide);
 }
 
 bool UC_Guide::Initialize()
@@ -52,11 +52,6 @@ bool UC_Guide::Initialize()
 
 	CheckNullResult(BackButton_3, false);
 	BackButton_3->OnClicked.AddDynamic(this, &UC_Guide::ShowSecondPage);
-
-	/*
-	RoomNum307->OpenEighthGuide.AddDynamic(this, &UC_Guide::OpenEighthGuide);
-	RoomNum508->OpenNinthGuide.AddDynamic(this, &UC_Guide::OpenNinthGuide);
-	*/
 
 	return true;
 }
@@ -82,26 +77,27 @@ void UC_Guide::ShowThirdPage()
 	GuidePageSwitcher->SetActiveWidget(ThirdPage);
 }
 
-/*
 void UC_Guide::OpenEighthGuide()
 {
 	Player->DataAsset->OpenGuide.IsOpenEighth = true;
+	Player->CallLineOfCharacter(ECharacterLineType::OpenEighthGuide);
 
-	Mosaic->SetText(FText::FromString(""));
 	if (Player->DataAsset->OpenGuide.IsOpenTenth == true)
 	{
 		if (Player->DataAsset->OpenGuide.IsOpenNinth == true)
 		{
 			Mosaic->SetText(FText::FromString(
-			EighthText + NinthText + TenthText
+				EighthText.ToString() + 
+				NinthText.ToString() + 
+				TenthText.ToString()
 			));	
 		}
 		else
 		{
 			Mosaic->SetText(FText::FromString(
-				EighthText +
-				MosaicNinthText +
-				TenthText
+				EighthText.ToString() +
+				MosaicNinthText.ToString() +
+				TenthText.ToString()
 			));
 		}
 	}
@@ -110,14 +106,15 @@ void UC_Guide::OpenEighthGuide()
 		if (Player->DataAsset->OpenGuide.IsOpenNinth == true)
 		{
 			Mosaic->SetText(FText::FromString(
-				EighthText + NinthText
+				EighthText.ToString() + 
+				NinthText.ToString()
 			));
 		}
 		else
 		{
 			Mosaic->SetText(FText::FromString(
-				EighthText +
-				MosaicNinthText
+				EighthText.ToString() +
+				MosaicNinthText.ToString()
 			));
 		}
 	}
@@ -126,22 +123,24 @@ void UC_Guide::OpenEighthGuide()
 void UC_Guide::OpenNinthGuide()
 {
 	Player->DataAsset->OpenGuide.IsOpenNinth = true;
-	
-	Mosaic->SetText(FText::FromString(""));
+	Player->CallLineOfCharacter(ECharacterLineType::OpenNinthGuide);
+
 	if (Player->DataAsset->OpenGuide.IsOpenTenth == true)
 	{
 		if (Player->DataAsset->OpenGuide.IsOpenEighth == true)
 		{
 			Mosaic->SetText(FText::FromString(
-				EighthText + NinthText + TenthText
+				EighthText.ToString() + 
+				NinthText.ToString() + 
+				TenthText.ToString()
 			));
 		}
 		else
 		{
 			Mosaic->SetText(FText::FromString(
-				MosaicEighthText +
-				NinthText +
-				TenthText
+				MosaicEighthText.ToString() +
+				NinthText.ToString() +
+				TenthText.ToString()
 			));
 		}
 	}
@@ -150,14 +149,15 @@ void UC_Guide::OpenNinthGuide()
 		if (Player->DataAsset->OpenGuide.IsOpenEighth== true)
 		{
 			Mosaic->SetText(FText::FromString(
-				EighthText + NinthText
+				EighthText.ToString() +
+				NinthText.ToString()
 			));
 		}
 		else
 		{
 			Mosaic->SetText(FText::FromString(
-				MosaicEighthText +
-				NinthText
+				MosaicEighthText.ToString() +
+				NinthText.ToString()
 			));
 		}
 	}
@@ -167,21 +167,24 @@ void UC_Guide::OpenNinthGuide()
 void UC_Guide::OpenTenthGuide()
 {
 	Player->DataAsset->OpenGuide.IsOpenTenth = true;
+	Player->CallLineOfCharacter(ECharacterLineType::OpenTenthGuide);
 
 	if (Player->DataAsset->OpenGuide.IsOpenNinth == true)
 	{
 		if (Player->DataAsset->OpenGuide.IsOpenEighth == true)
 		{
 			Mosaic->SetText(FText::FromString(
-				EighthText + NinthText + TenthText
+				EighthText.ToString() +
+				NinthText.ToString() + 
+				TenthText.ToString()
 			));
 		}
 		else
 		{
 			Mosaic->SetText(FText::FromString(
-				MosaicEighthText +
-				NinthText +
-				TenthText
+				MosaicEighthText.ToString() +
+				NinthText.ToString() +
+				TenthText.ToString()
 			));
 		}
 	}
@@ -190,19 +193,18 @@ void UC_Guide::OpenTenthGuide()
 		if (Player->DataAsset->OpenGuide.IsOpenEighth == true)
 		{
 			Mosaic->SetText(FText::FromString(
-				EighthText + 
-				MosaicNinthText + 
-				TenthText
+				EighthText.ToString() +
+				MosaicNinthText.ToString() +
+				TenthText.ToString()
 			));
 		}
 		else
 		{
 			Mosaic->SetText(FText::FromString(
-				MosaicEighthText +
-				MosaicNinthText + 
-				TenthText
+				MosaicEighthText.ToString() +
+				MosaicNinthText.ToString() +
+				TenthText.ToString()
 			));
 		}
 	}
 }
-*/

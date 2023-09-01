@@ -5,7 +5,7 @@
 #include "C_RoomNum307.generated.h"
 
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOpenEighthGuide);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOpenEighthGuideSignature);
 
 UCLASS()
 class SELFMADEPROJECT2_API AC_RoomNum307 : public AActor
@@ -27,10 +27,8 @@ private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UBoxComponent* Box;
 
-	class AC_Player* Player;
-
 public:
-	FOpenEighthGuide OpenEighthGuide;
+	FOpenEighthGuideSignature OpenEighthGuide;
 
 
 

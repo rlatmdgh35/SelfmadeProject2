@@ -28,8 +28,4 @@ private:
 
 private:
 	void TravelPast();
-
-
-
-
 };

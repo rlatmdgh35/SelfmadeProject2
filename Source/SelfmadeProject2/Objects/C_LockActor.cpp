@@ -7,7 +7,7 @@
 
 AC_LockActor::AC_LockActor()
 {
-
+	C_Helpers::CreateSceneComponent(this, &LockMesh, "LockMesh", RootComponent);
 }
 
 void AC_LockActor::BeginPlay()

@@ -1,7 +1,5 @@
 #include "C_RoomNum508.h"
 #include "Components/BoxComponent.h"
-#include "Player/C_Player.h"
-#include "DataAsset/C_DataAsset.h"
 #include "Global.h"
 
 

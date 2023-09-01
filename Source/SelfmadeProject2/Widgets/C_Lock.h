@@ -5,7 +5,7 @@
 #include "C_Lock.generated.h"
 
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOpenTenthGuide);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOpenTenthGuideSignatrue);
 
 UCLASS()
 class SELFMADEPROJECT2_API UC_Lock : public UUserWidget
@@ -32,7 +32,7 @@ public:
 	void SetTextNum(FText InText);
 
 public:
-	FOpenTenthGuide OpenTenthGuide;
+	FOpenTenthGuideSignatrue OpenTenthGuide;
 
 private:
 	UPROPERTY(meta = (BindWidget))

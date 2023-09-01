@@ -37,9 +37,9 @@ void AC_PastCollision::TravelHotel()
 	CheckNull(world);
 
 	world->ServerTravel("/Game/Maps/HotelMap");
-	
 	Player->bStopLocation = false;
 	Player->bStopRotation = false;
+	Player->CallLineOfCharacter(ECharacterLineType::HotelMap_Start);
 
 
 }

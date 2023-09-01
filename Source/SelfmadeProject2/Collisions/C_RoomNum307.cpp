@@ -1,7 +1,5 @@
 #include "C_RoomNum307.h"
 #include "Components/BoxComponent.h"
-#include "Player/C_Player.h"
-#include "DataAsset/C_DataAsset.h"
 #include "Global.h"
 
 
@@ -9,7 +7,7 @@ AC_RoomNum307::AC_RoomNum307()
 {
 	C_Helpers::CreateSceneComponent(this, &Box, "Box");
 
-	Box->bHiddenInGame = false;
+	Box->bHiddenInGame = false; // For Test
 }
 
 void AC_RoomNum307::BeginPlay()

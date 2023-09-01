@@ -26,7 +26,6 @@ void AC_StartCollision::BeginPlay()
 
 void AC_StartCollision::BeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
-	Player->bStopLocation = true;
 	GetWorldTimerManager().SetTimer(TimerHandle, this, &AC_StartCollision::TravelPast, 3);
 }
 
@@ -35,12 +34,6 @@ void AC_StartCollision::TravelPast()
 	UWorld* world = GetWorld();
 	CheckNull(world);
 	world->ServerTravel("/Game/Maps/PastMap");
-
-	Player->CurrentMap = ECurrentMap::Past;
-	Player->bStopLocation = false;
-
-
-
 }
 
 
