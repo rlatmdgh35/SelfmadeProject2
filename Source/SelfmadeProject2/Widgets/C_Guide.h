@@ -70,6 +70,7 @@ private:
 	class AC_RoomNum508* RoomNum508;
 	class UC_Lock* LockWidget;
 	class AC_Player* Player;
+	class UC_LineOfCharacter* Line;
 
 public:
 	UPROPERTY(BlueprintReadWrite)

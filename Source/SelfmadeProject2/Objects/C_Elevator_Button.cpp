@@ -14,40 +14,29 @@ AC_Elevator_Button::AC_Elevator_Button()
 	*/
 }
 
+void AC_Elevator_Button::BeginPlay()
+{
+	Super::BeginPlay();
+
+	TArray<AActor*> elevatorActor;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Elevator::StaticClass(), elevatorActor);
+	Elevator = Cast<AC_Elevator>(elevatorActor[0]);
+}
+
 void AC_Elevator_Button::Interaction()
 {
-	if (Elevator == nullptr)
+	CheckTrue(Elevator->bMoving == true);
+
+	if (Elevator->MoveToFloor != Floor)
 	{
-		TArray<AActor*> elevatorActor;
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Elevator::StaticClass(), elevatorActor);
-		Elevator = Cast<AC_Elevator>(elevatorActor[0]);
-
-		if (Elevator->MoveToFloor != Floor)
-		{
-			if (bIn == true)
-				Elevator->SetFloor(Floor);
-			// elevator->
-		}
-		else
-		{
-			if (SetFloorDelegate.IsBound())
-				SetFloorDelegate.Broadcast();
-		}
+		if (bIn == true)
+			Elevator->SetFloor(Floor);
+		// elevator->
 	}
-
 	else
 	{
-
-		if (Elevator->MoveToFloor != Floor)
-		{
-			if (bIn == true)
-				Elevator->SetFloor(Floor);
-			// elevator->
-		}
-		else
-		{
-			if (SetFloorDelegate.IsBound())
-				SetFloorDelegate.Broadcast();
-		}
+		C_Log::Print("Test");
+		if (InteractionElevator.IsBound())
+			InteractionElevator.Broadcast();
 	}
 }

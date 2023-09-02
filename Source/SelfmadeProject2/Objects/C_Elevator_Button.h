@@ -4,8 +4,7 @@
 #include "Objects/C_Elevator.h"
 #include "C_Elevator_Button.generated.h"
 
-
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FSetFloorSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FInteractionElevatorSignature);
 
 UCLASS()
 class SELFMADEPROJECT2_API AC_Elevator_Button : public AC_Elevator
@@ -15,10 +14,14 @@ class SELFMADEPROJECT2_API AC_Elevator_Button : public AC_Elevator
 public:
 	AC_Elevator_Button();
 	
+protected:
+	virtual void BeginPlay() override;
+
+public:
 	void Interaction();
 
 public:
-	FSetFloorSignature SetFloorDelegate;
+	FInteractionElevatorSignature InteractionElevator;
 
 public:
 	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly)

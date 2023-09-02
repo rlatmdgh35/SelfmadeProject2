@@ -21,36 +21,31 @@ void AC_Loop::BeginPlay()
 	TArray<AActor*> playerActor;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Player::StaticClass(), playerActor);
 	Player = Cast<AC_Player>(playerActor[0]);
-
-	APlayerController* controller = Cast<APlayerController>(Player->GetController());
-	LineOfCharacter = CreateWidget<UC_LineOfCharacter>(controller, LineOfCharacterClass);
-
-	LineOfCharacter->PastMapSetOffLoop.AddDynamic(this, &AC_Loop::SetOffLoop);
 }
 
 void AC_Loop::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	CheckFalse(bLoop);
-	if (Player->GetActorLocation().Y <= -11420.f)
+	if (bLoop == true)
 	{
-		FVector location;
-		location.X = Player->GetActorLocation().X;
-		location.Y = 1100.f;
-		location.Z = Player->GetActorLocation().Z;
 
-		Player->SetActorLocation(location);
+		if (Player->GetActorLocation().Y <= -10880.f)
+		{
+			FVector location;
+			location.X = Player->GetActorLocation().X;
+			location.Y = 1630.f;
+			location.Z = Player->GetActorLocation().Z;
+
+			Player->SetActorLocation(location);
+		}
+
+		if ((bStart) && (Player->GetActorLocation().Y <= -5000.f))
+		{
+			Player->CallLineOfCharacter(ECharacterLineType::PastMap_Start);
+			bStart = false;
+		}
 	}
-
-	if ((bStart) && (Player->GetActorLocation().X <= 2500.f))
-	{
-		Player->CallLineOfCharacter(ECharacterLineType::PastMap_Start);
-		bStart = false;
-	}
-}
-
-void AC_Loop::SetOffLoop()
-{
-	bLoop = false;
+	else;
+		// Destroy Actor
 }

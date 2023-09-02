@@ -16,8 +16,14 @@ class SELFMADEPROJECT2_API AC_Elevator : public AActor
 {
 	GENERATED_BODY()
 
+public:
+	AC_Elevator();
+
 protected:
 	virtual void BeginPlay() override;
+
+public:
+	virtual void Tick(float DeltaTime) override;
 
 public:
 	UFUNCTION(BlueprintImplementableEvent)
@@ -38,7 +44,7 @@ public:
 		FVector StartLocation;
 
 	UPROPERTY(BlueprintReadWrite)
-		bool bMoving;
+		bool bMoving = false;
 
 	UPROPERTY(BlueprintReadWrite)
 		bool bCloseDoor;

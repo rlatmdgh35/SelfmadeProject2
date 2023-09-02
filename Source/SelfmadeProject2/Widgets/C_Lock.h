@@ -51,6 +51,7 @@ private:
 		class UButton* QuitButton;
 
 private:
+	TSubclassOf<class AC_Player> PlayerClass;
 	class AC_Player* Player;
 
 public:

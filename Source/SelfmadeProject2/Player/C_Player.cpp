@@ -85,13 +85,13 @@ void AC_Player::BeginPlay()
 	LockWidget->SetVisibility(ESlateVisibility::Hidden);
 
 	GuideWidget = CreateWidget<UC_Guide>(controller, Guide);
-	GuideWidget->AddToViewport();
 	GuideWidget->BeginPlay(this);
+	GuideWidget->AddToViewport();
 	GuideWidget->SetVisibility(ESlateVisibility::Hidden);
 
 	LineOfCharacterWidget = CreateWidget<UC_LineOfCharacter>(controller, LineOfCharacter);
-	LineOfCharacterWidget->AddToViewport();
 	LineOfCharacterWidget->BeginPlay(this);
+	LineOfCharacterWidget->AddToViewport();
 }
 
 void AC_Player::Tick(float DeltaTime)

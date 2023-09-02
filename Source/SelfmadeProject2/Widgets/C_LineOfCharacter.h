@@ -5,8 +5,6 @@
 #include "C_LineOfCharacter.generated.h"
 
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPastMapSetOffLoopSignature);
-
 UCLASS()
 class SELFMADEPROJECT2_API UC_LineOfCharacter : public UUserWidget
 {
@@ -44,14 +42,12 @@ private:
 
 	void ClearTextBlock();
 
-public:
-	FPastMapSetOffLoopSignature PastMapSetOffLoop;
-
 private:
 	FTimerDelegate TimerDelegate;
 
 private:
 	class UC_Guide* GuideWidget;
+	class AC_Loop* Loop;
 
 private:
 	UPROPERTY(meta = (BindWidget))

@@ -18,10 +18,6 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 
-private:
-	UFUNCTION()
-		void SetOffLoop();
-
 // For Show Edior
 private:
 	UPROPERTY(VisibleDefaultsOnly)
@@ -33,7 +29,9 @@ private:
 	TSubclassOf<class UC_LineOfCharacter> LineOfCharacterClass;
 	class UC_LineOfCharacter* LineOfCharacter;
 
-private:
+public:
 	bool bLoop = true;
+
+private:
 	bool bStart = true;
 };
