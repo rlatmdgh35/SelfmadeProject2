@@ -65,9 +65,15 @@ void AC_Player::BeginPlay()
 	if (doorActors.Num() > 0)
 	{
 		for (int32 i = 0; i < doorActors.Num(); i++)
-		{
 			Doors.Add(Cast<AC_Door>(doorActors[i]));
-		}
+	}
+
+	TArray<AActor*> buttonActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Elevator_Button::StaticClass(), buttonActors);
+	if (buttonActors.Num() > 0)
+	{
+		for (int8 i = 0; i < buttonActors.Num(); i++)
+			Elevator_Button.Add(Cast<AC_Elevator_Button>(buttonActors[i]));
 	}
 
 	TArray<AActor*> officeActor;
@@ -75,6 +81,10 @@ void AC_Player::BeginPlay()
 	if (officeActor.Num() > 0)
 		Office = Cast<AC_Office>(officeActor[0]);
 
+	TArray<AActor*> lockActor;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_LockActor::StaticClass(), lockActor);
+	if(lockActor.Num() > 0)
+		LockActor = Cast<AC_LockActor>(lockActor[0]);
 
 
 	APlayerController* controller = Cast<APlayerController>(GetController());
@@ -150,22 +160,10 @@ void AC_Player::CallLineOfCharacter(ECharacterLineType InType)
 
 void AC_Player::LineTraceInteraction(AActor* Actor)
 {
-	Elevator_Button = Cast<AC_Elevator_Button>(Actor);
-	if (Elevator_Button != nullptr)
-	{
-		Elevator_Button->bCanCall = true;
-		if (Elevator_Button != Actor)
-			Elevator_Button->bCanCall = false;
-	}
-
-	LockActor = Cast<AC_LockActor>(Actor);
-	if (LockActor != nullptr)
-	{
+	if (Cast<AC_LockActor>(Actor) != nullptr)
 		LockActor->bCanCall = true;
-		if (LockActor != Actor)
-			LockActor->bCanCall = false;
-	}
-
+	else
+		LockActor->bCanCall = false;
 }
 
 void AC_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -249,16 +247,20 @@ void AC_Player::Interaction()
 		Office->Interaction();
 	}
 
-	if ((LockActor != nullptr) && (LockActor->bCanCall == true) && (DataAsset->OpenGuide.IsOpenTenth == false))
+	if ((LockActor->bCanCall == true) && (DataAsset->OpenGuide.IsOpenTenth == false))
 	{
 		CheckTrue(InteractionType == EInteractionType::CheckGuide);
 		LockActor->Interaction();
 	}
 
-	if ((Elevator_Button != nullptr) && (Elevator_Button->bCanCall == true))
+	for (uint8 i = 0; i < Elevator_Button.Num(); i++)
 	{
-		InteractionType = EInteractionType::Elevator;
-		Elevator_Button->Interaction();
+		if (Elevator_Button[i]->bCanCall == true)
+		{
+			InteractionType = EInteractionType::Elevator;
+			Elevator_Button[i]->Interaction();
+			break;
+		}
 	}
 }
 

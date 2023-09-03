@@ -16,9 +16,6 @@ class SELFMADEPROJECT2_API AC_Elevator : public AActor
 {
 	GENERATED_BODY()
 
-public:
-	AC_Elevator();
-
 protected:
 	virtual void BeginPlay() override;
 
@@ -27,13 +24,13 @@ public:
 
 public:
 	UFUNCTION(BlueprintImplementableEvent)
-		void OpenElevatorDoor();
+		void DoMoveDoor();
 
 public:
 	void SetFloor(EMoveToFloor InFloor);
 
 private:
-	class AC_Elevator_Button* Button;
+	TArray<class AC_Elevator_Button*> Buttons;
 
 
 public:
@@ -49,7 +46,8 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 		bool bCloseDoor;
 
-
-
+public:
+	UPROPERTY(BlueprintReadOnly)
+		bool IsOpenTenth = false;
 
 };

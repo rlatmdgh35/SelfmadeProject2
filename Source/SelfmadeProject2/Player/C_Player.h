@@ -113,7 +113,7 @@ public:
 private:
 	class AC_Office* Office;
 	class AC_LockActor* LockActor;
-	class AC_Elevator_Button* Elevator_Button;
+	TArray<class AC_Elevator_Button*> Elevator_Button;
 
 public:
 	TSubclassOf<class UC_Guide> Guide;

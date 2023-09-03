@@ -53,7 +53,7 @@ public:
 	UPROPERTY(EditAnywhere)
 		bool IsOpenNinth = false;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 		bool IsOpenTenth = false;
 };
 

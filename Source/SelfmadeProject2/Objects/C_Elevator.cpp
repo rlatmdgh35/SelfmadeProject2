@@ -2,32 +2,35 @@
 #include "C_Elevator_Button.h"
 #include "Global.h"
 
-AC_Elevator::AC_Elevator()
-{
-	PrimaryActorTick.bCanEverTick = true;
-}
+
+
 
 void AC_Elevator::BeginPlay()
 {
-	TArray<AActor*> buttonActor;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Elevator_Button::StaticClass(), buttonActor);
-	Button = Cast<AC_Elevator_Button>(buttonActor[0]);
+	Super::BeginPlay();
 
-	Button->InteractionElevator.AddDynamic(this, &AC_Elevator::OpenElevatorDoor);
+	TArray<AActor*> buttonActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Elevator_Button::StaticClass(), buttonActors);
+	if (buttonActors.Num() > 0)
+	{
+		for (uint8 i = 0; i < buttonActors.Num(); i++)
+		{
+			Buttons.Add(Cast<AC_Elevator_Button>(buttonActors[i]));
+			Buttons[i]->PressElevatorButton.AddDynamic(this, &AC_Elevator::DoMoveDoor);
+		}
+	}
 }
 
 void AC_Elevator::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-
 }
 
 void AC_Elevator::SetFloor(EMoveToFloor InFloor)
 {
 	CheckFalse(bCloseDoor);
 
-	MoveToFloor = InFloor;
 	StartLocation = GetActorLocation();
+	MoveToFloor = InFloor;
 	bMoving = true;
 }

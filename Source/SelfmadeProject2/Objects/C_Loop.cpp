@@ -46,6 +46,7 @@ void AC_Loop::Tick(float DeltaTime)
 			bStart = false;
 		}
 	}
-	else;
+	else
+		SetActorTickEnabled(false);
 		// Destroy Actor
 }

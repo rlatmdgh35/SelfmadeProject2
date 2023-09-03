@@ -4,7 +4,8 @@
 #include "Objects/C_Elevator.h"
 #include "C_Elevator_Button.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FInteractionElevatorSignature);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPressElevatorButtonSignature);
 
 UCLASS()
 class SELFMADEPROJECT2_API AC_Elevator_Button : public AC_Elevator
@@ -18,26 +19,34 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+	virtual void Tick(float DeltaTime) override;
+
+public:
 	void Interaction();
 
 public:
-	FInteractionElevatorSignature InteractionElevator;
+	FPressElevatorButtonSignature PressElevatorButton;
 
 public:
 	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly)
-		class UStaticMeshComponent* Button;
+		class UStaticMeshComponent* ButtonMesh;
+
+private:
+	class AC_Player* Player;
 
 public:
 	UPROPERTY(EditAnywhere)
 		EMoveToFloor Floor;
 
 	UPROPERTY(EditAnywhere)
-		bool bIn;
-
-private:
-	AC_Elevator* Elevator;
+		bool bInElevator;
 
 public:
-	bool bCanCall = false;
+	UPROPERTY(BlueprintReadOnly)
+		AC_Elevator* Elevator;
+
+public:
+	UPROPERTY(BlueprintReadWrite)
+		bool bCanCall = false;
 
 };
