@@ -1,6 +1,7 @@
 #include "C_Elevator_Button.h"
 #include "Components/StaticMeshComponent.h"
 #include "Player/C_Player.h"
+#include "Component/C_PlayerComponent.h"
 #include "DataAsset/C_DataAsset.h"
 #include "Global.h"
 
@@ -39,15 +40,21 @@ void AC_Elevator_Button::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	FVector elevatorLocation = Elevator->GetActorLocation();
-	FVector resultLocation = elevatorLocation + FVector(-130.f, -137.5f, (110.f + 20.f * (float)Floor));
 
-	if ((float)Floor != 3)
+	if (Floor != EMoveToFloor::Arrow)
 	{
-		SetActorLocation(resultLocation);
+		FVector resultLocation = elevatorLocation + FVector(-132.f, -137.5f, (110.f + 20.f * (float)Floor));
+
+		if ((float)Floor != 3) // Not ForthButtons
+			SetActorLocation(resultLocation);
+
+		else if (Player->PlayerComponent->DataAsset->OpenGuide.IsOpenTenth == true)
+			SetActorLocation(resultLocation);
 	}
-	
-	else if (Player->DataAsset->OpenGuide.IsOpenTenth == true)
+	else
 	{
+		FVector resultLocation = elevatorLocation + FVector(-132, (-150 + 25 * bOpenButton), 90);	// If bOpenButton == true -> SetLocation(-132, -125, 90)
+																									// If bOpenButton == false -> SetLocation(-132, -150, 90);
 		SetActorLocation(resultLocation);
 	}
 }
@@ -55,15 +62,20 @@ void AC_Elevator_Button::Tick(float DeltaTime)
 void AC_Elevator_Button::Interaction()
 {
 	CheckTrue(Elevator->bMoving == true);
+	CheckFalse(Elevator->bCloseDoor == true || Floor == EMoveToFloor::Arrow);
 
-	C_Log::Print((int)Floor + 1);
+	if (Floor != EMoveToFloor::Arrow)
+	{
+		if (Elevator->MoveToFloor != Floor)
+			Elevator->SetFloor(Floor);
 
-	if (Elevator->MoveToFloor != Floor)
-	{
-		Elevator->SetFloor(Floor);
+		else if (PressOpenDoorButton.IsBound())
+			PressOpenDoorButton.Broadcast(Floor);
 	}
-	else if (PressElevatorButton.IsBound())
-	{
-		PressElevatorButton.Broadcast();
-	}
+	else if ((bOpenButton == true) && (PressOpenDoorButton.IsBound()))
+		PressOpenDoorButton.Broadcast(Floor);
+
+	else if (PressCloseDoorButton.IsBound())
+		PressCloseDoorButton.Broadcast(Floor);
+
 }

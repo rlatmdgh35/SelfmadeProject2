@@ -5,7 +5,8 @@
 #include "C_Elevator_Button.generated.h"
 
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPressElevatorButtonSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPressOpenDoorButtonSignature, EMoveToFloor, InType);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPressCloseDoorButtonSignature, EMoveToFloor, InType);
 
 UCLASS()
 class SELFMADEPROJECT2_API AC_Elevator_Button : public AC_Elevator
@@ -25,10 +26,11 @@ public:
 	void Interaction();
 
 public:
-	FPressElevatorButtonSignature PressElevatorButton;
+	FPressOpenDoorButtonSignature PressOpenDoorButton;
+	FPressCloseDoorButtonSignature PressCloseDoorButton;
 
 public:
-	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly)
+	UPROPERTY(VisibleDefaultsOnly)
 		class UStaticMeshComponent* ButtonMesh;
 
 private:
@@ -41,12 +43,14 @@ public:
 	UPROPERTY(EditAnywhere)
 		bool bInElevator;
 
+	UPROPERTY(EditAnywhere)
+		bool bOpenButton;
+
 public:
 	UPROPERTY(BlueprintReadOnly)
 		AC_Elevator* Elevator;
 
 public:
-	UPROPERTY(BlueprintReadWrite)
-		bool bCanCall = false;
+	bool bCanCall = false;
 
 };

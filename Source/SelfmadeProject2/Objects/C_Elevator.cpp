@@ -11,13 +11,12 @@ void AC_Elevator::BeginPlay()
 
 	TArray<AActor*> buttonActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Elevator_Button::StaticClass(), buttonActors);
-	if (buttonActors.Num() > 0)
+	
+	for (uint8 i = 0; i < buttonActors.Num(); i++)
 	{
-		for (uint8 i = 0; i < buttonActors.Num(); i++)
-		{
-			Buttons.Add(Cast<AC_Elevator_Button>(buttonActors[i]));
-			Buttons[i]->PressElevatorButton.AddDynamic(this, &AC_Elevator::DoMoveDoor);
-		}
+		Buttons.Add(Cast<AC_Elevator_Button>(buttonActors[i]));
+		Buttons[i]->PressOpenDoorButton.AddDynamic(this, &AC_Elevator::DoMoveDoor);
+		Buttons[i]->PressCloseDoorButton.AddDynamic(this, &AC_Elevator::CloseDoor);
 	}
 }
 

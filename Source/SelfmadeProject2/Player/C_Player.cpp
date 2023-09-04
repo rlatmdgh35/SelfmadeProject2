@@ -33,7 +33,6 @@ AC_Player::AC_Player()
 	C_Helpers::GetClass(&animInstanceClass, "/Game/Player/Blueprint/ABP_Player_Start");
 	GetMesh()->SetAnimInstanceClass(animInstanceClass);
 
-
 	// Mesh Setting
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -88));
 	GetMesh()->SetRelativeRotation(FRotator(0, 270, 0));
@@ -44,14 +43,12 @@ AC_Player::AC_Player()
 	Camera->SetRelativeRotation(FRotator(0, 90, 0));
 	Camera->bUsePawnControlRotation = true;
 
-
 	// Movement
 	GetCharacterMovement()->MaxWalkSpeed = 400.f;
 
 	C_Helpers::GetClass(&LineOfCharacter, "/Game/Blueprints/WBP_LineOfCharacter");
 	C_Helpers::GetClass(&Guide, "/Game/Blueprints/WBP_Guide");
 	C_Helpers::GetClass(&Lock, "/Game/Blueprints/WBP_Lock");
-
 }
 
 void AC_Player::BeginPlay()
@@ -147,9 +144,9 @@ void AC_Player::Tick(float DeltaTime)
 	}
 
 	if (CurrentEnergy <= 50)
-		DataAsset->IsCanRun = false;
+		PlayerComponent->DataAsset->IsCanRun = false;
 	else
-		DataAsset->IsCanRun = true;
+		PlayerComponent->DataAsset->IsCanRun = true;
 }
 
 void AC_Player::CallLineOfCharacter(ECharacterLineType InType)
@@ -160,10 +157,24 @@ void AC_Player::CallLineOfCharacter(ECharacterLineType InType)
 
 void AC_Player::LineTraceInteraction(AActor* Actor)
 {
-	if (Cast<AC_LockActor>(Actor) != nullptr)
-		LockActor->bCanCall = true;
-	else
-		LockActor->bCanCall = false;
+	for (uint8 i = 0; i < Elevator_Button.Num(); i++)
+	{
+		if (Elevator_Button[i] == Cast<AC_Elevator_Button>(Actor))
+		{
+			Elevator_Button[i]->bCanCall = true;
+			break;
+		}
+		else
+			Elevator_Button[i]->bCanCall = false;
+	}
+
+	if (LockActor != nullptr)
+	{
+		if (Cast<AC_LockActor>(Actor) != nullptr)
+			LockActor->bCanCall = true;
+		else
+			LockActor->bCanCall = false;
+	}
 }
 
 void AC_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -216,29 +227,25 @@ void AC_Player::OffRun()
 
 void AC_Player::CloseEyes()
 {
-	DataAsset->IsOpenEyes = false;
+	PlayerComponent->DataAsset->IsOpenEyes = false;
 }
 
 void AC_Player::OpenEyes()
 {
-	DataAsset->IsOpenEyes = true;
+	PlayerComponent->DataAsset->IsOpenEyes = true;
 }
 
 void AC_Player::Interaction()
 {
-	if (Doors.Num() > 0)
+	for (int32 i = 0; i < Doors.Num(); i++)
 	{
-		InteractionType = EInteractionType::Door;
-
-		for (int32 i = 0; i < Doors.Num(); i++)
+		if (Doors[i]->IsOverrlaped())
 		{
-			if (Doors[i]->IsOverrlaped())
-			{
-				CheckTrue(InteractionType == EInteractionType::CheckGuide);
+			CheckTrue(InteractionType == EInteractionType::CheckGuide);
+			InteractionType = EInteractionType::Door;
 
-				Doors[i]->Interaction();
-				break;
-			}
+			Doors[i]->Interaction();
+			break;
 		}
 	}
 
@@ -247,12 +254,13 @@ void AC_Player::Interaction()
 		Office->Interaction();
 	}
 
-	if ((LockActor->bCanCall == true) && (DataAsset->OpenGuide.IsOpenTenth == false))
+	if ((LockActor != nullptr) && (LockActor->bCanCall == true) && (PlayerComponent->DataAsset->OpenGuide.IsOpenTenth == false))
 	{
 		CheckTrue(InteractionType == EInteractionType::CheckGuide);
 		LockActor->Interaction();
 	}
 
+	
 	for (uint8 i = 0; i < Elevator_Button.Num(); i++)
 	{
 		if (Elevator_Button[i]->bCanCall == true)

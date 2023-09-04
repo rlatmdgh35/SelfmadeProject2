@@ -8,7 +8,7 @@
 UENUM(BlueprintType)
 enum class EMoveToFloor : uint8
 {
-	First, Second, Third, Forth, Fifth
+	First, Second, Third, Forth, Fifth, Arrow
 };
 
 UCLASS()
@@ -24,7 +24,12 @@ public:
 
 public:
 	UFUNCTION(BlueprintImplementableEvent)
-		void DoMoveDoor();
+		void DoMoveDoor(EMoveToFloor Type);
+
+public:
+	UFUNCTION(BlueprintImplementableEvent)
+		void CloseDoor(EMoveToFloor Type);
+
 
 public:
 	void SetFloor(EMoveToFloor InFloor);
@@ -44,7 +49,7 @@ public:
 		bool bMoving = false;
 
 	UPROPERTY(BlueprintReadWrite)
-		bool bCloseDoor;
+		bool bCloseDoor = true;
 
 public:
 	UPROPERTY(BlueprintReadOnly)
