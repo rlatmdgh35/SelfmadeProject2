@@ -13,7 +13,12 @@ AC_Elevator_Button::AC_Elevator_Button()
 	PrimaryActorTick.bCanEverTick = true;
 
 	C_Helpers::CreateSceneComponent<UStaticMeshComponent>(this, &ButtonMesh, "Button", RootComponent);
-	ButtonMesh->SetRelativeScale3D(FVector(0.05f, 0.1f, 0.1f));
+
+	UStaticMesh* cubeMesh;
+	C_Helpers::GetAsset(&cubeMesh, "StaticMesh'/Game/StaticMeshes/SM_Cube.SM_Cube'");
+
+	ButtonMesh->SetStaticMesh(cubeMesh);
+	ButtonMesh->SetRelativeScale3D(FVector(0.02f, 0.04f, 0.04f));
 }
 
 void AC_Elevator_Button::BeginPlay()
@@ -126,8 +131,10 @@ void AC_Elevator_Button::Tick(float DeltaTime)
 
 void AC_Elevator_Button::Interaction()
 {
-	CheckTrue(Elevator->bMoving == true);
-	CheckFalse(Elevator->bCloseDoor == true || Floor == EMoveToFloor::Arrow);
+	CheckTrue((Elevator->bMoving == true) && (bIsInteraction == true));
+	CheckFalse(Floor == EMoveToFloor::Arrow || bInElevator == false || Elevator->bCloseDoor == true);
+
+	bIsInteraction = true;
 
 	ChangeColor();
 

@@ -41,12 +41,8 @@ public:
 private:
 	TArray<class AC_Elevator_Button*> Buttons;
 
-protected:
-	class UMaterialInstanceConstant* DefaultMaterial;
-	class UMaterialInstanceDynamic* DynamicMaterial;
-
 public:
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadOnly)
 		EMoveToFloor MoveToFloor = EMoveToFloor::First;
 
 	UPROPERTY(BlueprintReadWrite)
