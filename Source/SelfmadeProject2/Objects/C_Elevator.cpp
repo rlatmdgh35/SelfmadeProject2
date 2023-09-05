@@ -1,4 +1,6 @@
 #include "C_Elevator.h"
+#include "Materials/MaterialInstanceDynamic.h"
+#include "Materials/MaterialInstanceConstant.h"
 #include "C_Elevator_Button.h"
 #include "Global.h"
 
@@ -32,4 +34,23 @@ void AC_Elevator::SetFloor(EMoveToFloor InFloor)
 	StartLocation = GetActorLocation();
 	MoveToFloor = InFloor;
 	bMoving = true;
+}
+
+void AC_Elevator::ChangeColor()
+{
+	DynamicMaterial->SetVectorParameterValue("Param", FLinearColor(1, 0, 0));
+
+	for (uint8 i = 0; i < Buttons.Num(); i++)
+	{
+		if (Buttons[i]->Floor == EMoveToFloor::Arrow)
+		{
+			FTimerHandle timerhandle;
+			GetWorldTimerManager().SetTimer(timerhandle, this, &AC_Elevator::ResetButtonColor, 2);
+		}
+	}
+}
+
+void AC_Elevator::ResetButtonColor()
+{
+	DynamicMaterial->SetVectorParameterValue("Param", FLinearColor(0, 1, 0));
 }

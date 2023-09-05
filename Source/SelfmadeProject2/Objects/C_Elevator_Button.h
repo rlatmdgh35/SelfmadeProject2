@@ -33,6 +33,9 @@ public:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UStaticMeshComponent* ButtonMesh;
 
+	UPROPERTY(BlueprintReadOnly)
+		AC_Elevator* Elevator;
+
 private:
 	class AC_Player* Player;
 
@@ -46,9 +49,8 @@ public:
 	UPROPERTY(EditAnywhere)
 		bool bOpenButton;
 
-public:
-	UPROPERTY(BlueprintReadOnly)
-		AC_Elevator* Elevator;
+	UPROPERTY(EditAnywhere)
+		bool bUpButton;
 
 public:
 	bool bCanCall = false;

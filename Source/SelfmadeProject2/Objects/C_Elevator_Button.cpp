@@ -1,5 +1,7 @@
 #include "C_Elevator_Button.h"
 #include "Components/StaticMeshComponent.h"
+#include "Materials/MaterialInstanceDynamic.h"
+#include "Materials/MaterialInstanceConstant.h"
 #include "Player/C_Player.h"
 #include "Component/C_PlayerComponent.h"
 #include "DataAsset/C_DataAsset.h"
@@ -11,6 +13,7 @@ AC_Elevator_Button::AC_Elevator_Button()
 	PrimaryActorTick.bCanEverTick = true;
 
 	C_Helpers::CreateSceneComponent<UStaticMeshComponent>(this, &ButtonMesh, "Button", RootComponent);
+	ButtonMesh->SetRelativeScale3D(FVector(0.05f, 0.1f, 0.1f));
 }
 
 void AC_Elevator_Button::BeginPlay()
@@ -27,6 +30,68 @@ void AC_Elevator_Button::BeginPlay()
 				Elevator = Cast<AC_Elevator>(elevatorActor[i]);
 		}
 	}
+
+	if (bInElevator != true)
+		SetActorRelativeRotation(FRotator(0, 180, 0));
+
+	switch (Floor)
+	{
+	case EMoveToFloor::First:
+		if (bInElevator == true)
+			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Number1_Inst");
+		else
+			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Up_Inst");
+		
+		break;
+
+	case EMoveToFloor::Second:
+		if (bInElevator)
+			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Number2_Inst");
+		else if (bUpButton == true)
+			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Up_Inst");
+		else
+			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Down_Inst");
+
+		break;
+
+	case EMoveToFloor::Third:
+		if (bInElevator)
+			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Number3_Inst");
+		else if (bUpButton == true)
+			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Up_Inst");
+		else
+			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Down_Inst");
+
+		break;
+
+	case EMoveToFloor::Forth:
+		if (bInElevator)
+			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Number4_Inst");
+		else if (bUpButton == true)
+			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Up_Inst");
+		else
+			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Down_Inst");
+
+		break;
+
+	case EMoveToFloor::Fifth:
+		if (bInElevator)
+			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Number5_Inst");
+		else
+			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Down_Inst");
+
+		break;
+
+	case EMoveToFloor::Arrow:
+		if (bOpenButton == true)
+			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Open_Inst");
+		else
+			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Close_Inst");
+		break;
+	}
+
+	DynamicMaterial = UMaterialInstanceDynamic::Create(DefaultMaterial, nullptr);
+	ButtonMesh->SetMaterial(0, DynamicMaterial);
 
 	TArray<AActor*> playerActor;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Player::StaticClass(), playerActor);
@@ -64,6 +129,8 @@ void AC_Elevator_Button::Interaction()
 	CheckTrue(Elevator->bMoving == true);
 	CheckFalse(Elevator->bCloseDoor == true || Floor == EMoveToFloor::Arrow);
 
+	ChangeColor();
+
 	if (Floor != EMoveToFloor::Arrow)
 	{
 		if (Elevator->MoveToFloor != Floor)
@@ -77,5 +144,4 @@ void AC_Elevator_Button::Interaction()
 
 	else if (PressCloseDoorButton.IsBound())
 		PressCloseDoorButton.Broadcast(Floor);
-
 }

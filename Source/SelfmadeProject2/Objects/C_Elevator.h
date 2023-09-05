@@ -26,10 +26,14 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void DoMoveDoor(EMoveToFloor Type);
 
-public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void CloseDoor(EMoveToFloor Type);
 
+protected:
+	UFUNCTION(BlueprintCallable)
+		void ResetButtonColor();
+
+	void ChangeColor();
 
 public:
 	void SetFloor(EMoveToFloor InFloor);
@@ -37,6 +41,9 @@ public:
 private:
 	TArray<class AC_Elevator_Button*> Buttons;
 
+protected:
+	class UMaterialInstanceConstant* DefaultMaterial;
+	class UMaterialInstanceDynamic* DynamicMaterial;
 
 public:
 	UPROPERTY(BlueprintReadWrite)
@@ -54,5 +61,6 @@ public:
 public:
 	UPROPERTY(BlueprintReadOnly)
 		bool IsOpenTenth = false;
+
 
 };

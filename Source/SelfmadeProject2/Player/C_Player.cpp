@@ -274,6 +274,8 @@ void AC_Player::Interaction()
 
 void AC_Player::CheckGuide()
 {
+	CheckFalse(CurrentMap == ECurrentMap::Hotel);
+
 	APlayerController* controller = Cast<APlayerController>(GetController());
 	if (bTurn)
 	{
