@@ -40,9 +40,6 @@ public:
 	class UMaterialInstanceConstant* DefaultMaterial;
 	class UMaterialInstanceDynamic* DynamicMaterial;
 
-private:
-	class AC_Player* Player;
-
 public:
 	UPROPERTY(EditAnywhere)
 		EMoveToFloor Floor;

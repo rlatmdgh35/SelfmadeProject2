@@ -16,6 +16,9 @@ class SELFMADEPROJECT2_API AC_Elevator : public AActor
 {
 	GENERATED_BODY()
 
+public:
+	AC_Elevator();
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -37,6 +40,21 @@ protected:
 
 public:
 	void SetFloor(EMoveToFloor InFloor);
+
+protected:
+	UPROPERTY(BlueprintReadOnly)
+		class USceneComponent* RootSceneComponent;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		class UStaticMeshComponent* TopMesh;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		class UTextRenderComponent* Text;
+
+	class UMaterial* Material;
+
+protected:
+	class AC_Player* Player;
 
 private:
 	TArray<class AC_Elevator_Button*> Buttons;

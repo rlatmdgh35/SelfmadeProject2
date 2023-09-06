@@ -1,12 +1,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
 #include "Objects/C_Elevator.h"
 #include "C_Elevator_OutDoor.generated.h"
 
 
 UCLASS()
-class SELFMADEPROJECT2_API AC_Elevator_OutDoor : public AC_Elevator
+class SELFMADEPROJECT2_API AC_Elevator_OutDoor : public AActor
 {
 	GENERATED_BODY()
 

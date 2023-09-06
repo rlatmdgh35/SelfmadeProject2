@@ -2,6 +2,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Materials/MaterialInstanceDynamic.h"
 #include "Materials/MaterialInstanceConstant.h"
+#include "Components/TextRenderComponent.h"
 #include "Player/C_Player.h"
 #include "Component/C_PlayerComponent.h"
 #include "DataAsset/C_DataAsset.h"
@@ -12,13 +13,15 @@ AC_Elevator_Button::AC_Elevator_Button()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	C_Helpers::CreateSceneComponent<UStaticMeshComponent>(this, &ButtonMesh, "Button", RootComponent);
+	C_Helpers::CreateSceneComponent<UStaticMeshComponent>(this, &ButtonMesh, "Button", RootSceneComponent);
 
 	UStaticMesh* cubeMesh;
 	C_Helpers::GetAsset(&cubeMesh, "StaticMesh'/Game/StaticMeshes/SM_Cube.SM_Cube'");
 
 	ButtonMesh->SetStaticMesh(cubeMesh);
 	ButtonMesh->SetRelativeScale3D(FVector(0.02f, 0.04f, 0.04f));
+
+	Text->SetVisibility(false);
 }
 
 void AC_Elevator_Button::BeginPlay()
@@ -27,7 +30,7 @@ void AC_Elevator_Button::BeginPlay()
 
 	TArray<AActor*> elevatorActor;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Elevator::StaticClass(), elevatorActor);
-	for (uint8 i = 0; i < elevatorActor.Num(); i++)
+	for (uint8 i = 0; i < elevatorActor.Num(); i++) // Do Not Need for (Only SpawnWorld In HotelMap both)
 	{
 		if (elevatorActor[i]->Tags.Num() > 0)
 		{
@@ -97,10 +100,6 @@ void AC_Elevator_Button::BeginPlay()
 
 	DynamicMaterial = UMaterialInstanceDynamic::Create(DefaultMaterial, nullptr);
 	ButtonMesh->SetMaterial(0, DynamicMaterial);
-
-	TArray<AActor*> playerActor;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Player::StaticClass(), playerActor);
-	Player = Cast<AC_Player>(playerActor[0]);
 }
 
 void AC_Elevator_Button::Tick(float DeltaTime)
@@ -113,9 +112,9 @@ void AC_Elevator_Button::Tick(float DeltaTime)
 
 	if (Floor != EMoveToFloor::Arrow)
 	{
-		FVector resultLocation = elevatorLocation + FVector(-132.f, -137.5f, (110.f + 20.f * (float)Floor));
+		FVector resultLocation = elevatorLocation + FVector(-132.f, -137.5f, (90.f + 20.f * (float)Floor));
 
-		if ((float)Floor != 3) // Not ForthButtons
+		if ((float)Floor != 4) // Not ForthButtons
 			SetActorLocation(resultLocation);
 
 		else if (Player->PlayerComponent->DataAsset->OpenGuide.IsOpenTenth == true)
@@ -138,11 +137,8 @@ void AC_Elevator_Button::Interaction()
 
 	if (Floor != EMoveToFloor::Arrow)
 	{
-		if (Elevator->MoveToFloor != Floor)
-		{
+		if (Elevator->MoveToFloor != (int32)Floor)
 			Elevator->SetFloor(Floor);
-			int32 a = 0;
-		}
 
 		else if (PressOpenDoorButton.IsBound())
 			PressOpenDoorButton.Broadcast(Floor);
