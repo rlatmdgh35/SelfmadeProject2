@@ -30,33 +30,30 @@ void AC_Elevator::Tick(float DeltaTime)
 void AC_Elevator::SetFloor(EMoveToFloor InFloor)
 {
 	StartLocation = GetActorLocation();
-	MoveToFloor = InFloor;
+	MoveToFloor = (int32)InFloor;
 	bMoving = true;
-
-	// C_Log::Print("Move To Floor : " + FString::FromInt((int)MoveToFloor + 1));
 }
 
 void AC_Elevator::ChangeColor()
 {
-	for (uint8 i = 0; i < Buttons.Num(); i++)
+	// Todo. Change Move To Floor Type
+
+
+	for (int32 i = 0; i < Buttons.Num(); i++)
 	{
 		if (Buttons[i]->bIsInteraction == true)
 		{
-			if (Buttons[i]->Floor == EMoveToFloor::Arrow ||
-				Buttons[i]->Floor == MoveToFloor)
+			if (Buttons[i]->Floor== EMoveToFloor::Arrow ||
+				(int32)Buttons[i]->Floor == MoveToFloor)
 			{
-				// C_Log::Print("Move To Floor : " + FString::FromInt((int)MoveToFloor + 1));
-
 				Buttons[i]->DynamicMaterial->SetVectorParameterValue("Param", FLinearColor(1, 0, 0));
 
 				FTimerHandle timerhandle;
 				GetWorldTimerManager().SetTimer(timerhandle, this, &AC_Elevator::ResetButtonColor, 1);
 				break;
 			}
-			else if (Buttons[i]->bIsInteraction == true)
+			else
 			{
-				// C_Log::Print("Move To Floor : " + FString::FromInt((int)MoveToFloor + 1));
-
 				Buttons[i]->DynamicMaterial->SetVectorParameterValue("Param", FLinearColor(1, 0, 0));
 				break;
 			}

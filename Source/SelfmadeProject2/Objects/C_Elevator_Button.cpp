@@ -136,12 +136,13 @@ void AC_Elevator_Button::Interaction()
 
 	bIsInteraction = true;
 
-	ChangeColor();
-
 	if (Floor != EMoveToFloor::Arrow)
 	{
 		if (Elevator->MoveToFloor != Floor)
+		{
 			Elevator->SetFloor(Floor);
+			int32 a = 0;
+		}
 
 		else if (PressOpenDoorButton.IsBound())
 			PressOpenDoorButton.Broadcast(Floor);
@@ -151,4 +152,6 @@ void AC_Elevator_Button::Interaction()
 
 	else if (PressCloseDoorButton.IsBound())
 		PressCloseDoorButton.Broadcast(Floor);
+
+	ChangeColor();
 }

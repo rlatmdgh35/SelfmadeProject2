@@ -8,7 +8,7 @@
 UENUM(BlueprintType)
 enum class EMoveToFloor : uint8
 {
-	First, Second, Third, Forth, Fifth, Arrow
+	Zero, First, Second, Third, Forth, Fifth, Arrow
 };
 
 UCLASS()
@@ -43,7 +43,7 @@ private:
 
 public:
 	UPROPERTY(BlueprintReadOnly)
-		EMoveToFloor MoveToFloor = EMoveToFloor::First;
+		int32 MoveToFloor = 1;
 
 	UPROPERTY(BlueprintReadWrite)
 		FVector StartLocation;
