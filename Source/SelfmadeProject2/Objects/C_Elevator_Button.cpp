@@ -30,7 +30,7 @@ void AC_Elevator_Button::BeginPlay()
 
 	TArray<AActor*> elevatorActor;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Elevator::StaticClass(), elevatorActor);
-	for (uint8 i = 0; i < elevatorActor.Num(); i++) // Do Not Need for (Only SpawnWorld In HotelMap both)
+	for (int32 i = 0; i < elevatorActor.Num(); i++) // Do Not Need for (Only SpawnWorld In HotelMap both)
 	{
 		if (elevatorActor[i]->Tags.Num() > 0)
 		{
@@ -42,60 +42,55 @@ void AC_Elevator_Button::BeginPlay()
 	if (bInElevator != true)
 		SetActorRelativeRotation(FRotator(0, 180, 0));
 
-	switch (Floor)
+	if (Floor == 1)
 	{
-	case EMoveToFloor::First:
 		if (bInElevator == true)
 			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Number1_Inst");
 		else
 			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Up_Inst");
-		
-		break;
-
-	case EMoveToFloor::Second:
+	}
+	else if (Floor == 2)
+	{
 		if (bInElevator)
 			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Number2_Inst");
 		else if (bUpButton == true)
 			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Up_Inst");
 		else
 			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Down_Inst");
+	}
+	else if (Floor == 3)
+	{
 
-		break;
-
-	case EMoveToFloor::Third:
 		if (bInElevator)
 			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Number3_Inst");
 		else if (bUpButton == true)
 			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Up_Inst");
 		else
 			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Down_Inst");
-
-		break;
-
-	case EMoveToFloor::Forth:
+	}
+	else if (Floor == 4)
+	{
 		if (bInElevator)
 			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Number4_Inst");
 		else if (bUpButton == true)
 			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Up_Inst");
 		else
 			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Down_Inst");
-
-		break;
-
-	case EMoveToFloor::Fifth:
+	}
+	else if (Floor == 5)
+	{
 		if (bInElevator)
 			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Number5_Inst");
 		else
 			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Down_Inst");
+	}
 
-		break;
-
-	case EMoveToFloor::Arrow:
+	else if (Floor == 0)
+	{
 		if (bOpenButton == true)
 			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Open_Inst");
 		else
 			C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Close_Inst");
-		break;
 	}
 
 	DynamicMaterial = UMaterialInstanceDynamic::Create(DefaultMaterial, nullptr);
@@ -110,11 +105,11 @@ void AC_Elevator_Button::Tick(float DeltaTime)
 
 	FVector elevatorLocation = Elevator->GetActorLocation();
 
-	if (Floor != EMoveToFloor::Arrow)
+	if (Floor != 0)
 	{
-		FVector resultLocation = elevatorLocation + FVector(-132.f, -137.5f, (90.f + 20.f * (float)Floor));
+		FVector resultLocation = elevatorLocation + FVector(-132.f, -137.5f, (90.f + 20.f * Floor));
 
-		if ((float)Floor != 4) // Not ForthButtons
+		if (Floor != 4) // Not ForthButtons
 			SetActorLocation(resultLocation);
 
 		else if (Player->PlayerComponent->DataAsset->OpenGuide.IsOpenTenth == true)
@@ -131,13 +126,13 @@ void AC_Elevator_Button::Tick(float DeltaTime)
 void AC_Elevator_Button::Interaction()
 {
 	CheckTrue((Elevator->bMoving == true) && (bIsInteraction == true));
-	CheckFalse(Floor == EMoveToFloor::Arrow || bInElevator == false || Elevator->bCloseDoor == true);
+	CheckFalse(Floor == 0 || bInElevator == false || Elevator->bCloseDoor == true);
 
 	bIsInteraction = true;
 
-	if (Floor != EMoveToFloor::Arrow)
+	if (Floor != 0)
 	{
-		if (Elevator->MoveToFloor != (int32)Floor)
+		if (Elevator->MoveToFloor != Floor)
 			Elevator->SetFloor(Floor);
 
 		else if (PressOpenDoorButton.IsBound())

@@ -32,7 +32,7 @@ private:
 
 public:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-		EMoveToFloor Floor;
+		int32 Floor;
 
 public:
 	UPROPERTY(BlueprintReadOnly)

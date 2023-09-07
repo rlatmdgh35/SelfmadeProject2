@@ -61,7 +61,7 @@ public:
 	FText ForthText;
 
 private:
-	uint8 Index = 1;
+	int32 Index = 1;
 
 
 };

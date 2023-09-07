@@ -5,12 +5,6 @@
 #include "C_Elevator.generated.h"
 
 
-UENUM(BlueprintType)
-enum class EMoveToFloor : uint8
-{
-	Zero, First, Second, Third, Forth, Fifth, Arrow
-};
-
 UCLASS()
 class SELFMADEPROJECT2_API AC_Elevator : public AActor
 {
@@ -27,19 +21,20 @@ public:
 
 public:
 	UFUNCTION(BlueprintImplementableEvent)
-		void DoMoveDoor(EMoveToFloor Type);
+		void DoMoveDoor(int32 Type);
 
 	UFUNCTION(BlueprintImplementableEvent)
-		void CloseDoor(EMoveToFloor Type);
+		void CloseDoor(int32 Type);
 
 protected:
+	void ChangeColor();
+
 	UFUNCTION(BlueprintCallable)
 		void ResetButtonColor();
 
-	void ChangeColor();
 
 public:
-	void SetFloor(EMoveToFloor InFloor);
+	void SetFloor(int32 InFloor);
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
@@ -51,8 +46,6 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UTextRenderComponent* Text;
 
-	class UMaterial* Material;
-
 protected:
 	class AC_Player* Player;
 
@@ -61,7 +54,7 @@ private:
 
 public:
 	UPROPERTY(BlueprintReadOnly)
-		int32 MoveToFloor = 1;
+		int32 MoveToFloor;
 
 	UPROPERTY(BlueprintReadWrite)
 		FVector StartLocation;

@@ -46,9 +46,9 @@ AC_Player::AC_Player()
 	// Movement
 	GetCharacterMovement()->MaxWalkSpeed = 400.f;
 
-	C_Helpers::GetClass(&LineOfCharacter, "/Game/Blueprints/WBP_LineOfCharacter");
-	C_Helpers::GetClass(&Guide, "/Game/Blueprints/WBP_Guide");
-	C_Helpers::GetClass(&Lock, "/Game/Blueprints/WBP_Lock");
+	C_Helpers::GetClass(&LineOfCharacter, "/Game/Blueprints/Widgets/WBP_LineOfCharacter");
+	C_Helpers::GetClass(&Guide, "/Game/Blueprints/Widgets/WBP_Guide");
+	C_Helpers::GetClass(&Lock, "/Game/Blueprints/Widgets/WBP_Lock");
 }
 
 void AC_Player::BeginPlay()
@@ -157,7 +157,7 @@ void AC_Player::CallLineOfCharacter(ECharacterLineType InType)
 
 void AC_Player::LineTraceInteraction(AActor* Actor)
 {
-	for (uint8 i = 0; i < Elevator_Button.Num(); i++)
+	for (int32 i = 0; i < Elevator_Button.Num(); i++)
 	{
 		if (Elevator_Button[i] == Cast<AC_Elevator_Button>(Actor))
 		{
@@ -261,7 +261,7 @@ void AC_Player::Interaction()
 	}
 
 	
-	for (uint8 i = 0; i < Elevator_Button.Num(); i++)
+	for (int32 i = 0; i < Elevator_Button.Num(); i++)
 	{
 		if (Elevator_Button[i]->bCanCall == true)
 		{

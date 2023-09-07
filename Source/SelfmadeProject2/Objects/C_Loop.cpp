@@ -11,7 +11,7 @@ AC_Loop::AC_Loop()
 	PrimaryActorTick.bCanEverTick = true;
 
 	C_Helpers::CreateSceneComponent(this, &Root, "Root");
-	C_Helpers::GetClass(&LineOfCharacterClass, "/Game/Blueprints/WBP_LineOfCharacter");
+	C_Helpers::GetClass(&LineOfCharacterClass, "/Game/Blueprints/Widgets/WBP_LineOfCharacter");
 }
 
 void AC_Loop::BeginPlay()

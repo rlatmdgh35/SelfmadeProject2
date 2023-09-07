@@ -74,7 +74,7 @@ void AC_Door::Interaction()
 {
 	// 
 	FQuat quat;
-	FVector rightVector = RootComponent->GetRelativeRotationFromWorld(quat).GetForwardVector();
+	FVector rightVector = RootComponent->GetRelativeRotationFromWorld(quat).GetRightVector();
 	FVector directionalVector = (Player->GetActorLocation() - GetActorLocation());
 	directionalVector.Z = 0;
 
@@ -89,14 +89,14 @@ void AC_Door::Interaction()
 	FVector corner_L = Corner_L->GetComponentLocation();
 	FVector normal_L = (playerLocation - corner_L).GetSafeNormal2D();
 
-	float dotResult = FVector::DotProduct(rightVector, directionalVector);
+	float crossResult = FVector::CrossProduct(rightVector, directionalVector).Z;
 	float cross_R = FVector::CrossProduct(normal_R, playerForward).Z * -1;
 	float cross_L = FVector::CrossProduct(normal_L, playerForward).Z;
 
 	C_Log::Print("L : " + FString::SanitizeFloat(cross_L));
 	C_Log::Print("R : " + FString::SanitizeFloat(cross_R));
 
-	if (dotResult <= 0)
+	if (crossResult >= 0)
 	{
 		CheckFalse(cross_R <= 0 && cross_L <= 0);
 		Rotation = 1.f;
