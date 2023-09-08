@@ -19,9 +19,9 @@ AC_Door::AC_Door()
 	C_Helpers::CreateSceneComponent<USceneComponent>(this, &Corner_L, "Corner_L", DefaultSceneComponent);
 	C_Helpers::CreateSceneComponent<UBoxComponent>(this, &Box, "BoxCollision", DefaultSceneComponent);
 
-	DoorRoot->SetRelativeLocation(FVector(0, 62, 0));
+	DoorRoot->SetRelativeLocation(FVector(0, 54, 0));
 	
-	Door->SetRelativeLocationAndRotation(FVector(0, -62, 0), FRotator(0, 90, 0));
+	Door->SetRelativeLocationAndRotation(FVector(0, -52, 0), FRotator(0, 90, 0));
 
 	UStaticMesh* doorHandle_F;
 	C_Helpers::GetAsset(&doorHandle_F, "/Game/StaticMeshes/SM_DoorHandle");

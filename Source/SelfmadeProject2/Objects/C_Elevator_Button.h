@@ -5,8 +5,8 @@
 #include "C_Elevator_Button.generated.h"
 
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPressOpenDoorButtonSignature, int32, InType);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPressCloseDoorButtonSignature, int32, InType);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPressOpenDoorButtonSignature, EMoveToFloor, InType);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPressCloseDoorButtonSignature, EMoveToFloor, InType);
 
 UCLASS()
 class SELFMADEPROJECT2_API AC_Elevator_Button : public AC_Elevator
@@ -42,7 +42,7 @@ public:
 
 public:
 	UPROPERTY(EditAnywhere)
-		int32 Floor;
+		EMoveToFloor Floor;
 
 	UPROPERTY(EditAnywhere)
 		bool bInElevator;

@@ -99,6 +99,7 @@ void AC_Player::BeginPlay()
 	LineOfCharacterWidget = CreateWidget<UC_LineOfCharacter>(controller, LineOfCharacter);
 	LineOfCharacterWidget->BeginPlay(this);
 	LineOfCharacterWidget->AddToViewport();
+	LineOfCharacterWidget->PlaySoundCharacterLine.AddDynamic(this, &AC_Player::PlaySoundLine);
 }
 
 void AC_Player::Tick(float DeltaTime)
@@ -149,12 +150,6 @@ void AC_Player::Tick(float DeltaTime)
 		PlayerComponent->DataAsset->IsCanRun = true;
 }
 
-void AC_Player::CallLineOfCharacter(ECharacterLineType InType)
-{
-	if (CharacterLineType.IsBound())
-		CharacterLineType.Broadcast(InType);
-}
-
 void AC_Player::LineTraceInteraction(AActor* Actor)
 {
 	for (int32 i = 0; i < Elevator_Button.Num(); i++)
@@ -176,6 +171,14 @@ void AC_Player::LineTraceInteraction(AActor* Actor)
 			LockActor->bCanCall = false;
 	}
 }
+
+void AC_Player::CallLineOfCharacter(ECharacterLineType InType)
+{
+	if (CharacterLineType.IsBound())
+		CharacterLineType.Broadcast(InType);
+}
+
+
 
 void AC_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -210,7 +213,7 @@ void AC_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AC_Player::OnRun()
 {
-	CheckTrue(CurrentMap == ECurrentMap::Past);
+	CheckFalse(CurrentMap == ECurrentMap::Hotel);
 	CheckTrue(CurrentEnergy <= 50);
 
 	GetCharacterMovement()->MaxWalkSpeed = 600.f;
@@ -219,7 +222,7 @@ void AC_Player::OnRun()
 
 void AC_Player::OffRun()
 {
-	CheckTrue(CurrentMap == ECurrentMap::Past);
+	CheckFalse(CurrentMap == ECurrentMap::Hotel);
 
 	GetCharacterMovement()->MaxWalkSpeed = 400.f;
 	IsRun = false;

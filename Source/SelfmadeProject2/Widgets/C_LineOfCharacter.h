@@ -2,8 +2,11 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Player/C_Player.h"
 #include "C_LineOfCharacter.generated.h"
 
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlaySoundCharacterLine, ECharacterLineType, InType);
 
 UCLASS()
 class SELFMADEPROJECT2_API UC_LineOfCharacter : public UUserWidget
@@ -42,10 +45,14 @@ private:
 
 	void ClearTextBlock();
 
+public:
+	FPlaySoundCharacterLine PlaySoundCharacterLine;
+
 private:
 	FTimerDelegate TimerDelegate;
 
 private:
+	class AC_Player* Player;
 	class UC_Guide* GuideWidget;
 	class AC_Loop* Loop;
 

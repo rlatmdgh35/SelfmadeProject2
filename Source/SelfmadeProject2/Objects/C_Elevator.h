@@ -5,6 +5,12 @@
 #include "C_Elevator.generated.h"
 
 
+UENUM(BlueprintType)
+enum class EMoveToFloor : uint8
+{
+	Arrow, First, Second, Third, Forth, Fifth
+};
+
 UCLASS()
 class SELFMADEPROJECT2_API AC_Elevator : public AActor
 {
@@ -20,21 +26,20 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
-	UFUNCTION(BlueprintImplementableEvent)
-		void DoMoveDoor(int32 Type);
+	void SetFloor(EMoveToFloor InFloor);
 
 	UFUNCTION(BlueprintImplementableEvent)
-		void CloseDoor(int32 Type);
+		void DoMoveDoor(EMoveToFloor Type);
 
-protected:
-	void ChangeColor();
+	UFUNCTION(BlueprintImplementableEvent)
+		void CloseDoor(EMoveToFloor Type);
+
+	UFUNCTION(BlueprintCallable)
+		void ChangeColor();
 
 	UFUNCTION(BlueprintCallable)
 		void ResetButtonColor();
 
-
-public:
-	void SetFloor(int32 InFloor);
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
@@ -51,10 +56,14 @@ protected:
 
 private:
 	TArray<class AC_Elevator_Button*> Buttons;
+	TArray<class AC_Elevator_OutDoor*> OutDoors;
 
 public:
-	UPROPERTY(BlueprintReadOnly)
-		int32 MoveToFloor;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+		EMoveToFloor MoveToFloor = EMoveToFloor::First;
+
+	UPROPERTY(BlueprintReadWrite)
+		int32 CurrentFloor;
 
 	UPROPERTY(BlueprintReadWrite)
 		FVector StartLocation;
@@ -64,10 +73,6 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 		bool bCloseDoor = true;
-
-public:
-	UPROPERTY(BlueprintReadOnly)
-		bool IsOpenTenth = false;
 
 
 };

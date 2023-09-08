@@ -49,6 +49,17 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+// This Function Can Read In Blueprint
+public:
+	UFUNCTION(BlueprintCallable)
+		void LineTraceInteraction(AActor* InActor);
+
+// Call Broadcast Function
+public:
+	void CallLineOfCharacter(ECharacterLineType InType);
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void PlaySoundLine(ECharacterLineType InType);
 
 // Action Event
 private:
@@ -72,22 +83,12 @@ private:
 	void OnBackSpace();
 
 
-
 // Axis Event
 private:
 	void OnMoveForward(float InAxis);
 	void OnMoveRight(float InAxis);
 	void OnHorizontalLook(float InAxis);
 	void OnVerticalLook(float InAxis);
-
-// Call Broadcast Function
-public:
-	void CallLineOfCharacter(ECharacterLineType InType);
-
-// This Function Can Read In Blueprint
-public:
-	UFUNCTION(BlueprintCallable)
-		void LineTraceInteraction(AActor* InActor);
 
 // Delegate -> LineOfCharacter
 public:
@@ -125,9 +126,6 @@ public:
 	TSubclassOf<class UC_LineOfCharacter> LineOfCharacter;
 	class UC_LineOfCharacter* LineOfCharacterWidget;
 
-
-
-
 public:
 	UPROPERTY(BlueprintReadWrite)
 		ECurrentMap CurrentMap = ECurrentMap::Start;
@@ -157,7 +155,9 @@ public:
 		bool bStopRotation;
 
 
-protected:
+private:
+	FVector MyLocation;
+
 	float Speed;
 	float MaxEnergy = 350.f;
 	float ChargeWaitTime;

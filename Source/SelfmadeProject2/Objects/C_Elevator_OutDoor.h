@@ -27,6 +27,9 @@ public:
 	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly)
 		class UStaticMeshComponent* LeftDoor;
 
+	UPROPERTY(VisibleDefaultsOnly)
+		class UTextRenderComponent* Text;
+
 private:
 	TArray<class AC_Elevator_Button*> Buttons;
 

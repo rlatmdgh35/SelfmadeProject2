@@ -21,6 +21,6 @@ void AC_PastMapGameMode::BeginPlay()
 	AC_Player* player = Cast<AC_Player>(playerActor[0]);
 	
 	player->CurrentMap = ECurrentMap::Past;
-	player->GetCharacterMovement()->MaxWalkSpeed = 600.f;
 	player->SetActorLocation(FVector(4775, 3150, 120));
+	// player->SetActorLocation(FVector(1880, -4900, 100)); // Test
 }
