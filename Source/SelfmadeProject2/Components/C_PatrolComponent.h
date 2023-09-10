@@ -16,5 +16,16 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+public:
+	void NextIndex();
+	bool GetMoveToLocation(FVector& OutLocation);
+
+
+private:
+	UPROPERTY(EditAnywhere)
+		class AC_PatrolPath* Path;
+
+	UPROPERTY(EditAnywhere)
+		int32 Index;
 		
 };

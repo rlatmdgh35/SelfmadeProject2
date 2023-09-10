@@ -4,7 +4,7 @@
 #include "Materials/MaterialInstanceConstant.h"
 #include "Components/TextRenderComponent.h"
 #include "Player/C_Player.h"
-#include "Component/C_PlayerComponent.h"
+#include "Components/C_PlayerComponent.h"
 #include "DataAsset/C_DataAsset.h"
 #include "Global.h"
 

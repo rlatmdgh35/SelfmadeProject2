@@ -5,7 +5,7 @@
 #include "Widgets/C_LineOfCharacter.h"
 #include "Widgets/C_Guide.h"
 #include "Widgets/C_Lock.h"
-#include "Component/C_PlayerComponent.h"
+#include "Components/C_PlayerComponent.h"
 #include "DataAsset/C_DataAsset.h"
 #include "Meshes/C_Door.h"
 #include "Objects/C_Office.h"

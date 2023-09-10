@@ -1,7 +1,7 @@
 #include "C_DataAsset.h"
 #include "GameFramework/Character.h"
 #include "Player/C_Player.h"
-#include "Component/C_PlayerComponent.h"
+#include "Components/C_PlayerComponent.h"
 #include "Global.h"
 
 

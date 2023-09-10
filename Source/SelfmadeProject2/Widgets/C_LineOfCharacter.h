@@ -25,6 +25,10 @@ public:
 private:
 	void PrintStartMap_1();
 	void PrintStartMap_2();
+	void PrintStartMap_3();
+	void PrintStartMap_4();
+	void PrintStartMap_5();
+	void PrintStartMap_6();
 
 	void PrintPastMap_1();
 	void PrintPastMap_2();
@@ -61,6 +65,28 @@ private:
 		class UTextBlock* CharacterLineText;
 
 public:
+	UPROPERTY(BlueprintReadWrite)
+		FText StartMap_1;
+
+	UPROPERTY(BlueprintReadWrite)
+		FText StartMap_2;
+
+	UPROPERTY(BlueprintReadWrite)
+		FText StartMap_3;
+
+	UPROPERTY(BlueprintReadWrite)
+		FText StartMap_4;
+
+	UPROPERTY(BlueprintReadWrite)
+		FText StartMap_5;
+
+	UPROPERTY(BlueprintReadWrite)
+		FText StartMap_6;
+
+	UPROPERTY(BlueprintReadWrite)
+		FText StartMap_7;
+
+
 	UPROPERTY(BlueprintReadWrite)
 		FText PastMap_1;
 

@@ -6,7 +6,7 @@
 #include "Components/TextRenderComponent.h"
 #include "Materials/MaterialInstanceConstant.h"
 #include "Player/C_Player.h"
-#include "Component/C_PlayerComponent.h"
+#include "Components/C_PlayerComponent.h"
 #include "DataAsset/C_DataAsset.h"
 #include "C_Elevator_Button.h"
 #include "C_Elevator_OutDoor.h"

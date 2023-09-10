@@ -24,6 +24,7 @@ void UC_LineOfCharacter::SetCharacterLine(ECharacterLineType InType)
 	switch (InType)
 	{
 	case ECharacterLineType::StartMap_Start:
+		PrintStartMap_1();
 		break;
 	case ECharacterLineType::PastMap_Start:
 		PrintPastMap_1();
@@ -48,9 +49,36 @@ void UC_LineOfCharacter::ClearTextBlock()
 
 void UC_LineOfCharacter::PrintStartMap_1()
 {
+	CharacterLineText->SetText(StartMap_1);
+	if (PlaySoundCharacterLine.IsBound())
+		PlaySoundCharacterLine.Broadcast(ECharacterLineType::StartMap_Start);
+
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UC_LineOfCharacter::PrintPastMap_2, 1.5);
 }
 
 void UC_LineOfCharacter::PrintStartMap_2()
+{
+	CharacterLineText->SetText(StartMap_2);
+
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UC_LineOfCharacter::PrintPastMap_3, 2.5);
+}
+
+void UC_LineOfCharacter::PrintStartMap_3()
+{
+	CharacterLineText->SetText(StartMap_3);
+
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UC_LineOfCharacter::PrintPastMap_3, 3.5);
+}
+
+void UC_LineOfCharacter::PrintStartMap_4()
+{
+}
+
+void UC_LineOfCharacter::PrintStartMap_5()
+{
+}
+
+void UC_LineOfCharacter::PrintStartMap_6()
 {
 }
 

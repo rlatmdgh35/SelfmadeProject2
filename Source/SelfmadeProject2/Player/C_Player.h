@@ -128,7 +128,7 @@ public:
 
 public:
 	UPROPERTY(BlueprintReadWrite)
-		ECurrentMap CurrentMap = ECurrentMap::Start;
+		ECurrentMap CurrentMap;
 
 	UPROPERTY(BlueprintReadWrite)
 		EInteractionType InteractionType = EInteractionType::None;
