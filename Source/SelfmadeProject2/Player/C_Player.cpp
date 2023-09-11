@@ -2,12 +2,13 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Widgets/C_Interaction.h"
 #include "Widgets/C_LineOfCharacter.h"
 #include "Widgets/C_Guide.h"
 #include "Widgets/C_Lock.h"
 #include "Components/C_PlayerComponent.h"
 #include "DataAsset/C_DataAsset.h"
-#include "Meshes/C_Door.h"
+#include "Objects/C_Door.h"
 #include "Objects/C_Office.h"
 #include "Objects/C_LockActor.h"
 #include "Objects/C_Elevator_Button.h"
@@ -46,6 +47,7 @@ AC_Player::AC_Player()
 	// Movement
 	GetCharacterMovement()->MaxWalkSpeed = 400.f;
 
+	C_Helpers::GetClass(&InteractionClass, "/Game/Blueprints/Widgets/WBP_Interaction");
 	C_Helpers::GetClass(&LineOfCharacter, "/Game/Blueprints/Widgets/WBP_LineOfCharacter");
 	C_Helpers::GetClass(&Guide, "/Game/Blueprints/Widgets/WBP_Guide");
 	C_Helpers::GetClass(&Lock, "/Game/Blueprints/Widgets/WBP_Lock");
@@ -85,6 +87,10 @@ void AC_Player::BeginPlay()
 
 
 	APlayerController* controller = Cast<APlayerController>(GetController());
+
+	InteractionWidget = CreateWidget<UC_Interaction>(controller, InteractionClass);
+	InteractionWidget->AddToViewport();
+	InteractionWidget->BeginPlay(this);
 
 	LockWidget = CreateWidget<UC_Lock>(controller, Lock);
 	LockWidget->AddToViewport();
@@ -152,23 +158,55 @@ void AC_Player::Tick(float DeltaTime)
 
 void AC_Player::LineTraceInteraction(AActor* Actor)
 {
+	if (LockActor != nullptr)
+	{
+		CheckTrue(PlayerComponent->DataAsset->OpenGuide.IsOpenTenth == true);
+
+		if (Cast<AC_LockActor>(Actor) != nullptr)
+		{
+			LockActor->bCanCall = true;
+			InteractionText.Broadcast(EInteractionType::Lock);
+		}
+		else
+		{
+			LockActor->bCanCall = false;
+			InteractionText.Broadcast(EInteractionType::None);
+		}
+	}
+
+	for (int32 i = 0; i < Doors.Num(); i++)
+	{
+		if (Doors[i] == Cast<AC_Door>(Actor))
+		{
+			CheckTrue(InteractionType == EInteractionType::CheckGuide);
+			CheckTrue(InteractionType == EInteractionType::Lock);
+
+			Doors[i]->bCanCall = true;
+			InteractionText.Broadcast(EInteractionType::Door);
+
+			break;
+		}
+		else
+		{
+			Doors[i]->bCanCall = false;
+			InteractionText.Broadcast(EInteractionType::None);
+		}
+	}
+
 	for (int32 i = 0; i < Elevator_Button.Num(); i++)
 	{
 		if (Elevator_Button[i] == Cast<AC_Elevator_Button>(Actor))
 		{
 			Elevator_Button[i]->bCanCall = true;
+			InteractionText.Broadcast(EInteractionType::Elevator);
+			
 			break;
 		}
 		else
+		{
 			Elevator_Button[i]->bCanCall = false;
-	}
-
-	if (LockActor != nullptr)
-	{
-		if (Cast<AC_LockActor>(Actor) != nullptr)
-			LockActor->bCanCall = true;
-		else
-			LockActor->bCanCall = false;
+			InteractionText.Broadcast(EInteractionType::None);
+		}
 	}
 }
 
@@ -240,26 +278,17 @@ void AC_Player::OpenEyes()
 
 void AC_Player::Interaction()
 {
-	for (int32 i = 0; i < Doors.Num(); i++)
-	{
-		if (Doors[i]->IsOverrlaped())
-		{
-			CheckTrue(InteractionType == EInteractionType::CheckGuide);
-			InteractionType = EInteractionType::Door;
-
-			Doors[i]->Interaction();
-			break;
-		}
-	}
-
 	if ((Office != nullptr) && (Office->IsOverlapped()))
 	{
+		InteractionText.Broadcast(EInteractionType::None);
 		Office->Interaction();
 	}
 
 	if ((LockActor != nullptr) && (LockActor->bCanCall == true) && (PlayerComponent->DataAsset->OpenGuide.IsOpenTenth == false))
 	{
 		CheckTrue(InteractionType == EInteractionType::CheckGuide);
+		InteractionText.Broadcast(EInteractionType::None);
+		InteractionType = EInteractionType::Lock;
 		LockActor->Interaction();
 	}
 
@@ -268,11 +297,24 @@ void AC_Player::Interaction()
 	{
 		if (Elevator_Button[i]->bCanCall == true)
 		{
+			InteractionText.Broadcast(EInteractionType::None);
 			InteractionType = EInteractionType::Elevator;
 			Elevator_Button[i]->Interaction();
 			break;
 		}
 	}
+
+	for (int32 i = 0; i < Doors.Num(); i++)
+	{
+		if (Doors[i]->bCanCall == true)
+		{
+			InteractionText.Broadcast(EInteractionType::None);
+			InteractionType = EInteractionType::Door;
+			Doors[i]->Interaction();
+			break;
+		}
+	}
+
 }
 
 void AC_Player::CheckGuide()

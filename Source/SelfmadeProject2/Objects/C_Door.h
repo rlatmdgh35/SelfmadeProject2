@@ -17,19 +17,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-private:
-	UFUNCTION()
-		void ActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
-
-	UFUNCTION()
-		void ActorEndOverlap(AActor* OverlappedActor, AActor* OtherActor);
-
 public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void StartTimeline();
-
-public:
-	FORCEINLINE bool IsOverrlaped() { return bOverlapped; }
 
 public:
 	void Interaction();
@@ -79,9 +69,7 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 		float SaveRotation;
 
-public:
-	bool bOverlapped;
-
+	bool bCanCall = false;
 
 
 

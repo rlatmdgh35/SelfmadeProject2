@@ -1,14 +1,12 @@
 #include "C_PastMapGameMode.h"
-#include "GameFramework/CharacterMovementComponent.h"
 #include "Player/C_Player.h"
-#include "DataAsset/C_DataAsset.h"
 #include "Global.h"
+
 
 AC_PastMapGameMode::AC_PastMapGameMode()
 {
 	TSubclassOf<AC_Player> player;
 	C_Helpers::GetClass(&player, "/Game/Player/Blueprint/BP_Player");
-
 	DefaultPawnClass = player;
 }
 

@@ -29,6 +29,7 @@ private:
 	void PrintStartMap_4();
 	void PrintStartMap_5();
 	void PrintStartMap_6();
+	void PrintStartMap_7();
 
 	void PrintPastMap_1();
 	void PrintPastMap_2();

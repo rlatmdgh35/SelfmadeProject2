@@ -1,7 +1,6 @@
 #include "C_Door.h"
 #include "Components/SceneComponent.h"
 #include "Components/StaticMeshComponent.h"
-#include "Components/BoxComponent.h"
 #include "Player/C_Player.h"
 #include "Global.h"
 
@@ -17,7 +16,6 @@ AC_Door::AC_Door()
 	C_Helpers::CreateSceneComponent<UStaticMeshComponent>(this, &DoorHandle_B, "DoorHandle_B", Door);
 	C_Helpers::CreateSceneComponent<USceneComponent>(this, &Corner_R, "Corner_R", DefaultSceneComponent);
 	C_Helpers::CreateSceneComponent<USceneComponent>(this, &Corner_L, "Corner_L", DefaultSceneComponent);
-	C_Helpers::CreateSceneComponent<UBoxComponent>(this, &Box, "BoxCollision", DefaultSceneComponent);
 
 	DoorRoot->SetRelativeLocation(FVector(0, 54, 0));
 	
@@ -41,10 +39,6 @@ AC_Door::AC_Door()
 
 	Corner_R->SetRelativeLocation(FVector(3.5f * xScale, 60.f * yScale, 100.f * zScale));
 	Corner_L->SetRelativeLocation(FVector(3.5f * xScale, -60.f * yScale, 100.f * zScale));
-
-
-	Box->SetRelativeLocationAndRotation(FVector(0, 0, 100), FRotator(0, 90, 0));
-	Box->SetRelativeScale3D(FVector(1.75, 3, 3));
 }
 
 void AC_Door::BeginPlay()
@@ -54,20 +48,6 @@ void AC_Door::BeginPlay()
 	TArray<AActor*> playerActor;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Player::StaticClass(), playerActor);
 	Player = Cast<AC_Player>(playerActor[0]);
-
-
-	OnActorBeginOverlap.AddDynamic(this, &AC_Door::ActorBeginOverlap);
-	OnActorEndOverlap.AddDynamic(this, &AC_Door::ActorEndOverlap);
-}
-
-void AC_Door::ActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
-{
-	bOverlapped = true;
-}
-
-void AC_Door::ActorEndOverlap(AActor* OverlappedActor, AActor* OtherActor)
-{
-	bOverlapped = false;
 }
 
 void AC_Door::Interaction()

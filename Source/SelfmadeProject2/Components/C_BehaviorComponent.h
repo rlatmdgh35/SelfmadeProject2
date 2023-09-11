@@ -8,7 +8,7 @@
 UENUM(BlueprintType)
 enum class EOfficerType : uint8
 {
-	JumpScare, Patrol, Approach
+	 Patrol, Approach, JumpScare
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -21,15 +21,19 @@ public:
 	void ChangeType(EOfficerType InNewType);
 
 public:
-	class AC_Player* GetTargetPlayer();
-
-public:
 	FORCEINLINE void SetBlackboard(class UBlackboardComponent* InBlackboard) { Blackboard = InBlackboard; }
 
 	FVector GetPlayerLocation();
 
+public:
+	class AC_Player* GetTargetPlayer();
+
 private:
 	class UBlackboardComponent* Blackboard;
+
+public:
+	UPROPERTY(BlueprintReadOnly)
+		EOfficerType OfficerType;
 
 private:
 	UPROPERTY(EditAnywhere)

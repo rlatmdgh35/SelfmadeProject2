@@ -17,9 +17,9 @@ AC_Player* UC_BehaviorComponent::GetTargetPlayer()
 
 void UC_BehaviorComponent::ChangeType(EOfficerType InNewType)
 {
+	OfficerType = InNewType;
 	EOfficerType previewType = InNewType;
 	Blackboard->SetValueAsEnum(BehaviorKey, (int32)InNewType);
-
 
 
 }

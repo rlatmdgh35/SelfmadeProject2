@@ -10,7 +10,6 @@ void UC_LineOfCharacter::BeginPlay(ACharacter* InCharacter)
 {
 	Player = Cast<AC_Player>(InCharacter);
 	Player->CharacterLineType.AddDynamic(this, &UC_LineOfCharacter::SetCharacterLine);
-
 	
 	TArray<AActor*> loopActor;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Loop::StaticClass(), loopActor);
@@ -25,6 +24,9 @@ void UC_LineOfCharacter::SetCharacterLine(ECharacterLineType InType)
 	{
 	case ECharacterLineType::StartMap_Start:
 		PrintStartMap_1();
+		break;
+	case ECharacterLineType::StartMap_JumpScare:
+		PrintStartMap_5();
 		break;
 	case ECharacterLineType::PastMap_Start:
 		PrintPastMap_1();
@@ -67,7 +69,7 @@ void UC_LineOfCharacter::PrintStartMap_3()
 {
 	CharacterLineText->SetText(StartMap_3);
 
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UC_LineOfCharacter::PrintPastMap_3, 3.5);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UC_LineOfCharacter::ClearTextBlock, 3.5);
 }
 
 void UC_LineOfCharacter::PrintStartMap_4()
@@ -76,10 +78,21 @@ void UC_LineOfCharacter::PrintStartMap_4()
 
 void UC_LineOfCharacter::PrintStartMap_5()
 {
+	CharacterLineText->SetText(StartMap_5);
+	if (PlaySoundCharacterLine.IsBound())
+		PlaySoundCharacterLine.Broadcast(ECharacterLineType::StartMap_JumpScare);
+
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UC_LineOfCharacter::ClearTextBlock, 3.5);
 }
 
 void UC_LineOfCharacter::PrintStartMap_6()
 {
+}
+
+void UC_LineOfCharacter::PrintStartMap_7()
+{
+	CharacterLineText->SetText(StartMap_7);
+
 }
 
 void UC_LineOfCharacter::PrintPastMap_1()

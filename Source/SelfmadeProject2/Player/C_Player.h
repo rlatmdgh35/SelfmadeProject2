@@ -15,7 +15,7 @@ enum class ECurrentMap : uint8
 UENUM(BlueprintType)
 enum class ECharacterLineType : uint8
 {
-	StartMap_Start, PastMap_Start, HotelMap_Start, OpenEighthGuide, OpenNinthGuide, OpenTenthGuide
+	StartMap_Start, StartMap_JumpScare, PastMap_Start, HotelMap_Start, OpenEighthGuide, OpenNinthGuide, OpenTenthGuide
 };
 
 UENUM(BlueprintType)
@@ -32,6 +32,7 @@ enum class EEndingType : uint8
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCharacterLineTypeSignature, ECharacterLineType, InType);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInteractionTextSignature, EInteractionType, InType);
 
 
 UCLASS()
@@ -56,7 +57,8 @@ public:
 
 // Call Broadcast Function
 public:
-	void CallLineOfCharacter(ECharacterLineType InType);
+	UFUNCTION(BlueprintCallable)
+		void CallLineOfCharacter(ECharacterLineType InType);
 
 	UFUNCTION(BlueprintImplementableEvent)
 		void PlaySoundLine(ECharacterLineType InType);
@@ -90,9 +92,12 @@ private:
 	void OnHorizontalLook(float InAxis);
 	void OnVerticalLook(float InAxis);
 
-// Delegate -> LineOfCharacter
+// Delegate
 public:
 	FCharacterLineTypeSignature CharacterLineType;
+
+	UPROPERTY(BlueprintReadOnly)
+		FInteractionTextSignature InteractionText;
 
 // SceneComponent
 public:
@@ -117,6 +122,9 @@ private:
 	TArray<class AC_Elevator_Button*> Elevator_Button;
 
 public:
+	TSubclassOf<class UC_Interaction> InteractionClass;
+	class UC_Interaction* InteractionWidget;
+
 	TSubclassOf<class UC_Guide> Guide;
 	class UC_Guide* GuideWidget;
 

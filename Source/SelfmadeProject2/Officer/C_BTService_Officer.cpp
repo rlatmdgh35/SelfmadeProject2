@@ -29,6 +29,15 @@ void UC_BTService_Officer::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* No
 	UC_PatrolComponent* patrolComponent = C_Helpers::GetComponent<UC_PatrolComponent>(officer);
 	CheckNull(patrolComponent);
 
+
+	if (officer->bIsJumpScare == true)
+	{
+		behaviorComponent->ChangeType(EOfficerType::JumpScare);
+		return;
+	}
+
+
+
 	AC_Player* player = behaviorComponent->GetTargetPlayer();
 	if (player == nullptr)
 	{

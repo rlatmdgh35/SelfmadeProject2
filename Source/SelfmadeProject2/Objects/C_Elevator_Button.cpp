@@ -119,14 +119,17 @@ void AC_Elevator_Button::Interaction()
 
 	if (Floor != EMoveToFloor::Arrow)
 	{
-		C_Log::Log("MoveToFloor : " + FString::FromInt((int32)Elevator->MoveToFloor));
-		C_Log::Log("Floor : " + FString::FromInt((int32)Floor));
-
 		if (Elevator->MoveToFloor != Floor)
+		{
+			Player->InteractionType = EInteractionType::Elevator;
 			Elevator->SetFloor(Floor);
+		}
 
 		else if (PressOpenDoorButton.IsBound())
+		{
+			Player->InteractionType = EInteractionType::Elevator;
 			PressOpenDoorButton.Broadcast(Floor);
+		}
 	}
 	else if ((bOpenButton == true) && (PressOpenDoorButton.IsBound()))
 		PressOpenDoorButton.Broadcast(Floor);

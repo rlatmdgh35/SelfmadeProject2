@@ -4,6 +4,9 @@
 #include "GameFramework/Character.h"
 #include "C_Security_Officer.generated.h"
 
+
+
+
 UCLASS()
 class SELFMADEPROJECT2_API AC_Security_Officer : public ACharacter
 {
@@ -22,6 +25,13 @@ private:
 
 	UPROPERTY(VisibleDefaultsOnly)
 		class UC_PatrolComponent* Patrol;
+
+public:
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		bool bCanPatrol = true;
+
+	UPROPERTY(EditAnywhere)
+		bool bIsJumpScare;
 
 	UPROPERTY(EditDefaultsOnly)
 		int32 TeamID = 1;

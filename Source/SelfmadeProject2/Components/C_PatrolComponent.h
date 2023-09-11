@@ -27,5 +27,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 		int32 Index;
+
+	class AC_Security_Officer* Officer;
+
 		
 };

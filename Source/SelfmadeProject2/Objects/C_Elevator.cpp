@@ -150,9 +150,6 @@ void AC_Elevator::ChangeColor()
 			}
 			else
 			{
-				C_Log::Log("CurrentFloor : " + FString::FromInt(CurrentFloor));
-				C_Log::Log("ButtonFloor : " + FString::FromInt((int32)Buttons[i]->Floor)); // For Test
-
 				Buttons[i]->DynamicMaterial->SetVectorParameterValue("Param", FLinearColor(1, 0, 0));
 				break;
 			}
