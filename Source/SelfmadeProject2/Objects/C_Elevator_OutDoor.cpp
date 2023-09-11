@@ -21,7 +21,7 @@ AC_Elevator_OutDoor::AC_Elevator_OutDoor()
 
 	Text->SetHorizontalAlignment(EHorizTextAligment::EHTA_Center);
 	Text->SetVerticalAlignment(EVerticalTextAligment::EVRTA_TextCenter);
-	Text->SetRelativeLocationAndRotation(FVector(-50, 180, 160), FRotator(0, 180, 0)); // Todo. Need Fix Location
+	Text->SetRelativeLocationAndRotation(FVector(-56, 200, 235), FRotator(0, 180, 0)); // Todo. Need Fix Location
 }
 
 void AC_Elevator_OutDoor::BeginPlay()

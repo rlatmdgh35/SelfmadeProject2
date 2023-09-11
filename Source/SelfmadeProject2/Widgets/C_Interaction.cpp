@@ -21,8 +21,6 @@ void UC_Interaction::BeginPlay(ACharacter* InCharacter)
 
 void UC_Interaction::InteractionText(EInteractionType InType)
 {
-	CheckFalse(Player->InteractionType == EInteractionType::None);
-
 	switch (InType)
 	{
 	case EInteractionType::None:
@@ -31,10 +29,10 @@ void UC_Interaction::InteractionText(EInteractionType InType)
 	case EInteractionType::Door:
 		DoorTextBlock();
 		break;
-	case EInteractionType::Lock:
+	case EInteractionType::Elevator:
 		ElevatorTextBlock();
 		break;
-	case EInteractionType::Elevator:
+	case EInteractionType::Lock:
 		LockTextBlock();
 		break;
 	}

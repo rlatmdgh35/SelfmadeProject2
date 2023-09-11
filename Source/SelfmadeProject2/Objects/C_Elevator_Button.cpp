@@ -40,7 +40,10 @@ void AC_Elevator_Button::BeginPlay()
 	}
 
 	if (bInElevator != true)
+	{
+		SetActorLocation(FVector());
 		SetActorRelativeRotation(FRotator(0, 180, 0));
+	}
 
 	if (bInElevator == true)
 	{

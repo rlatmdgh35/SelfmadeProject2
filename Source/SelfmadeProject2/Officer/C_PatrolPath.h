@@ -21,8 +21,4 @@ public:
 private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class USplineComponent* Spline;
-
-private:
-	UPROPERTY(EditInstanceOnly)
-		bool bClosedLoop;
 };

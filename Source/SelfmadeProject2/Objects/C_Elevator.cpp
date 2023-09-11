@@ -2,7 +2,6 @@
 #include "Materials/MaterialInstanceDynamic.h"
 #include "Materials/MaterialInstanceConstant.h"
 #include "Components/SceneComponent.h"
-#include "Components/StaticMeshComponent.h"
 #include "Components/TextRenderComponent.h"
 #include "Materials/MaterialInstanceConstant.h"
 #include "Player/C_Player.h"

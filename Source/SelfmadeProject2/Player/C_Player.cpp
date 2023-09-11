@@ -280,14 +280,12 @@ void AC_Player::Interaction()
 {
 	if ((Office != nullptr) && (Office->IsOverlapped()))
 	{
-		InteractionText.Broadcast(EInteractionType::None);
 		Office->Interaction();
 	}
 
 	if ((LockActor != nullptr) && (LockActor->bCanCall == true) && (PlayerComponent->DataAsset->OpenGuide.IsOpenTenth == false))
 	{
 		CheckTrue(InteractionType == EInteractionType::CheckGuide);
-		InteractionText.Broadcast(EInteractionType::None);
 		InteractionType = EInteractionType::Lock;
 		LockActor->Interaction();
 	}
@@ -297,7 +295,6 @@ void AC_Player::Interaction()
 	{
 		if (Elevator_Button[i]->bCanCall == true)
 		{
-			InteractionText.Broadcast(EInteractionType::None);
 			InteractionType = EInteractionType::Elevator;
 			Elevator_Button[i]->Interaction();
 			break;
@@ -308,7 +305,6 @@ void AC_Player::Interaction()
 	{
 		if (Doors[i]->bCanCall == true)
 		{
-			InteractionText.Broadcast(EInteractionType::None);
 			InteractionType = EInteractionType::Door;
 			Doors[i]->Interaction();
 			break;

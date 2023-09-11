@@ -47,7 +47,6 @@ void UC_Lock::SetTextNum(FText InText)
 
 			if (OpenTenthGuide.IsBound())
 				OpenTenthGuide.Broadcast();
-			// Index = 1;
 		}
 
 		else

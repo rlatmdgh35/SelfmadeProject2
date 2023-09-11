@@ -62,8 +62,10 @@ void AC_AIController_Officer::OnPerceptionUpdated(const TArray<AActor*>& Updated
 	{
 		player = Cast<AC_Player>(perceivedActor);
 
+		C_Log::Log("for");
 		if (player != nullptr)
 		{
+			C_Log::Log("NotNull");
 			break;
 		}
 	}
