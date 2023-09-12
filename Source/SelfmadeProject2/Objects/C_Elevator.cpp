@@ -62,35 +62,41 @@ void AC_Elevator::Tick(float DeltaTime)
 	float zLocation = GetActorLocation().Z;
 	if (50.f <= zLocation && zLocation < 150.f)
 	{
-		Text->SetTextRenderColor(FColor::White);
+		Text->SetTextRenderColor(FColor::Black);
 		Text->SetText(FText::FromString("1"));
 
 		for (int32 i = 0; i < OutDoors.Num(); i++)
 		{
 			OutDoors[i]->Text->SetTextRenderColor(FColor::White);
 			OutDoors[i]->Text->SetText(FText::FromString("1"));
+			OutDoors[i]->TopText->SetTextRenderColor(FColor::White);
+			OutDoors[i]->TopText->SetText(FText::FromString("1"));
 		}
 	}
 	else if (450.f <= zLocation && zLocation < 650.f)
 	{
-		Text->SetTextRenderColor(FColor::White);
+		Text->SetTextRenderColor(FColor::Black);
 		Text->SetText(FText::FromString("2"));
 
 		for (int32 i = 0; i < OutDoors.Num(); i++)
 		{
 			OutDoors[i]->Text->SetTextRenderColor(FColor::White);
 			OutDoors[i]->Text->SetText(FText::FromString("2"));
+			OutDoors[i]->TopText->SetTextRenderColor(FColor::White);
+			OutDoors[i]->TopText->SetText(FText::FromString("2"));
 		}
 	}
 	else if (950.f <= zLocation && zLocation < 1150.f)
 	{
-		Text->SetTextRenderColor(FColor::White);
+		Text->SetTextRenderColor(FColor::Black);
 		Text->SetText(FText::FromString("3"));
 
 		for (int32 i = 0; i < OutDoors.Num(); i++)
 		{
 			OutDoors[i]->Text->SetTextRenderColor(FColor::White);
 			OutDoors[i]->Text->SetText(FText::FromString("3"));
+			OutDoors[i]->TopText->SetTextRenderColor(FColor::White);
+			OutDoors[i]->TopText->SetText(FText::FromString("3"));
 		}
 	}
 	else if (1450.f <= zLocation && zLocation < 1650.f)
@@ -98,29 +104,34 @@ void AC_Elevator::Tick(float DeltaTime)
 		Text->SetText(FText::FromString("4"));
 
 		for (int32 i = 0; i < OutDoors.Num(); i++)
+		{
 			OutDoors[i]->Text->SetText(FText::FromString("4"));
+			OutDoors[i]->TopText->SetText(FText::FromString("4"));
+		}
 
 		bool check = Player->PlayerComponent->DataAsset->OpenGuide.IsOpenTenth == true;
 		if (MoveToFloor == EMoveToFloor::Forth && check)
 		{
-			Text->SetTextRenderColor(FColor::Red);
+			Text->SetTextRenderColor(FColor::Black);
 
 			for (int32 i = 0; i < OutDoors.Num(); i++)
 			{
-				OutDoors[i]->Text->SetTextRenderColor(FColor::White);
 				OutDoors[i]->Text->SetTextRenderColor(FColor::Red);
+				OutDoors[i]->TopText->SetTextRenderColor(FColor::Red);
 			}
 		}
 	}
 	else if (1950.f <= zLocation && zLocation <= 2050.f)
 	{
-		Text->SetTextRenderColor(FColor::White);
+		Text->SetTextRenderColor(FColor::Black);
 		Text->SetText(FText::FromString("5"));
 
 		for (int32 i = 0; i < OutDoors.Num(); i++)
 		{
 			OutDoors[i]->Text->SetTextRenderColor(FColor::White);
 			OutDoors[i]->Text->SetText(FText::FromString("5"));
+			OutDoors[i]->TopText->SetTextRenderColor(FColor::White);
+			OutDoors[i]->TopText->SetText(FText::FromString("5"));
 		}
 	}
 }

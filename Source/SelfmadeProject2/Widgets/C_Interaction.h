@@ -43,6 +43,8 @@ private:
 		class UTextBlock* MainText;
 
 	class AC_Player* Player;
+	class AC_Elevator* Elevator;
 	TArray<class AC_Door*> Doors;
+	TArray<class AC_Elevator_Button*> Buttons;
 
 };

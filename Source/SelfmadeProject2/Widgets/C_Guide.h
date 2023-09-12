@@ -26,7 +26,7 @@ public:
 	UFUNCTION()
 		void ShowThirdPage();
 
-private:
+public:
 	UFUNCTION()
 		void OpenEighthGuide();
 

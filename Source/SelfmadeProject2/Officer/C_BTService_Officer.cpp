@@ -48,7 +48,8 @@ void UC_BTService_Officer::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* No
 	{
 		float distance = officer->GetDistanceTo(player);
 
-		if (distance < controller->GetSightRadius())	behaviorComponent->ChangeType(EOfficerType::Approach);
+		if (distance < 350)
+			behaviorComponent->ChangeType(EOfficerType::Approach);
 	}
 
 

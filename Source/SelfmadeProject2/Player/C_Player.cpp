@@ -19,6 +19,7 @@ AC_Player::AC_Player()
 {
 	// || Create SceneComponent ||
 	C_Helpers::CreateSceneComponent(this, &Camera, "Camera", GetMesh());
+	C_Helpers::CreateSceneComponent(this, &Plane, "Plane", Camera);
 
 	// || Create ActorComponent ||
 	C_Helpers::CreateActorComponent(this, &PlayerComponent, "Component");
@@ -32,17 +33,29 @@ AC_Player::AC_Player()
 
 	TSubclassOf<UAnimInstance> animInstanceClass;
 	C_Helpers::GetClass(&animInstanceClass, "/Game/Player/Blueprint/ABP_Player_Start");
-	GetMesh()->SetAnimInstanceClass(animInstanceClass);
+
+	UStaticMesh* planeAsset;
+	C_Helpers::GetAsset(&planeAsset, "/Game/StaticMeshes/SM_Plane");
+
+	UMaterial* blackMaterial;
+	C_Helpers::GetAsset(&blackMaterial, "/Game/Materials/MAT_Black");
 
 	// Mesh Setting
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -88));
 	GetMesh()->SetRelativeRotation(FRotator(0, 270, 0));
 	GetMesh()->SetSkeletalMesh(meshAsset);
+	GetMesh()->SetAnimInstanceClass(animInstanceClass);
 
 	// Camera Setting
 	Camera->SetRelativeLocation(FVector(0, 44.5, 157.5));
 	Camera->SetRelativeRotation(FRotator(0, 90, 0));
 	Camera->bUsePawnControlRotation = true;
+
+	// Planes To Act As Blindfolds Setting
+	Plane->SetStaticMesh(planeAsset);
+	Plane->SetRelativeLocationAndRotation(FVector(25, 0, 0), FRotator(90, 0, 0));
+	Plane->SetMaterial(0, blackMaterial);
+	Plane->SetVisibility(false);
 
 	// Movement
 	GetCharacterMovement()->MaxWalkSpeed = 400.f;
@@ -105,7 +118,6 @@ void AC_Player::BeginPlay()
 	LineOfCharacterWidget = CreateWidget<UC_LineOfCharacter>(controller, LineOfCharacter);
 	LineOfCharacterWidget->BeginPlay(this);
 	LineOfCharacterWidget->AddToViewport();
-	LineOfCharacterWidget->PlaySoundCharacterLine.AddDynamic(this, &AC_Player::PlaySoundLine);
 }
 
 void AC_Player::Tick(float DeltaTime)
@@ -132,8 +144,6 @@ void AC_Player::Tick(float DeltaTime)
 		if (ChargeWaitTime != 0)
 		{
 			SaveDeltaTime = FMath::Clamp(SaveDeltaTime, 0.f, ChargeWaitTime);
-			C_Log::Print("FlowTime Value : " + FString::SanitizeFloat(SaveDeltaTime), 1); 	 // For Test
-			C_Log::Print("WaitTime Value : " + FString::SanitizeFloat(ChargeWaitTime), 2);	 // For Test
 			CurrentEnergy = SaveEnergyValue + ((MaxEnergy - SaveEnergyValue) / ChargeWaitTime * SaveDeltaTime);
 			CurrentEnergy = FMath::Clamp(CurrentEnergy, 0.f, 1000.f);
 		}
@@ -213,7 +223,12 @@ void AC_Player::LineTraceInteraction(AActor* Actor)
 void AC_Player::CallLineOfCharacter(ECharacterLineType InType)
 {
 	if (CharacterLineType.IsBound())
+	{
+		C_Log::Log("Binding"); // For Test
 		CharacterLineType.Broadcast(InType);
+	}
+
+	PlaySoundLine(InType);
 }
 
 
@@ -269,11 +284,22 @@ void AC_Player::OffRun()
 void AC_Player::CloseEyes()
 {
 	PlayerComponent->DataAsset->IsOpenEyes = false;
+	if (InteractionType == EInteractionType::CheckGuide)
+	{
+		bTurn = false;
+		CheckGuide();
+	}
+	InteractionType = EInteractionType::CloseEyes;
+
+	Plane->SetVisibility(true);
 }
 
 void AC_Player::OpenEyes()
 {
 	PlayerComponent->DataAsset->IsOpenEyes = true;
+	InteractionType = EInteractionType::None;
+
+	Plane->SetVisibility(false);
 }
 
 void AC_Player::Interaction()

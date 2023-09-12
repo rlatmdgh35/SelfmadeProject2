@@ -19,7 +19,9 @@ AC_AIController_Officer::AC_AIController_Officer()
 
 	Sight->SightRadius = 600.f;
 	Sight->LoseSightRadius = 600.f;
-
+	Sight->DetectionByAffiliation.bDetectNeutrals = true;
+	Sight->DetectionByAffiliation.bDetectEnemies = true;
+	Sight->DetectionByAffiliation.bDetectFriendlies = true;
 
 	Perception->ConfigureSense(*Sight);
 	Perception->SetDominantSense(Sight->GetSenseImplementation());
@@ -62,15 +64,14 @@ void AC_AIController_Officer::OnPerceptionUpdated(const TArray<AActor*>& Updated
 	{
 		player = Cast<AC_Player>(perceivedActor);
 
-		C_Log::Log("for");
 		if (player != nullptr)
 		{
-			C_Log::Log("NotNull");
 			break;
 		}
 	}
 
 	Blackboard->SetValueAsObject("PlayerKey", player);
+	Blackboard->SetValueAsVector("LocationKey", player->GetActorLocation());
 }
 
 float AC_AIController_Officer::GetSightRadius()

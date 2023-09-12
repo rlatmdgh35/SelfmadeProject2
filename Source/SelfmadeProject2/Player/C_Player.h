@@ -21,7 +21,7 @@ enum class ECharacterLineType : uint8
 UENUM(BlueprintType)
 enum class EInteractionType : uint8
 {
-	None, CheckGuide, Door, Lock, Elevator, Max
+	None, CloseEyes, CheckGuide, Door, Lock, Elevator, Max
 };
 
 UENUM(BlueprintType)
@@ -103,6 +103,9 @@ public:
 public:
 	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly)
 		class UCameraComponent* Camera;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		class UStaticMeshComponent* Plane;
 
 // ActorComponent
 public:

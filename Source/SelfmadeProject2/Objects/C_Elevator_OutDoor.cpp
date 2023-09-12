@@ -12,6 +12,8 @@ AC_Elevator_OutDoor::AC_Elevator_OutDoor()
 	C_Helpers::CreateSceneComponent<UStaticMeshComponent>(this, &RightDoor, "RightDoor", DefaultSceneComponent);
 	C_Helpers::CreateSceneComponent<UStaticMeshComponent>(this, &LeftDoor, "LeftDoor", DefaultSceneComponent);
 	C_Helpers::CreateSceneComponent<UTextRenderComponent>(this, &Text, "Text", DefaultSceneComponent);
+	C_Helpers::CreateSceneComponent<UTextRenderComponent>(this, &TopText, "TopText", DefaultSceneComponent);
+
 
 	RightDoor->SetRelativeLocation(FVector(0, -75, 150));
 	RightDoor->SetRelativeScale3D(FVector(0.1f, 1.5f, 3.f));
@@ -21,7 +23,11 @@ AC_Elevator_OutDoor::AC_Elevator_OutDoor()
 
 	Text->SetHorizontalAlignment(EHorizTextAligment::EHTA_Center);
 	Text->SetVerticalAlignment(EVerticalTextAligment::EVRTA_TextCenter);
-	Text->SetRelativeLocationAndRotation(FVector(-56, 200, 235), FRotator(0, 180, 0)); // Todo. Need Fix Location
+	Text->SetRelativeLocationAndRotation(FVector(-56, 200, 235), FRotator(0, 180, 0));
+
+	TopText->SetHorizontalAlignment(EHorizTextAligment::EHTA_Center);
+	TopText->SetVerticalAlignment(EVerticalTextAligment::EVRTA_TextCenter);
+	TopText->SetRelativeLocationAndRotation(FVector(-56, 0, 350), FRotator(0, 180, 0));
 }
 
 void AC_Elevator_OutDoor::BeginPlay()

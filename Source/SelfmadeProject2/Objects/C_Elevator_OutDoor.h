@@ -29,6 +29,10 @@ public:
 
 	UPROPERTY(VisibleDefaultsOnly)
 		class UTextRenderComponent* Text;
+	
+	UPROPERTY(VisibleDefaultsOnly)
+		class UTextRenderComponent* TopText;
+
 
 private:
 	TArray<class AC_Elevator_Button*> Buttons;

@@ -18,22 +18,6 @@ void UC_Guide::BeginPlay(ACharacter* InCharacter)
 {
 	Player = Cast<AC_Player>(InCharacter);
 
-	TArray<AActor*> roomNum307Actor;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_RoomNum307::StaticClass(), roomNum307Actor);
-	if (roomNum307Actor.Num() > 0)
-	{
-		RoomNum307 = Cast<AC_RoomNum307>(roomNum307Actor[0]);
-		RoomNum307->OpenEighthGuide.AddDynamic(this, &UC_Guide::OpenEighthGuide);
-	}
-
-	TArray<AActor*> roomNum508Actor;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_RoomNum508::StaticClass(), roomNum508Actor);
-	if (roomNum508Actor.Num() > 0)
-	{
-		RoomNum508 = Cast<AC_RoomNum508>(roomNum508Actor[0]);
-		RoomNum508->OpenNinthGuide.AddDynamic(this, &UC_Guide::OpenNinthGuide);
-	}
-
 	LockWidget = Cast<UC_Lock>(Player->LockWidget);
 	LockWidget->OpenTenthGuide.AddDynamic(this, &UC_Guide::OpenTenthGuide);
 }

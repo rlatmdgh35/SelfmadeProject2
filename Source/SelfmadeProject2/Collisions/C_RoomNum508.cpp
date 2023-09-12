@@ -1,5 +1,7 @@
 #include "C_RoomNum508.h"
 #include "Components/BoxComponent.h"
+#include "Player/C_Player.h"
+#include "Widgets/C_Guide.h"
 #include "Global.h"
 
 
@@ -21,7 +23,7 @@ void AC_RoomNum508::OnBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
 	Box->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-	if (OpenNinthGuide.IsBound())
-		OpenNinthGuide.Broadcast();
+	AC_Player* player = Cast<AC_Player>(OverlappedActor);
+	player->CallLineOfCharacter(ECharacterLineType::OpenNinthGuide);
+	player->GuideWidget->OpenNinthGuide();
 }
-

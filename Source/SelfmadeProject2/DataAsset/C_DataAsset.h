@@ -79,7 +79,7 @@ public:
 		FOpenGuide OpenGuide;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "PlayerState")
-		bool IsOpenEyes;
+		bool IsOpenEyes = false;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "PlayerState")
 		bool IsCanRun;

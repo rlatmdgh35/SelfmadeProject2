@@ -52,8 +52,6 @@ void UC_LineOfCharacter::ClearTextBlock()
 void UC_LineOfCharacter::PrintStartMap_1()
 {
 	CharacterLineText->SetText(StartMap_1);
-	if (PlaySoundCharacterLine.IsBound())
-		PlaySoundCharacterLine.Broadcast(ECharacterLineType::StartMap_Start);
 
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UC_LineOfCharacter::PrintPastMap_2, 1.5);
 }
@@ -79,8 +77,6 @@ void UC_LineOfCharacter::PrintStartMap_4()
 void UC_LineOfCharacter::PrintStartMap_5()
 {
 	CharacterLineText->SetText(StartMap_5);
-	if (PlaySoundCharacterLine.IsBound())
-		PlaySoundCharacterLine.Broadcast(ECharacterLineType::StartMap_JumpScare);
 
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UC_LineOfCharacter::ClearTextBlock, 3.5);
 }
@@ -98,8 +94,6 @@ void UC_LineOfCharacter::PrintStartMap_7()
 void UC_LineOfCharacter::PrintPastMap_1()
 {
 	CharacterLineText->SetText(PastMap_1);
-	if (PlaySoundCharacterLine.IsBound())
-		PlaySoundCharacterLine.Broadcast(ECharacterLineType::PastMap_Start);
 
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UC_LineOfCharacter::ClearTextBlock, 3.5);
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UC_LineOfCharacter::PrintPastMap_2, 5.5);

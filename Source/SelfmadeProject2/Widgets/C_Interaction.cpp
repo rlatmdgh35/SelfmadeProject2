@@ -2,6 +2,7 @@
 #include "Components/TextBlock.h"
 // #include "Player/C_Player.h" <- In Header
 #include "Objects/C_Door.h"
+#include "Objects/C_Elevator_Button.h" // C_Elevator_Button.h 's parent is C_Elevator
 #include "Global.h"
 
 
@@ -16,6 +17,19 @@ void UC_Interaction::BeginPlay(ACharacter* InCharacter)
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Door::StaticClass(), doorActors);
 	for (int32 i = 0; i < doorActors.Num(); i++)
 		Doors.Add(Cast<AC_Door>(doorActors[i]));
+
+	TArray<AActor*> elevatorActor;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Elevator::StaticClass(), elevatorActor);
+	if (elevatorActor.Num() > 0)
+		Elevator = Cast<AC_Elevator>(elevatorActor[0]);
+
+
+	TArray<AActor*> elevatorButtonActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Elevator_Button::StaticClass(), elevatorButtonActors);
+	for (int32 i = 0; i < elevatorButtonActors.Num(); i++)
+	{
+		Buttons.Add(Cast<AC_Elevator_Button>(elevatorButtonActors[i]));
+	}
 
 }
 
@@ -58,6 +72,21 @@ void UC_Interaction::DoorTextBlock()
 
 void UC_Interaction::ElevatorTextBlock()
 {
+	for (int32 i = 0; i < Buttons.Num(); i++)
+	{
+		CheckTrue(Elevator->bMoving == true);
+		if (Buttons[i]->bCanCall == true)
+		{
+			if (Buttons[i]->Floor == EMoveToFloor::Arrow)
+			{
+				if (Buttons[i]->bOpenButton == true)	MainText->SetText(OpenDoorText);
+				else									MainText->SetText(CloseDoorText);
+			}
+			else
+				MainText->SetText(ElevatorText);
+		}
+	}
+
 	MainText->SetText(ElevatorText);
 }
 

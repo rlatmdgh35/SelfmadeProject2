@@ -40,23 +40,20 @@ void AC_Elevator_Button::BeginPlay()
 	}
 
 	if (bInElevator != true)
-	{
-		SetActorLocation(FVector());
 		SetActorRelativeRotation(FRotator(0, 180, 0));
-	}
 
 	if (bInElevator == true)
 	{
 		switch (Floor)
 		{
-		case EMoveToFloor::First:		C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Number1_Inst");	break;
-		case EMoveToFloor::Second:		C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Number2_Inst");	break;
-		case EMoveToFloor::Third:		C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Number3_Inst");	break;
-		case EMoveToFloor::Forth:		C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Number4_Inst");	break;
-		case EMoveToFloor::Fifth:		C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Number5_Inst");	break;
+		case EMoveToFloor::First:		C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Materials/ElevatorButtons/Instance/MAT_Number1_Inst");	break;
+		case EMoveToFloor::Second:		C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Materials/ElevatorButtons/Instance/MAT_Number2_Inst");	break;
+		case EMoveToFloor::Third:		C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Materials/ElevatorButtons/Instance/MAT_Number3_Inst");	break;
+		case EMoveToFloor::Forth:		C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Materials/ElevatorButtons/Instance/MAT_Number4_Inst");	break;
+		case EMoveToFloor::Fifth:		C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Materials/ElevatorButtons/Instance/MAT_Number5_Inst");	break;
 		case EMoveToFloor::Arrow:	
-			if (bOpenButton == true)	C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Open_Inst");
-			else						C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Close_Inst");
+			if (bOpenButton == true)	C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Materials/ElevatorButtons/Instance/MAT_Open_Inst");
+			else						C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Materials/ElevatorButtons/Instance/MAT_Close_Inst");
 
 			break;
 		}
@@ -65,20 +62,20 @@ void AC_Elevator_Button::BeginPlay()
 	{
 		switch (Floor)
 		{
-		case EMoveToFloor::First:		C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Up_Inst");		break;
-		case EMoveToFloor::Second:		C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Up_Inst");		break;
-		case EMoveToFloor::Third:		C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Up_Inst");		break;
-		case EMoveToFloor::Forth:		C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Up_Inst");		break;
+		case EMoveToFloor::First:		C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Materials/ElevatorButtons/Instance/MAT_Up_Inst");		break;
+		case EMoveToFloor::Second:		C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Materials/ElevatorButtons/Instance/MAT_Up_Inst");		break;
+		case EMoveToFloor::Third:		C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Materials/ElevatorButtons/Instance/MAT_Up_Inst");		break;
+		case EMoveToFloor::Forth:		C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Materials/ElevatorButtons/Instance/MAT_Up_Inst");		break;
 		}
 	}
 	else
 	{
 		switch (Floor)
 		{
-		case EMoveToFloor::Second:		C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Down_Inst");		break;
-		case EMoveToFloor::Third:		C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Down_Inst");		break;
-		case EMoveToFloor::Forth:		C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Down_Inst");		break;
-		case EMoveToFloor::Fifth:		C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Material/ElevatorButtons/Instance/MAT_Down_Inst");		break;
+		case EMoveToFloor::Second:		C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Materials/ElevatorButtons/Instance/MAT_Down_Inst");		break;
+		case EMoveToFloor::Third:		C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Materials/ElevatorButtons/Instance/MAT_Down_Inst");		break;
+		case EMoveToFloor::Forth:		C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Materials/ElevatorButtons/Instance/MAT_Down_Inst");		break;
+		case EMoveToFloor::Fifth:		C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&DefaultMaterial, "/Game/Materials/ElevatorButtons/Instance/MAT_Down_Inst");		break;
 		}
 	}
 
