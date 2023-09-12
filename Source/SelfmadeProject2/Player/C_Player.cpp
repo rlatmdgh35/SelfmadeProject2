@@ -6,7 +6,6 @@
 #include "Widgets/C_LineOfCharacter.h"
 #include "Widgets/C_Guide.h"
 #include "Widgets/C_Lock.h"
-#include "Components/C_PlayerComponent.h"
 #include "DataAsset/C_DataAsset.h"
 #include "Objects/C_Door.h"
 #include "Objects/C_Office.h"
@@ -21,12 +20,10 @@ AC_Player::AC_Player()
 	C_Helpers::CreateSceneComponent(this, &Camera, "Camera", GetMesh());
 	C_Helpers::CreateSceneComponent(this, &Plane, "Plane", Camera);
 
-	// || Create ActorComponent ||
-	C_Helpers::CreateActorComponent(this, &PlayerComponent, "Component");
-
 	// || Get Asset_DataAsset ||
-	C_Helpers::GetAsset(&DataAsset, "/Game/Player/DA_Player");
-	PlayerComponent->DataAsset = DataAsset;
+	// TSubclassOf<UC_DataAsset> dataAsset;
+	// C_Helpers::GetClass(&dataAsset, "/Game/Player/DA_Player");
+	// DataAsset = dataAsset; // Todo.
 
 	USkeletalMesh* meshAsset;
 	C_Helpers::GetAsset(&meshAsset, "/Game/Character/Start/Mesh/Ch28_nonPBR");
@@ -36,7 +33,7 @@ AC_Player::AC_Player()
 
 	UStaticMesh* planeAsset;
 	C_Helpers::GetAsset(&planeAsset, "/Game/StaticMeshes/SM_Plane");
-
+	
 	UMaterial* blackMaterial;
 	C_Helpers::GetAsset(&blackMaterial, "/Game/Materials/MAT_Black");
 
@@ -97,8 +94,7 @@ void AC_Player::BeginPlay()
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_LockActor::StaticClass(), lockActor);
 	if(lockActor.Num() > 0)
 		LockActor = Cast<AC_LockActor>(lockActor[0]);
-
-
+	
 	APlayerController* controller = Cast<APlayerController>(GetController());
 
 	InteractionWidget = CreateWidget<UC_Interaction>(controller, InteractionClass);
@@ -161,16 +157,16 @@ void AC_Player::Tick(float DeltaTime)
 	}
 
 	if (CurrentEnergy <= 50)
-		PlayerComponent->DataAsset->IsCanRun = false;
+		DataAsset->IsCanRun = false;
 	else
-		PlayerComponent->DataAsset->IsCanRun = true;
+		DataAsset->IsCanRun = true;
 }
 
 void AC_Player::LineTraceInteraction(AActor* Actor)
 {
 	if (LockActor != nullptr)
 	{
-		CheckTrue(PlayerComponent->DataAsset->OpenGuide.IsOpenTenth == true);
+		CheckTrue(DataAsset->OpenGuide.IsOpenTenth == true);
 
 		if (Cast<AC_LockActor>(Actor) != nullptr)
 		{
@@ -283,7 +279,7 @@ void AC_Player::OffRun()
 
 void AC_Player::CloseEyes()
 {
-	PlayerComponent->DataAsset->IsOpenEyes = false;
+	DataAsset->IsOpenEyes = false;
 	if (InteractionType == EInteractionType::CheckGuide)
 	{
 		bTurn = false;
@@ -296,7 +292,7 @@ void AC_Player::CloseEyes()
 
 void AC_Player::OpenEyes()
 {
-	PlayerComponent->DataAsset->IsOpenEyes = true;
+	DataAsset->IsOpenEyes = true;
 	InteractionType = EInteractionType::None;
 
 	Plane->SetVisibility(false);
@@ -309,7 +305,7 @@ void AC_Player::Interaction()
 		Office->Interaction();
 	}
 
-	if ((LockActor != nullptr) && (LockActor->bCanCall == true) && (PlayerComponent->DataAsset->OpenGuide.IsOpenTenth == false))
+	if ((LockActor != nullptr) && (LockActor->bCanCall == true) && (DataAsset->OpenGuide.IsOpenTenth == false))
 	{
 		CheckTrue(InteractionType == EInteractionType::CheckGuide);
 		InteractionType = EInteractionType::Lock;

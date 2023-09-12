@@ -37,6 +37,17 @@ private:
 
 	void PrintHotelMap_1();
 	void PrintHotelMap_2();
+	void PrintHotelMap_3();
+	void PrintHotelMap_4();
+	void PrintHotelMap_5();
+	void PrintHotelMap_6();
+	void PrintHotelMap_7();
+	void PrintHotelMap_8();
+	void PrintHotelMap_9();
+	void PrintHotelMap_Eighth();
+	void PrintHotelMap_Ninth();
+	void PrintHotelMap_Tenth1();
+	void PrintHotelMap_Tenth2();
 
 
 
@@ -45,8 +56,9 @@ private:
 	void PrintTenthGuide();
 
 
-
 	void ClearTextBlock();
+	void ClearTextTimer(float InRate);
+
 
 private:
 	FTimerDelegate TimerDelegate;
@@ -97,32 +109,47 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 		FText PastMap_5;
-
-	/*
-	UPROPERTY(BlueprintReadWrite)
-		FText ;
+	
 
 	UPROPERTY(BlueprintReadWrite)
-		FText;
+		FText HotelMap_1;
 
 	UPROPERTY(BlueprintReadWrite)
-		FText;
+		FText HotelMap_2;
 
 	UPROPERTY(BlueprintReadWrite)
-		FText;
+		FText HotelMap_3;
 
 	UPROPERTY(BlueprintReadWrite)
-		FText;
+		FText HotelMap_4;
 
 	UPROPERTY(BlueprintReadWrite)
-		FText;
+		FText HotelMap_5;
 
 	UPROPERTY(BlueprintReadWrite)
-		FText ;
-		*/
+		FText HotelMap_6;
+
+	UPROPERTY(BlueprintReadWrite)
+		FText HotelMap_7;
+
+	UPROPERTY(BlueprintReadWrite)
+		FText HotelMap_8;
+
+	UPROPERTY(BlueprintReadWrite)
+		FText HotelMap_9;
 
 	UPROPERTY(BlueprintReadWrite)
 		FText OpenEighthGuide;
+
+	UPROPERTY(BlueprintReadWrite)
+		FText OpenNinthGuide;
+
+	UPROPERTY(BlueprintReadWrite)
+		FText OpenTenthGuide1;
+
+	UPROPERTY(BlueprintReadWrite)
+		FText OpenTenthGuide2;
+
 
 private:
 	FTimerHandle TimerHandle;

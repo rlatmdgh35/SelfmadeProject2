@@ -4,7 +4,7 @@
 #include "Materials/MaterialInstanceConstant.h"
 #include "Components/TextRenderComponent.h"
 #include "Player/C_Player.h"
-#include "Components/C_PlayerComponent.h"
+
 #include "DataAsset/C_DataAsset.h"
 #include "Global.h"
 
@@ -99,7 +99,7 @@ void AC_Elevator_Button::Tick(float DeltaTime)
 		if (Floor != EMoveToFloor::Forth) // Not ForthButtons
 			SetActorLocation(resultLocation);
 
-		else if (Player->PlayerComponent->DataAsset->OpenGuide.IsOpenTenth == true)
+		else if (Player->DataAsset->OpenGuide.IsOpenTenth == true)
 			SetActorLocation(resultLocation);
 	}
 	else

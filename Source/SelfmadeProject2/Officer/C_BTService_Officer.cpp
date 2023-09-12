@@ -4,6 +4,7 @@
 #include "Components/C_BehaviorComponent.h"
 #include "Components/C_PatrolComponent.h"
 #include "Player/C_Player.h"
+#include "DataAsset/C_DataAsset.h"
 
 #include "Global.h"
 
@@ -46,6 +47,8 @@ void UC_BTService_Officer::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* No
 
 	else
 	{
+		// player->DataAsset.IsOpenEyes
+
 		float distance = officer->GetDistanceTo(player);
 
 		if (distance < 350)

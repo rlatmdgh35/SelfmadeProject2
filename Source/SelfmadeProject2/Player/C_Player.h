@@ -107,11 +107,6 @@ public:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UStaticMeshComponent* Plane;
 
-// ActorComponent
-public:
-	UPROPERTY(VisibleDefaultsOnly)
-		class UC_PlayerComponent* PlayerComponent;
-
 public:
 	UPROPERTY(BlueprintReadOnly)
 		TArray<class AC_Door*> Doors;

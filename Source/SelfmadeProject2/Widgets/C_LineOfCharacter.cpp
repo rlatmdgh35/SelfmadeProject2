@@ -34,12 +34,13 @@ void UC_LineOfCharacter::SetCharacterLine(ECharacterLineType InType)
 	case ECharacterLineType::HotelMap_Start:
 		break;
 	case ECharacterLineType::OpenEighthGuide:
+		PrintHotelMap_Eighth();
 		break;
 	case ECharacterLineType::OpenNinthGuide:
+		PrintHotelMap_Ninth();
 		break;
 	case ECharacterLineType::OpenTenthGuide:
-		break;
-	default:
+		PrintHotelMap_Tenth1();
 		break;
 	}
 }
@@ -48,6 +49,12 @@ void UC_LineOfCharacter::ClearTextBlock()
 {
 	CharacterLineText->SetText(FText::FromString(""));
 }
+
+void UC_LineOfCharacter::ClearTextTimer(float InRate)
+{
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UC_LineOfCharacter::ClearTextBlock, InRate);
+}
+
 
 void UC_LineOfCharacter::PrintStartMap_1()
 {
@@ -67,7 +74,7 @@ void UC_LineOfCharacter::PrintStartMap_3()
 {
 	CharacterLineText->SetText(StartMap_3);
 
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UC_LineOfCharacter::ClearTextBlock, 3.5);
+	ClearTextTimer(3.5f);
 }
 
 void UC_LineOfCharacter::PrintStartMap_4()
@@ -78,7 +85,7 @@ void UC_LineOfCharacter::PrintStartMap_5()
 {
 	CharacterLineText->SetText(StartMap_5);
 
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UC_LineOfCharacter::ClearTextBlock, 3.5);
+	ClearTextTimer(3.5f);
 }
 
 void UC_LineOfCharacter::PrintStartMap_6()
@@ -95,7 +102,6 @@ void UC_LineOfCharacter::PrintPastMap_1()
 {
 	CharacterLineText->SetText(PastMap_1);
 
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UC_LineOfCharacter::ClearTextBlock, 3.5);
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UC_LineOfCharacter::PrintPastMap_2, 5.5);
 }
 
@@ -129,29 +135,74 @@ void UC_LineOfCharacter::PrintPastMap_5()
 
 void UC_LineOfCharacter::PrintHotelMap_1()
 {
-
+	CharacterLineText->SetText(HotelMap_1);
 }
 
 void UC_LineOfCharacter::PrintHotelMap_2()
 {
-
+	CharacterLineText->SetText(HotelMap_2);
 }
 
-void UC_LineOfCharacter::PrintEighthGuide()
+void UC_LineOfCharacter::PrintHotelMap_3()
+{
+	CharacterLineText->SetText(HotelMap_3);
+}
+
+void UC_LineOfCharacter::PrintHotelMap_4()
+{
+	CharacterLineText->SetText(HotelMap_4);
+}
+
+void UC_LineOfCharacter::PrintHotelMap_5()
+{
+	CharacterLineText->SetText(HotelMap_5);
+}
+
+void UC_LineOfCharacter::PrintHotelMap_6()
+{
+	CharacterLineText->SetText(HotelMap_6);
+}
+
+void UC_LineOfCharacter::PrintHotelMap_7()
+{
+	CharacterLineText->SetText(HotelMap_7);
+}
+
+void UC_LineOfCharacter::PrintHotelMap_8()
+{
+	CharacterLineText->SetText(HotelMap_8);
+}
+
+void UC_LineOfCharacter::PrintHotelMap_9()
+{
+	CharacterLineText->SetText(HotelMap_9);
+}
+
+void UC_LineOfCharacter::PrintHotelMap_Eighth()
 {
 	CharacterLineText->SetText(OpenEighthGuide);
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UC_LineOfCharacter::ClearTextBlock, 5);
+
+	ClearTextTimer(3.5f);
 }
 
-void UC_LineOfCharacter::PrintNinthGuide()
+void UC_LineOfCharacter::PrintHotelMap_Ninth()
 {
-	// CharacterLineText->SetText(OpenEighthGuide);
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UC_LineOfCharacter::ClearTextBlock, 5);
+	CharacterLineText->SetText(OpenNinthGuide);
+
+	ClearTextTimer(3.5f);
 }
 
-void UC_LineOfCharacter::PrintTenthGuide()
+void UC_LineOfCharacter::PrintHotelMap_Tenth1()
 {
-	// CharacterLineText->SetText(OpenEighthGuide);
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UC_LineOfCharacter::ClearTextBlock, 5);
+	CharacterLineText->SetText(OpenTenthGuide1);
+
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UC_LineOfCharacter::PrintHotelMap_Tenth2, 4);
+}
+
+void UC_LineOfCharacter::PrintHotelMap_Tenth2()
+{
+	CharacterLineText->SetText(OpenTenthGuide2);
+
+	ClearTextTimer(3.5f);
 }
 
