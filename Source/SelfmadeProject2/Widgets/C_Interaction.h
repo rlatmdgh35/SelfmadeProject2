@@ -21,11 +21,22 @@ private:
 
 private:
 	void ClearTextBlock();
+	void LightTextBlock();
+	void StartOfficerTextBlock();
 	void DoorTextBlock();
 	void ElevatorTextBlock();
 	void LockTextBlock();
 
 public:
+	UPROPERTY(BlueprintReadWrite)
+		FText OnLightText;
+
+	UPROPERTY(BlueprintReadWrite)
+		FText OffLightText;
+
+	UPROPERTY(BlueprintReadWrite)
+		FText StartOfficerText;
+
 	UPROPERTY(BlueprintReadWrite)
 		FText OpenDoorText;
 
@@ -44,6 +55,7 @@ private:
 
 	class AC_Player* Player;
 	class AC_Elevator* Elevator;
+	TArray<class AC_LightSwitch*> LightSwitches;
 	TArray<class AC_Door*> Doors;
 	TArray<class AC_Elevator_Button*> Buttons;
 

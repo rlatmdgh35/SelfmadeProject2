@@ -4,8 +4,6 @@
 #include "Components/C_BehaviorComponent.h"
 #include "Components/C_PatrolComponent.h"
 #include "Player/C_Player.h"
-#include "DataAsset/C_DataAsset.h"
-
 #include "Global.h"
 
 

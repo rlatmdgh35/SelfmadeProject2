@@ -5,7 +5,7 @@
 #include "Components/TextRenderComponent.h"
 #include "Materials/MaterialInstanceConstant.h"
 #include "Player/C_Player.h"
-#include "DataAsset/C_DataAsset.h"
+#include "Components/C_PlayerComponent.h"
 #include "C_Elevator_Button.h"
 #include "C_Elevator_OutDoor.h"
 #include "Global.h"
@@ -108,7 +108,7 @@ void AC_Elevator::Tick(float DeltaTime)
 			OutDoors[i]->TopText->SetText(FText::FromString("4"));
 		}
 
-		bool check = Player->DataAsset->OpenGuide.IsOpenTenth == true;
+		bool check = Player->PlayerComponent->OpenGuide.IsOpenTenth == true;
 		if (MoveToFloor == EMoveToFloor::Forth && check)
 		{
 			Text->SetTextRenderColor(FColor::Black);

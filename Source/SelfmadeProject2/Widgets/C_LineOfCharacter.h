@@ -49,15 +49,13 @@ private:
 	void PrintHotelMap_Tenth1();
 	void PrintHotelMap_Tenth2();
 
-
-
-	void PrintEighthGuide();
-	void PrintNinthGuide();
-	void PrintTenthGuide();
-
-
+	
 	void ClearTextBlock();
-	void ClearTextTimer(float InRate);
+	void ClearTextTimer(float InRate, bool Both = false);
+
+	void BlockPlayer();
+	void NotBlockPlayer();
+	void ControllPlayerTimer(float InRate, bool BlockPlayer = true);
 
 
 private:
@@ -71,6 +69,10 @@ private:
 private:
 	UPROPERTY(meta = (BindWidget))
 		class UTextBlock* CharacterLineText;
+
+public:
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+		class UTextBlock* OtherPersonLineText;
 
 public:
 	UPROPERTY(BlueprintReadWrite)
@@ -153,5 +155,6 @@ public:
 
 private:
 	FTimerHandle TimerHandle;
+	bool bBoth;
 
 };

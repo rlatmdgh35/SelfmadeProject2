@@ -15,13 +15,13 @@ enum class ECurrentMap : uint8
 UENUM(BlueprintType)
 enum class ECharacterLineType : uint8
 {
-	StartMap_Start, StartMap_JumpScare, PastMap_Start, HotelMap_Start, OpenEighthGuide, OpenNinthGuide, OpenTenthGuide
+	StartMap_Start, StartMap_Light, StartMap_JumpScare, StartMap_End, StartMap_Loop, PastMap_Start, HotelMap_Start, OpenEighthGuide, OpenNinthGuide, OpenTenthGuide
 };
 
 UENUM(BlueprintType)
 enum class EInteractionType : uint8
 {
-	None, CloseEyes, CheckGuide, Door, Lock, Elevator, Max
+	None, CloseEyes, LightSwitch, Officer, CheckGuide, Door, Lock, Elevator, Max
 };
 
 UENUM(BlueprintType)
@@ -62,6 +62,7 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 		void PlaySoundLine(ECharacterLineType InType);
+
 
 // Action Event
 private:
@@ -107,16 +108,22 @@ public:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UStaticMeshComponent* Plane;
 
+// ActorComponent
+public:
+	UPROPERTY(VisibleDefaultsOnly)
+		class UC_PlayerComponent* PlayerComponent;
+
 public:
 	UPROPERTY(BlueprintReadOnly)
 		TArray<class AC_Door*> Doors;
 
-	UPROPERTY(BlueprintReadOnly)
-		class UC_DataAsset* DataAsset;
+	UPROPERTY(BlueprintReadWrite)
+		class AC_Security_Officer* Officer;
 
 private:
 	class AC_Office* Office;
 	class AC_LockActor* LockActor;
+	TArray<class AC_LightSwitch*> LightSwitch;
 	TArray<class AC_Elevator_Button*> Elevator_Button;
 
 public:
@@ -130,7 +137,8 @@ public:
 	class UC_Lock* LockWidget;
 
 	TSubclassOf<class UC_LineOfCharacter> LineOfCharacter;
-	class UC_LineOfCharacter* LineOfCharacterWidget;
+	UPROPERTY(BlueprintReadOnly)
+		class UC_LineOfCharacter* LineOfCharacterWidget;
 
 public:
 	UPROPERTY(BlueprintReadWrite)

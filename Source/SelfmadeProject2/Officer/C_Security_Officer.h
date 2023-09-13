@@ -36,6 +36,8 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 		int32 TeamID = 1;
 
+public:
+	bool bCanCall;
 
 
 };

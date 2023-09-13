@@ -18,5 +18,4 @@ void AC_StartMapGameMode::BeginPlay()
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Player::StaticClass(), playerActor);
 	AC_Player* player = Cast<AC_Player>(playerActor[0]);
 	player->CurrentMap = ECurrentMap::Start;
-	player->CallLineOfCharacter(ECharacterLineType::StartMap_Start);
 }

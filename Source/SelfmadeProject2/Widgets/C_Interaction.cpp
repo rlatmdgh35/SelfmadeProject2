@@ -1,6 +1,7 @@
 #include "C_Interaction.h"
 #include "Components/TextBlock.h"
 // #include "Player/C_Player.h" <- In Header
+#include "Objects/C_LightSwitch.h"
 #include "Objects/C_Door.h"
 #include "Objects/C_Elevator_Button.h" // C_Elevator_Button.h 's parent is C_Elevator
 #include "Global.h"
@@ -13,23 +14,25 @@ void UC_Interaction::BeginPlay(ACharacter* InCharacter)
 
 	Player->InteractionText.AddDynamic(this, &UC_Interaction::InteractionText);
 
+	TArray<AActor*> lightSwitchActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_LightSwitch::StaticClass(), lightSwitchActors);
+	for (int32 i = 0; i < lightSwitchActors.Num(); i++)
+		LightSwitches.Add(Cast<AC_LightSwitch>(lightSwitchActors[i]));
+
 	TArray<AActor*> doorActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Door::StaticClass(), doorActors);
 	for (int32 i = 0; i < doorActors.Num(); i++)
 		Doors.Add(Cast<AC_Door>(doorActors[i]));
 
+	TArray<AActor*> elevatorButtonActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Elevator_Button::StaticClass(), elevatorButtonActors);
+	for (int32 i = 0; i < elevatorButtonActors.Num(); i++)
+		Buttons.Add(Cast<AC_Elevator_Button>(elevatorButtonActors[i]));
+
 	TArray<AActor*> elevatorActor;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Elevator::StaticClass(), elevatorActor);
 	if (elevatorActor.Num() > 0)
 		Elevator = Cast<AC_Elevator>(elevatorActor[0]);
-
-
-	TArray<AActor*> elevatorButtonActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Elevator_Button::StaticClass(), elevatorButtonActors);
-	for (int32 i = 0; i < elevatorButtonActors.Num(); i++)
-	{
-		Buttons.Add(Cast<AC_Elevator_Button>(elevatorButtonActors[i]));
-	}
 
 }
 
@@ -39,6 +42,12 @@ void UC_Interaction::InteractionText(EInteractionType InType)
 	{
 	case EInteractionType::None:
 		ClearTextBlock();
+		break;
+	case EInteractionType::LightSwitch:
+		LightTextBlock();
+		break;
+	case EInteractionType::Officer:
+		StartOfficerTextBlock();
 		break;
 	case EInteractionType::Door:
 		DoorTextBlock();
@@ -50,13 +59,25 @@ void UC_Interaction::InteractionText(EInteractionType InType)
 		LockTextBlock();
 		break;
 	}
-
-
 }
 
 void UC_Interaction::ClearTextBlock()
 {
 	MainText->SetText(FText::FromString(""));
+}
+
+void UC_Interaction::LightTextBlock()
+{
+	for (int32 i = 0; i < LightSwitches.Num(); i++)
+	{
+		if (LightSwitches[i]->bIsOnLight != true)		MainText->SetText(OnLightText);
+		else											MainText->SetText(OffLightText);
+	}
+}
+
+void UC_Interaction::StartOfficerTextBlock()
+{
+	MainText->SetText(StartOfficerText);
 }
 
 void UC_Interaction::DoorTextBlock()

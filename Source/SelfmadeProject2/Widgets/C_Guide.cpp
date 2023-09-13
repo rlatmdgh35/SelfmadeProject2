@@ -4,12 +4,11 @@
 #include "Components/TextBlock.h"
 #include "GameFramework/Character.h"
 #include "Player/C_Player.h"
-
-#include "DataAsset/C_DataAsset.h"
+#include "Components/C_PlayerComponent.h"
 #include "Collisions/C_RoomNum307.h"
 #include "Collisions/C_RoomNum508.h"
 #include "Widgets/C_Lock.h"
-#include "Widgets/C_LineOfCharacter.h" // 
+#include "Widgets/C_LineOfCharacter.h"
 #include "Global.h"
 
 
@@ -64,12 +63,12 @@ void UC_Guide::ShowThirdPage()
 
 void UC_Guide::OpenEighthGuide()
 {
-	Player->DataAsset->OpenGuide.IsOpenEighth = true;
+	Player->PlayerComponent->OpenGuide.IsOpenEighth = true;
 	Player->CallLineOfCharacter(ECharacterLineType::OpenEighthGuide);
 
-	if (Player->DataAsset->OpenGuide.IsOpenTenth == true)
+	if (Player->PlayerComponent->OpenGuide.IsOpenTenth == true)
 	{
-		if (Player->DataAsset->OpenGuide.IsOpenNinth == true)
+		if (Player->PlayerComponent->OpenGuide.IsOpenNinth == true)
 		{
 			Mosaic->SetText(FText::FromString(
 				EighthText.ToString() + 
@@ -88,7 +87,7 @@ void UC_Guide::OpenEighthGuide()
 	}
 	else
 	{
-		if (Player->DataAsset->OpenGuide.IsOpenNinth == true)
+		if (Player->PlayerComponent->OpenGuide.IsOpenNinth == true)
 		{
 			Mosaic->SetText(FText::FromString(
 				EighthText.ToString() + 
@@ -107,12 +106,12 @@ void UC_Guide::OpenEighthGuide()
 
 void UC_Guide::OpenNinthGuide()
 {
-	Player->DataAsset->OpenGuide.IsOpenNinth = true;
+	Player->PlayerComponent->OpenGuide.IsOpenNinth = true;
 	Player->CallLineOfCharacter(ECharacterLineType::OpenNinthGuide);
 
-	if (Player->DataAsset->OpenGuide.IsOpenTenth == true)
+	if (Player->PlayerComponent->OpenGuide.IsOpenTenth == true)
 	{
-		if (Player->DataAsset->OpenGuide.IsOpenEighth == true)
+		if (Player->PlayerComponent->OpenGuide.IsOpenEighth == true)
 		{
 			Mosaic->SetText(FText::FromString(
 				EighthText.ToString() + 
@@ -131,7 +130,7 @@ void UC_Guide::OpenNinthGuide()
 	}
 	else
 	{
-		if (Player->DataAsset->OpenGuide.IsOpenEighth== true)
+		if (Player->PlayerComponent->OpenGuide.IsOpenEighth == true)
 		{
 			Mosaic->SetText(FText::FromString(
 				EighthText.ToString() +
@@ -151,12 +150,12 @@ void UC_Guide::OpenNinthGuide()
 
 void UC_Guide::OpenTenthGuide()
 {
-	Player->DataAsset->OpenGuide.IsOpenTenth = true;
+	Player->PlayerComponent->OpenGuide.IsOpenTenth = true;
 	Player->CallLineOfCharacter(ECharacterLineType::OpenTenthGuide);
 
-	if (Player->DataAsset->OpenGuide.IsOpenNinth == true)
+	if (Player->PlayerComponent->OpenGuide.IsOpenNinth == true)
 	{
-		if (Player->DataAsset->OpenGuide.IsOpenEighth == true)
+		if (Player->PlayerComponent->OpenGuide.IsOpenEighth == true)
 		{
 			Mosaic->SetText(FText::FromString(
 				EighthText.ToString() +
@@ -175,7 +174,7 @@ void UC_Guide::OpenTenthGuide()
 	}
 	else
 	{
-		if (Player->DataAsset->OpenGuide.IsOpenEighth == true)
+		if (Player->PlayerComponent->OpenGuide.IsOpenEighth == true)
 		{
 			Mosaic->SetText(FText::FromString(
 				EighthText.ToString() +

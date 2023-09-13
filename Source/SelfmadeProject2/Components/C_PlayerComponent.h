@@ -1,8 +1,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Engine/DataAsset.h"
-#include "C_DataAsset.generated.h"
+#include "Components/ActorComponent.h"
+#include "C_PlayerComponent.generated.h"
+
 
 USTRUCT(BlueprintType)
 struct FKeepGuide
@@ -57,18 +58,11 @@ public:
 		bool IsOpenTenth = false;
 };
 
-UCLASS()
-class SELFMADEPROJECT2_API UC_DataAsset : public UDataAsset
+
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+class SELFMADEPROJECT2_API UC_PlayerComponent : public UActorComponent
 {
 	GENERATED_BODY()
-
-public:
-	UC_DataAsset();
-
-public:
-	void BeginPlay(ACharacter* InOwnerCharacter);
-
-
 
 
 public:
@@ -86,8 +80,6 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Objects")
 		bool IsOpenOffice;
-	
-private:
-	class AC_Player* Player;
 
+		
 };

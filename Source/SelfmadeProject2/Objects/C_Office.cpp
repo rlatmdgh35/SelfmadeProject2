@@ -3,8 +3,7 @@
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Player/C_Player.h"
-
-#include "DataAsset/C_DataAsset.h"
+#include "Components/C_PlayerComponent.h"
 #include "Global.h"
 
 
@@ -47,7 +46,7 @@ void AC_Office::Interaction() // If Player Has OfficeKey -> Open Door, Another F
 	CheckFalse(Player->bHaveOfficeKey);
 	C_Log::Print("OfficeOpen");
 
-	Player->DataAsset->IsOpenOffice = true;
+	Player->PlayerComponent->IsOpenOffice = true;
 	Player->bHaveOfficeKey = false;
 }
 

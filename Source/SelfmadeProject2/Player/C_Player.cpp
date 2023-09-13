@@ -2,15 +2,17 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Components/C_PlayerComponent.h"
 #include "Widgets/C_Interaction.h"
 #include "Widgets/C_LineOfCharacter.h"
 #include "Widgets/C_Guide.h"
 #include "Widgets/C_Lock.h"
-#include "DataAsset/C_DataAsset.h"
 #include "Objects/C_Door.h"
+#include "Objects/C_LightSwitch.h"
 #include "Objects/C_Office.h"
 #include "Objects/C_LockActor.h"
 #include "Objects/C_Elevator_Button.h"
+#include "Officer/C_Security_Officer.h"
 #include "Global.h"
 
 
@@ -21,9 +23,7 @@ AC_Player::AC_Player()
 	C_Helpers::CreateSceneComponent(this, &Plane, "Plane", Camera);
 
 	// || Get Asset_DataAsset ||
-	// TSubclassOf<UC_DataAsset> dataAsset;
-	// C_Helpers::GetClass(&dataAsset, "/Game/Player/DA_Player");
-	// DataAsset = dataAsset; // Todo.
+	C_Helpers::CreateActorComponent(this, &PlayerComponent, "PlayerComponent");
 
 	USkeletalMesh* meshAsset;
 	C_Helpers::GetAsset(&meshAsset, "/Game/Character/Start/Mesh/Ch28_nonPBR");
@@ -65,25 +65,22 @@ AC_Player::AC_Player()
 
 void AC_Player::BeginPlay()
 {
-	Super::BeginPlay();
-
 	CurrentEnergy = MaxEnergy;
 
 	TArray<AActor*> doorActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Door::StaticClass(), doorActors);
-	if (doorActors.Num() > 0)
-	{
-		for (int32 i = 0; i < doorActors.Num(); i++)
-			Doors.Add(Cast<AC_Door>(doorActors[i]));
-	}
+	for (int32 i = 0; i < doorActors.Num(); i++)
+		Doors.Add(Cast<AC_Door>(doorActors[i]));
+
+	TArray<AActor*> lightSwitchActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_LightSwitch::StaticClass(), lightSwitchActors);
+	for (int32 i = 0; i < lightSwitchActors.Num(); i++)
+		LightSwitch.Add(Cast<AC_LightSwitch>(lightSwitchActors[i]));
 
 	TArray<AActor*> buttonActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Elevator_Button::StaticClass(), buttonActors);
-	if (buttonActors.Num() > 0)
-	{
-		for (int8 i = 0; i < buttonActors.Num(); i++)
-			Elevator_Button.Add(Cast<AC_Elevator_Button>(buttonActors[i]));
-	}
+	for (int32 i = 0; i < buttonActors.Num(); i++)
+		Elevator_Button.Add(Cast<AC_Elevator_Button>(buttonActors[i]));
 
 	TArray<AActor*> officeActor;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Office::StaticClass(), officeActor);
@@ -114,6 +111,8 @@ void AC_Player::BeginPlay()
 	LineOfCharacterWidget = CreateWidget<UC_LineOfCharacter>(controller, LineOfCharacter);
 	LineOfCharacterWidget->BeginPlay(this);
 	LineOfCharacterWidget->AddToViewport();
+
+	Super::BeginPlay();
 }
 
 void AC_Player::Tick(float DeltaTime)
@@ -157,25 +156,25 @@ void AC_Player::Tick(float DeltaTime)
 	}
 
 	if (CurrentEnergy <= 50)
-		DataAsset->IsCanRun = false;
+		PlayerComponent->IsCanRun = false;
 	else
-		DataAsset->IsCanRun = true;
+		PlayerComponent->IsCanRun = true;
 }
 
 void AC_Player::LineTraceInteraction(AActor* Actor)
 {
-	if (LockActor != nullptr)
+	for (int32 i = 0; i < LightSwitch.Num(); i++)
 	{
-		CheckTrue(DataAsset->OpenGuide.IsOpenTenth == true);
-
-		if (Cast<AC_LockActor>(Actor) != nullptr)
+		if (LightSwitch[i] == Cast<AC_LightSwitch>(Actor))
 		{
-			LockActor->bCanCall = true;
-			InteractionText.Broadcast(EInteractionType::Lock);
+			CheckTrue(InteractionType == EInteractionType::CheckGuide);
+
+			LightSwitch[i]->bCanCall = true;
+			InteractionText.Broadcast(EInteractionType::LightSwitch);
 		}
 		else
 		{
-			LockActor->bCanCall = false;
+			LightSwitch[i]->bCanCall = false;
 			InteractionText.Broadcast(EInteractionType::None);
 		}
 	}
@@ -214,15 +213,44 @@ void AC_Player::LineTraceInteraction(AActor* Actor)
 			InteractionText.Broadcast(EInteractionType::None);
 		}
 	}
+
+	if (Officer != nullptr)
+	{
+		CheckFalse(CurrentMap == ECurrentMap::Start);
+
+		if (Cast<AC_Security_Officer>(Actor) != nullptr)
+		{
+			Officer->bCanCall = true;
+			InteractionText.Broadcast(EInteractionType::Officer);
+		}
+		else
+		{
+			Officer->bCanCall = false;
+			InteractionText.Broadcast(EInteractionType::None);
+		}
+	}
+
+	if (LockActor != nullptr)
+	{
+		CheckTrue(PlayerComponent->OpenGuide.IsOpenTenth == true);
+
+		if (Cast<AC_LockActor>(Actor) != nullptr)
+		{
+			LockActor->bCanCall = true;
+			InteractionText.Broadcast(EInteractionType::Lock);
+		}
+		else
+		{
+			LockActor->bCanCall = false;
+			InteractionText.Broadcast(EInteractionType::None);
+		}
+	}
 }
 
 void AC_Player::CallLineOfCharacter(ECharacterLineType InType)
 {
 	if (CharacterLineType.IsBound())
-	{
-		C_Log::Log("Binding"); // For Test
 		CharacterLineType.Broadcast(InType);
-	}
 
 	PlaySoundLine(InType);
 }
@@ -279,7 +307,7 @@ void AC_Player::OffRun()
 
 void AC_Player::CloseEyes()
 {
-	DataAsset->IsOpenEyes = false;
+	PlayerComponent->IsOpenEyes = false;
 	if (InteractionType == EInteractionType::CheckGuide)
 	{
 		bTurn = false;
@@ -292,7 +320,7 @@ void AC_Player::CloseEyes()
 
 void AC_Player::OpenEyes()
 {
-	DataAsset->IsOpenEyes = true;
+	PlayerComponent->IsOpenEyes = true;
 	InteractionType = EInteractionType::None;
 
 	Plane->SetVisibility(false);
@@ -300,18 +328,28 @@ void AC_Player::OpenEyes()
 
 void AC_Player::Interaction()
 {
-	if ((Office != nullptr) && (Office->IsOverlapped()))
-	{
-		Office->Interaction();
-	}
+	if ((Officer != nullptr) && (Officer->bCanCall == true))
+		CallLineOfCharacter(ECharacterLineType::StartMap_End);
 
-	if ((LockActor != nullptr) && (LockActor->bCanCall == true) && (DataAsset->OpenGuide.IsOpenTenth == false))
+
+	if ((Office != nullptr) && (Office->IsOverlapped()))
+		Office->Interaction();
+
+	if ((LockActor != nullptr) && (LockActor->bCanCall == true) && (PlayerComponent->OpenGuide.IsOpenTenth == false))
 	{
 		CheckTrue(InteractionType == EInteractionType::CheckGuide);
 		InteractionType = EInteractionType::Lock;
 		LockActor->Interaction();
 	}
 
+	for (int32 i = 0; i < LightSwitch.Num(); i++)
+	{
+		if (LightSwitch[i]->bCanCall == true)
+		{
+			LightSwitch[i]->Interaction();
+			break;
+		}
+	}
 	
 	for (int32 i = 0; i < Elevator_Button.Num(); i++)
 	{
