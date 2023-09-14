@@ -44,9 +44,6 @@ private:
 
 	UPROPERTY(EditAnywhere)
 		FName LocationKey = "LocationKey";
-		
-	UPROPERTY(EditAnywhere)
-		FName IsOpenEyes = "IsOpenEyes";
 
 
 };

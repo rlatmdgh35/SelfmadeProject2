@@ -5,8 +5,6 @@
 #include "C_Security_Officer.generated.h"
 
 
-
-
 UCLASS()
 class SELFMADEPROJECT2_API AC_Security_Officer : public ACharacter
 {
@@ -38,6 +36,7 @@ public:
 
 public:
 	bool bCanCall;
+	bool bLoop = true;
 
 
 };

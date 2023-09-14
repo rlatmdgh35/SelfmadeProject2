@@ -7,5 +7,4 @@
 AC_Security_Officer::AC_Security_Officer()
 {
 	C_Helpers::CreateActorComponent(this, &Patrol, "Patrol");
-
 }

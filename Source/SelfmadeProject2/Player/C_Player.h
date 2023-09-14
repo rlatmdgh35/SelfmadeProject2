@@ -27,7 +27,7 @@ enum class EInteractionType : uint8
 UENUM(BlueprintType)
 enum class EEndingType : uint8
 {
-	Happy, Sad, Normal, Hidden
+	Sad, Normal, Happy, Hidden
 };
 
 
@@ -62,6 +62,10 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 		void PlaySoundLine(ECharacterLineType InType);
+
+// Ending Function
+public:
+	void EndingFunction(EEndingType InType);
 
 
 // Action Event
@@ -135,6 +139,9 @@ public:
 
 	TSubclassOf<class UC_Lock> Lock;
 	class UC_Lock* LockWidget;
+
+	TSubclassOf<class UC_Ending> Ending;
+	class UC_Ending* EndingWidget;
 
 	TSubclassOf<class UC_LineOfCharacter> LineOfCharacter;
 	UPROPERTY(BlueprintReadOnly)

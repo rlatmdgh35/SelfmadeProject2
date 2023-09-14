@@ -7,6 +7,7 @@
 #include "Widgets/C_LineOfCharacter.h"
 #include "Widgets/C_Guide.h"
 #include "Widgets/C_Lock.h"
+#include "Widgets/C_Ending.h"
 #include "Objects/C_Door.h"
 #include "Objects/C_LightSwitch.h"
 #include "Objects/C_Office.h"
@@ -61,6 +62,7 @@ AC_Player::AC_Player()
 	C_Helpers::GetClass(&LineOfCharacter, "/Game/Blueprints/Widgets/WBP_LineOfCharacter");
 	C_Helpers::GetClass(&Guide, "/Game/Blueprints/Widgets/WBP_Guide");
 	C_Helpers::GetClass(&Lock, "/Game/Blueprints/Widgets/WBP_Lock");
+	C_Helpers::GetClass(&Ending, "/Game/Blueprints/Widgets/WBP_Ending");
 }
 
 void AC_Player::BeginPlay()
@@ -95,12 +97,12 @@ void AC_Player::BeginPlay()
 	APlayerController* controller = Cast<APlayerController>(GetController());
 
 	InteractionWidget = CreateWidget<UC_Interaction>(controller, InteractionClass);
-	InteractionWidget->AddToViewport();
 	InteractionWidget->BeginPlay(this);
+	InteractionWidget->AddToViewport();
 
 	LockWidget = CreateWidget<UC_Lock>(controller, Lock);
-	LockWidget->AddToViewport();
 	LockWidget->BeginPlay(this);
+	LockWidget->AddToViewport();
 	LockWidget->SetVisibility(ESlateVisibility::Hidden);
 
 	GuideWidget = CreateWidget<UC_Guide>(controller, Guide);
@@ -112,6 +114,10 @@ void AC_Player::BeginPlay()
 	LineOfCharacterWidget->BeginPlay(this);
 	LineOfCharacterWidget->AddToViewport();
 
+	EndingWidget = CreateWidget<UC_Ending>(controller, Ending);
+	EndingWidget->AddToViewport();
+	EndingWidget->SetVisibility(ESlateVisibility::Hidden);
+	
 	Super::BeginPlay();
 }
 
@@ -159,6 +165,17 @@ void AC_Player::Tick(float DeltaTime)
 		PlayerComponent->IsCanRun = false;
 	else
 		PlayerComponent->IsCanRun = true;
+}
+
+void AC_Player::EndingFunction(EEndingType InType)
+{
+	InteractionWidget->SetVisibility(ESlateVisibility::Hidden);
+	GuideWidget->SetVisibility(ESlateVisibility::Hidden);
+	LockWidget->SetVisibility(ESlateVisibility::Hidden);
+	LineOfCharacterWidget->SetVisibility(ESlateVisibility::Hidden);
+
+	EndingWidget->SetVisibility(ESlateVisibility::Visible);
+	EndingWidget->EndingType(InType);
 }
 
 void AC_Player::LineTraceInteraction(AActor* Actor)
@@ -217,6 +234,7 @@ void AC_Player::LineTraceInteraction(AActor* Actor)
 	if (Officer != nullptr)
 	{
 		CheckFalse(CurrentMap == ECurrentMap::Start);
+		CheckFalse(Officer->bLoop == true);
 
 		if (Cast<AC_Security_Officer>(Actor) != nullptr)
 		{
@@ -328,8 +346,11 @@ void AC_Player::OpenEyes()
 
 void AC_Player::Interaction()
 {
-	if ((Officer != nullptr) && (Officer->bCanCall == true))
+	if ((Officer != nullptr) && (Officer->bCanCall == true) && (Officer->bLoop == true))
+	{
+		Officer->bLoop = false;
 		CallLineOfCharacter(ECharacterLineType::StartMap_End);
+	}
 
 
 	if ((Office != nullptr) && (Office->IsOverlapped()))

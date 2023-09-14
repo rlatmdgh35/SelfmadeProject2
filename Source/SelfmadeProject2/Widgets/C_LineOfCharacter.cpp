@@ -2,6 +2,7 @@
 #include "Components/TextBlock.h"
 #include "GameFramework/Character.h"
 #include "Objects/C_Loop.h"
+#include "Officer/C_Security_Officer.h"
 #include "Global.h"
 
 
@@ -62,31 +63,21 @@ void UC_LineOfCharacter::ClearTextBlock()
 		OtherPersonLineText->SetText(FText::FromString(""));
 }
 
-void UC_LineOfCharacter::ClearTextTimer(float InRate, bool Both)
+void UC_LineOfCharacter::ClearTextTimer(float InRate, int32 InNum, bool Both)
 {
 	bBoth = Both;
 
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UC_LineOfCharacter::ClearTextBlock, InRate);
-}
 
-void UC_LineOfCharacter::BlockPlayer()
-{
-	Player->bStopLocation = true;
-	Player->bStopRotation = true;
-}
-
-void UC_LineOfCharacter::NotBlockPlayer()
-{
-	Player->bStopLocation = false;
-	Player->bStopRotation = false;
-}
-
-void UC_LineOfCharacter::ControllPlayerTimer(float InRate, bool BlockPlayer)
-{
-	if (BlockPlayer)
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UC_LineOfCharacter::BlockPlayer, InRate);
-	else
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UC_LineOfCharacter::NotBlockPlayer, InRate);
+	if (InNum == 1)
+	{
+		Player->bStopLocation = false;
+		Player->bStopRotation = false;
+	}
+	else if(InNum == 2)
+	{
+		Player->Officer->bLoop = true;
+	}
 }
 
 void UC_LineOfCharacter::PrintStartMap_1()
@@ -113,8 +104,10 @@ void UC_LineOfCharacter::PrintStartMap_3()
 void UC_LineOfCharacter::PrintStartMap_4()
 {
 	CharacterLineText->SetText(StartMap_4);
+	Player->bStopLocation = true;
+	Player->bStopRotation = true;
 
-	ClearTextTimer(4.5f);
+	ClearTextTimer(4.5f, 1);
 }
 
 void UC_LineOfCharacter::PrintStartMap_5()
@@ -128,7 +121,7 @@ void UC_LineOfCharacter::PrintStartMap_6()
 {
 	CharacterLineText->SetText(StartMap_6);
 
-	ClearTextTimer(2.75f);
+	ClearTextTimer(2.75f, 2);
 }
 
 void UC_LineOfCharacter::PrintStartMap_7()

@@ -51,11 +51,7 @@ private:
 
 	
 	void ClearTextBlock();
-	void ClearTextTimer(float InRate, bool Both = false);
-
-	void BlockPlayer();
-	void NotBlockPlayer();
-	void ControllPlayerTimer(float InRate, bool BlockPlayer = true);
+	void ClearTextTimer(float InRate, int32 InNum = 0, bool Both = false);
 
 
 private:

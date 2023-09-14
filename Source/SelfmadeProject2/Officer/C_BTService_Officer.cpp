@@ -1,9 +1,10 @@
 #include "C_BTService_Officer.h"
 #include "C_AIController_Officer.h"
 #include "C_Security_Officer.h"
+#include "Player/C_Player.h"
+#include "Components/C_PlayerComponent.h"
 #include "Components/C_BehaviorComponent.h"
 #include "Components/C_PatrolComponent.h"
-#include "Player/C_Player.h"
 #include "Global.h"
 
 
@@ -45,11 +46,9 @@ void UC_BTService_Officer::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* No
 
 	else
 	{
-		// player->DataAsset.IsOpenEyes
-
 		float distance = officer->GetDistanceTo(player);
 
-		if (distance < 350)
+		if (distance < 1000)
 			behaviorComponent->ChangeType(EOfficerType::Approach);
 	}
 

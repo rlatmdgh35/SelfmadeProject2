@@ -1,6 +1,7 @@
 #include "C_Interaction.h"
 #include "Components/TextBlock.h"
 // #include "Player/C_Player.h" <- In Header
+#include "Officer/C_Security_Officer.h"
 #include "Objects/C_LightSwitch.h"
 #include "Objects/C_Door.h"
 #include "Objects/C_Elevator_Button.h" // C_Elevator_Button.h 's parent is C_Elevator
@@ -77,6 +78,8 @@ void UC_Interaction::LightTextBlock()
 
 void UC_Interaction::StartOfficerTextBlock()
 {
+	CheckFalse(Player->Officer->bLoop == true);
+
 	MainText->SetText(StartOfficerText);
 }
 

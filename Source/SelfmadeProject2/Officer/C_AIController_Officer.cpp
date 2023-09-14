@@ -4,8 +4,9 @@
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
 #include "Officer/C_Security_Officer.h"
-#include "Components/C_BehaviorComponent.h"
 #include "Player/C_Player.h"
+#include "Components/C_PlayerComponent.h"
+#include "Components/C_BehaviorComponent.h"
 #include "Global.h"
 
 
@@ -17,8 +18,8 @@ AC_AIController_Officer::AC_AIController_Officer()
 	C_Helpers::CreateActorComponent(this, &Perception, "Perception");
 	C_Helpers::CreateActorComponent(this, &Sight, "Sight");
 
-	Sight->SightRadius = 600.f;
-	Sight->LoseSightRadius = 600.f;
+	Sight->SightRadius = 1000.f;
+	Sight->LoseSightRadius = 1000.f;
 	Sight->DetectionByAffiliation.bDetectNeutrals = true;
 	Sight->DetectionByAffiliation.bDetectEnemies = true;
 	Sight->DetectionByAffiliation.bDetectFriendlies = true;
@@ -66,12 +67,14 @@ void AC_AIController_Officer::OnPerceptionUpdated(const TArray<AActor*>& Updated
 
 		if (player != nullptr)
 		{
+			Blackboard->SetValueAsObject("PlayerKey", player);
+			Blackboard->SetValueAsVector("LocationKey", player->GetActorLocation());
+
 			break;
 		}
 	}
 
 	Blackboard->SetValueAsObject("PlayerKey", player);
-	Blackboard->SetValueAsVector("LocationKey", player->GetActorLocation());
 }
 
 float AC_AIController_Officer::GetSightRadius()
