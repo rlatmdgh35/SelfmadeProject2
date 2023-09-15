@@ -67,7 +67,7 @@ void UC_BTTaskNode_Run::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 			while (true)
 			{
 				officer->SetActorLocation(UKismetMathLibrary::VLerp(OfficerLocation, PlayerLocation, AlphaValue));
-				if (AlphaValue >= 1)	break;
+				if (AlphaValue >= 0.9f)	break;
 			}
 			player->EndingFunction(EEndingType::Sad);
 			FinishLatentTask(OwnerComp, EBTNodeResult::Failed);

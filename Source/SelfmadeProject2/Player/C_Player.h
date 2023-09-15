@@ -5,7 +5,6 @@
 #include "C_Player.generated.h"
 
 
-
 UENUM(BlueprintType)
 enum class ECurrentMap : uint8
 {
@@ -112,10 +111,17 @@ public:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UStaticMeshComponent* Plane;
 
+	UPROPERTY(VisibleDefaultsOnly)
+		class USpotLightComponent* Light;
+
 // ActorComponent
 public:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UC_PlayerComponent* PlayerComponent;
+
+private:
+	class UMaterialInstanceConstant* BlackMaterial;
+	class UMaterialInstanceDynamic* PlaneMaterial;
 
 public:
 	UPROPERTY(BlueprintReadOnly)
@@ -178,6 +184,7 @@ public:
 
 private:
 	FVector MyLocation;
+	bool bStartLight = true;
 
 	float Speed;
 	float MaxEnergy = 350.f;

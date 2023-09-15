@@ -27,6 +27,8 @@ EBTNodeResult::Type UC_BTTaskNode_Patrol::ExecuteTask(UBehaviorTreeComponent& Ow
 	UC_PatrolComponent* patrolComponent = C_Helpers::GetComponent<UC_PatrolComponent>(officer);
 	CheckNullResult(patrolComponent, EBTNodeResult::Failed);
 
+	officer->GetCharacterMovement()->MaxWalkSpeed = 400.f;
+
 	return EBTNodeResult::InProgress;
 }
 

@@ -12,8 +12,8 @@ class SELFMADEPROJECT2_API AC_ForthFloorWall : public AActor
 public:
 	AC_ForthFloorWall();
 
-protected:
-	virtual void BeginPlay() override;
+public:
+	virtual void Tick(float DeltaTime) override;
 
 private:
 	UFUNCTION()
@@ -22,5 +22,8 @@ private:
 private:
 	UPROPERTY(VisibleDefaultsOnly)
 		UStaticMeshComponent* Wall;
+
+private:
+	class AC_Player* Player;
 
 };

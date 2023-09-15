@@ -103,10 +103,18 @@ void UC_Interaction::ElevatorTextBlock()
 		{
 			if (Buttons[i]->Floor == EMoveToFloor::Arrow)
 			{
-				if (Buttons[i]->bOpenButton == true)	MainText->SetText(OpenDoorText);
-				else									MainText->SetText(CloseDoorText);
+				if (Buttons[i]->bOpenButton == true)
+				{
+					C_Log::Log("Open");
+					MainText->SetText(OpenDoorText);
+				}
+				else
+				{
+					C_Log::Log("Close");
+					MainText->SetText(CloseDoorText);
+				}
 			}
-			else
+			else if (Elevator->bMovingDoor == false)
 				MainText->SetText(ElevatorText);
 		}
 	}

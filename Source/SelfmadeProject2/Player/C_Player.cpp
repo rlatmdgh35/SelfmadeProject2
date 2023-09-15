@@ -1,7 +1,10 @@
 #include "C_Player.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Materials/MaterialInstanceConstant.h"
+#include "Materials/MaterialInstanceDynamic.h"
 #include "Camera/CameraComponent.h"
+#include "Components/SpotLightComponent.h"
 #include "Components/C_PlayerComponent.h"
 #include "Widgets/C_Interaction.h"
 #include "Widgets/C_LineOfCharacter.h"
@@ -22,8 +25,9 @@ AC_Player::AC_Player()
 	// || Create SceneComponent ||
 	C_Helpers::CreateSceneComponent(this, &Camera, "Camera", GetMesh());
 	C_Helpers::CreateSceneComponent(this, &Plane, "Plane", Camera);
+	C_Helpers::CreateSceneComponent(this, &Light, "Light", Camera);
 
-	// || Get Asset_DataAsset ||
+	// || Get PlayerComponent ||
 	C_Helpers::CreateActorComponent(this, &PlayerComponent, "PlayerComponent");
 
 	USkeletalMesh* meshAsset;
@@ -34,9 +38,8 @@ AC_Player::AC_Player()
 
 	UStaticMesh* planeAsset;
 	C_Helpers::GetAsset(&planeAsset, "/Game/StaticMeshes/SM_Plane");
-	
-	UMaterial* blackMaterial;
-	C_Helpers::GetAsset(&blackMaterial, "/Game/Materials/MAT_Black");
+	C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&BlackMaterial, "/Game/Materials/MAT_Black_Inst");
+	PlaneMaterial = UMaterialInstanceDynamic::Create(BlackMaterial, nullptr);
 
 	// Mesh Setting
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -88));
@@ -52,8 +55,13 @@ AC_Player::AC_Player()
 	// Planes To Act As Blindfolds Setting
 	Plane->SetStaticMesh(planeAsset);
 	Plane->SetRelativeLocationAndRotation(FVector(25, 0, 0), FRotator(90, 0, 0));
-	Plane->SetMaterial(0, blackMaterial);
+	Plane->SetMaterial(0, PlaneMaterial);
 	Plane->SetVisibility(false);
+	
+	Light->SetRelativeLocationAndRotation(FVector(-50, 30, -70), FRotator(3.5f, -5.f, 0.f));
+	Light->Intensity = 35000.f;
+	Light->OuterConeAngle = 15.f;
+	Light->SetVisibility(false);
 
 	// Movement
 	GetCharacterMovement()->MaxWalkSpeed = 400.f;
@@ -173,6 +181,16 @@ void AC_Player::EndingFunction(EEndingType InType)
 	GuideWidget->SetVisibility(ESlateVisibility::Hidden);
 	LockWidget->SetVisibility(ESlateVisibility::Hidden);
 	LineOfCharacterWidget->SetVisibility(ESlateVisibility::Hidden);
+
+
+	switch (InType)
+	{
+	case EEndingType::Sad:		PlaneMaterial->SetVectorParameterValue("Color", FLinearColor(1, 0, 0));		break;
+	case EEndingType::Normal:	PlaneMaterial->SetVectorParameterValue("Color", FLinearColor(0, 1, 0));		break;
+	case EEndingType::Happy:	PlaneMaterial->SetVectorParameterValue("Color", FLinearColor(0, 0, 1));		break;
+	case EEndingType::Hidden:	PlaneMaterial->SetVectorParameterValue("Color", FLinearColor(1, 1, 1));		break;
+	}
+	Plane->SetVisibility(true);
 
 	EndingWidget->SetVisibility(ESlateVisibility::Visible);
 	EndingWidget->EndingType(InType);
@@ -367,6 +385,14 @@ void AC_Player::Interaction()
 	{
 		if (LightSwitch[i]->bCanCall == true)
 		{
+			if (bStartLight == true)
+			{
+				CallLineOfCharacter(ECharacterLineType::StartMap_Light);
+
+				bStartLight = false;
+			}
+			
+
 			LightSwitch[i]->Interaction();
 			break;
 		}

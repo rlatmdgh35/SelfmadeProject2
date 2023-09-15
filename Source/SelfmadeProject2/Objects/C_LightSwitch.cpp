@@ -1,4 +1,5 @@
 #include "C_LightSwitch.h"
+#include "Components/PointLightComponent.h"
 #include "Player/C_Player.h"
 #include "Global.h"
 
@@ -15,6 +16,9 @@ AC_LightSwitch::AC_LightSwitch()
 	C_Helpers::CreateSceneComponent(this, &Plane2, "Plane2", DefaultSceneComponent);
 	C_Helpers::CreateSceneComponent(this, &Plane3, "Plane3", DefaultSceneComponent);
 	C_Helpers::CreateSceneComponent(this, &Plane4, "Plane4", DefaultSceneComponent);
+
+	C_Helpers::CreateSceneComponent(this, &Light, "Light", DefaultSceneComponent);
+
 
 	C_Helpers::GetAsset(&Cube, "/Game/StaticMeshes/SM_Cube");
 	C_Helpers::GetAsset(&Material, "/Game/Materials/MAT_Basic");
@@ -52,25 +56,29 @@ void AC_LightSwitch::BeginPlay()
 	TArray<AActor*> playerActor;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Player::StaticClass(), playerActor);
 	Player = Cast<AC_Player>(playerActor[0]);
+
+	ToggleLight(bIsOnLight);
 }
 
 void AC_LightSwitch::Interaction()
 {
-	if (Start == true)
-	{
-		Player->CallLineOfCharacter(ECharacterLineType::StartMap_Light);
+	ToggleLight(bIsOnLight);
+}
 
-		Start = false;
-	}
-
-	if (bIsOnLight)
+void AC_LightSwitch::ToggleLight(bool IsOnLight)
+{
+	if (IsOnLight)
 	{
-		SwitchRoot->SetRelativeRotation(FRotator(0, 0, 0));
+		SwitchRoot->SetRelativeRotation(FRotator(0, 0, 270));
+		Light->SetVisibility(true);
 		bIsOnLight = false;
 	}
 	else
 	{
-		SwitchRoot->SetRelativeRotation(FRotator(0, 0, 270));
+		SwitchRoot->SetRelativeRotation(FRotator(0, 0, 0));
+		Light->SetVisibility(false);
 		bIsOnLight = true;
 	}
+
+
 }

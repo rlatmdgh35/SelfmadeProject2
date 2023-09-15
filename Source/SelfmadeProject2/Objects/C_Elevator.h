@@ -74,5 +74,7 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 		bool bCloseDoor = true;
 
+	UPROPERTY(BlueprintReadWrite)
+		bool bMovingDoor;
 
 };

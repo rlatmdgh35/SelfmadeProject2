@@ -17,6 +17,8 @@ protected:
 
 public:
 	void Interaction();
+	void ToggleLight(bool IsOnLight);
+
 
 public:
 	UPROPERTY(VisibleDefaultsOnly)
@@ -27,6 +29,9 @@ public:
 
 	UPROPERTY(VisibleDefaultsOnly)
 		class UStaticMeshComponent* Switch;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		class UPointLightComponent* Light;
 
 private:
 	UPROPERTY(VisibleDefaultsOnly)
@@ -47,9 +52,9 @@ private:
 	class UMaterial* Material;
 
 public:
-	bool bCanCall;
-	bool bIsOnLight;
+	UPROPERTY(EditAnywhere)
+		bool bIsOnLight;
 
-	bool Start = true;
+	bool bCanCall;
 
 };

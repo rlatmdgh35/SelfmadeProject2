@@ -7,16 +7,22 @@
 AC_ForthFloorWall::AC_ForthFloorWall()
 {
 	C_Helpers::CreateSceneComponent(this, &Wall, "Wall");
+
+	PrimaryActorTick.bCanEverTick = true;
 }
 
-void AC_ForthFloorWall::BeginPlay()
+void AC_ForthFloorWall::Tick(float DeltaTime)
 {
-	Super::BeginPlay();
+	Super::Tick(DeltaTime);
 
-	TArray<AActor*> playerActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Player::StaticClass(), playerActors);
-	AC_Player* player = Cast<AC_Player>(playerActors[0]);
-	player->LockWidget->OpenTenthGuide.AddDynamic(this, &AC_ForthFloorWall::DeleteActor);
+	if (Player == nullptr)
+	{
+		TArray<AActor*> playerActor;
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Player::StaticClass(), playerActor);
+		Player = Cast<AC_Player>(playerActor[0]);
+		if (Player != nullptr)
+			Player->LockWidget->OpenTenthGuide.AddDynamic(this, &AC_ForthFloorWall::DeleteActor);
+	}
 }
 
 void AC_ForthFloorWall::DeleteActor()
