@@ -24,28 +24,34 @@ AC_Player::AC_Player()
 {
 	// || Create SceneComponent ||
 	C_Helpers::CreateSceneComponent(this, &Camera, "Camera", GetMesh());
+	C_Helpers::CreateSceneComponent(this, &HandLight, "HandLight", GetMesh());
 	C_Helpers::CreateSceneComponent(this, &Plane, "Plane", Camera);
 	C_Helpers::CreateSceneComponent(this, &Light, "Light", Camera);
 
 	// || Get PlayerComponent ||
 	C_Helpers::CreateActorComponent(this, &PlayerComponent, "PlayerComponent");
 
-	USkeletalMesh* meshAsset;
-	C_Helpers::GetAsset(&meshAsset, "/Game/Character/Start/Mesh/Ch28_nonPBR");
+	// || Get Player Assets & Class ||
+	C_Helpers::GetAsset(&StartMeshAsset, "/Game/Character/Start/Mesh/Ch28_nonPBR");
+	C_Helpers::GetAsset(&HotelMeshAsset, "/Game/Character/Past/Mesh/Ch18_nonPBR");
 
-	TSubclassOf<UAnimInstance> animInstanceClass;
-	C_Helpers::GetClass(&animInstanceClass, "/Game/Player/Blueprint/ABP_Player_Start");
+	C_Helpers::GetClass(&StartAnimInstanceClass, "/Game/Player/Blueprint/ABP_Player_Start");
+	C_Helpers::GetClass(&HotelAnimInstanceClass, "/Game/Player/Blueprint/ABP_Player_Hotel");
 
 	UStaticMesh* planeAsset;
 	C_Helpers::GetAsset(&planeAsset, "/Game/StaticMeshes/SM_Plane");
+	
 	C_Helpers::AssetDynamic<UMaterialInstanceConstant>(&BlackMaterial, "/Game/Materials/MAT_Black_Inst");
 	PlaneMaterial = UMaterialInstanceDynamic::Create(BlackMaterial, nullptr);
+
+	UStaticMesh* handLightAsset;
+	C_Helpers::GetAsset(&handLightAsset, "/Game/StaticMeshes/SM_HandLight");
+	HandLight->SetStaticMesh(handLightAsset);
+	HandLight->SetVisibility(false);
 
 	// Mesh Setting
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -88));
 	GetMesh()->SetRelativeRotation(FRotator(0, 270, 0));
-	GetMesh()->SetSkeletalMesh(meshAsset);
-	GetMesh()->SetAnimInstanceClass(animInstanceClass);
 
 	// Camera Setting
 	Camera->SetRelativeLocation(FVector(0, 44.5, 157.5));
@@ -57,8 +63,8 @@ AC_Player::AC_Player()
 	Plane->SetRelativeLocationAndRotation(FVector(25, 0, 0), FRotator(90, 0, 0));
 	Plane->SetMaterial(0, PlaneMaterial);
 	Plane->SetVisibility(false);
-	
-	Light->SetRelativeLocationAndRotation(FVector(-50, 30, -70), FRotator(3.5f, -5.f, 0.f));
+
+	Light->SetRelativeLocationAndRotation(FVector(-35, 25, -70), FRotator(3.5f, 0.f, 0.f));
 	Light->Intensity = 35000.f;
 	Light->OuterConeAngle = 15.f;
 	Light->SetVisibility(false);
@@ -102,6 +108,8 @@ void AC_Player::BeginPlay()
 	if(lockActor.Num() > 0)
 		LockActor = Cast<AC_LockActor>(lockActor[0]);
 	
+
+
 	APlayerController* controller = Cast<APlayerController>(GetController());
 
 	InteractionWidget = CreateWidget<UC_Interaction>(controller, InteractionClass);
@@ -173,6 +181,46 @@ void AC_Player::Tick(float DeltaTime)
 		PlayerComponent->IsCanRun = false;
 	else
 		PlayerComponent->IsCanRun = true;
+}
+
+void AC_Player::CallChangeMap(ECurrentMap InType)
+{
+	switch (InType)
+	{
+	case ECurrentMap::Nightmare:
+	{
+		GetMesh()->SetSkeletalMesh(StartMeshAsset);
+		GetMesh()->SetAnimInstanceClass(StartAnimInstanceClass);
+	}
+		break;
+	case ECurrentMap::Start:
+	{
+		CurrentMap = ECurrentMap::Start;
+	}
+		break;
+	case ECurrentMap::Past:
+	{
+		CurrentMap = ECurrentMap::Past;
+		SetActorLocation(FVector(4775, 3150, 120));
+	}
+		break;
+	case ECurrentMap::Hotel:
+	{
+		CurrentMap = ECurrentMap::Hotel;
+
+		GetMesh()->SetSkeletalMesh(HotelMeshAsset);
+		GetMesh()->SetAnimInstanceClass(HotelAnimInstanceClass);
+		HandLight->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), "Socket_HandLight");
+
+		HandLight->SetVisibility(true);
+		Light->SetVisibility(true);
+	}
+		break;
+	case ECurrentMap::End:
+		break;
+	}
+
+
 }
 
 void AC_Player::EndingFunction(EEndingType InType)
@@ -385,7 +433,7 @@ void AC_Player::Interaction()
 	{
 		if (LightSwitch[i]->bCanCall == true)
 		{
-			if (bStartLight == true)
+			if ((bStartLight == true) && (CurrentMap == ECurrentMap::Start))
 			{
 				CallLineOfCharacter(ECharacterLineType::StartMap_Light);
 

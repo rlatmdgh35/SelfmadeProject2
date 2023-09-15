@@ -13,10 +13,8 @@ class SELFMADEPROJECT2_API AC_HotelMapGameMode : public AGameModeBase
 public:
 	AC_HotelMapGameMode();
 
-protected:
+public: 
 	virtual void BeginPlay() override;
 
-private:
-	class USkeletalMesh* SkeletalMesh;
-	TSubclassOf<class UAnimInstance> AnimClass;
+
 };

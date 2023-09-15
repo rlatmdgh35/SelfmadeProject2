@@ -8,7 +8,7 @@
 UENUM(BlueprintType)
 enum class ECurrentMap : uint8
 {
-	Start, Past, Hotel, End
+	Nightmare, Start, Past, Hotel, End
 };
 
 UENUM(BlueprintType)
@@ -48,6 +48,9 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+public:
+	void CallChangeMap(ECurrentMap InType);
 
 // This Function Can Read In Blueprint
 public:
@@ -113,6 +116,17 @@ public:
 
 	UPROPERTY(VisibleDefaultsOnly)
 		class USpotLightComponent* Light;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		class UStaticMeshComponent* HandLight;
+
+// Player Assets
+private:
+	USkeletalMesh* StartMeshAsset;
+	USkeletalMesh* HotelMeshAsset;
+	TSubclassOf<UAnimInstance> StartAnimInstanceClass;
+	TSubclassOf<UAnimInstance> HotelAnimInstanceClass;
+
 
 // ActorComponent
 public:

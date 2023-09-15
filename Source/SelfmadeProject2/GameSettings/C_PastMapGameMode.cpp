@@ -17,8 +17,5 @@ void AC_PastMapGameMode::BeginPlay()
 	TArray<AActor*> playerActor;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC_Player::StaticClass(), playerActor);
 	AC_Player* player = Cast<AC_Player>(playerActor[0]);
-	
-	player->CurrentMap = ECurrentMap::Past;
-	player->SetActorLocation(FVector(4775, 3150, 120));
-	// player->SetActorLocation(FVector(1880, -4900, 100)); // Test
+	player->CallChangeMap(ECurrentMap::Past);
 }
